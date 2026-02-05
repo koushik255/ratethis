@@ -91,10 +91,10 @@ function LogPage() {
                 className="entry-link"
               >
                 <article className="entry">
-                  {anime.thumbnail && (
+                  {anime.picture && (
                     <div className="entry-thumb">
                       <img 
-                        src={anime.thumbnail} 
+                        src={anime.picture} 
                         alt={anime.title}
                         className="thumb-img"
                       />
