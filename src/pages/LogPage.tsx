@@ -45,6 +45,8 @@ function LogPage() {
             <Link to="/profile">profile</Link>
             <span className="nav-separator">/</span>
             <span className="nav-current">log</span>
+            <span className="nav-separator">/</span>
+            <Link to="/forums">forums</Link>
           </nav>
         </div>
         <div className="header-right">

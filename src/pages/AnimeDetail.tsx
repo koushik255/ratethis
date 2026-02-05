@@ -26,6 +26,8 @@ function AnimeDetail() {
               <Link to="/profile">profile</Link>
               <span className="nav-separator">/</span>
               <Link to="/log">log</Link>
+              <span className="nav-separator">/</span>
+              <Link to="/forums">forums</Link>
             </nav>
           </div>
           <div className="header-right">
@@ -50,6 +52,8 @@ function AnimeDetail() {
             <Link to="/profile">profile</Link>
             <span className="nav-separator">/</span>
             <Link to="/log">log</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/forums">forums</Link>
             <span className="nav-separator">/</span>
             <span className="nav-current">entry</span>
           </nav>

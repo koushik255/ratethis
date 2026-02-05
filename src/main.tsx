@@ -7,6 +7,8 @@ import App from "./App";
 import AnimeDetail from "./pages/AnimeDetail";
 import ProfilePage from "./pages/ProfilePage";
 import LogPage from "./pages/LogPage";
+import ForumsPage from "./pages/ForumsPage";
+import ThreadView from "./pages/ThreadView";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
@@ -20,6 +22,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="/anime/:id" element={<AnimeDetail />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/log" element={<LogPage />} />
+            <Route path="/forums" element={<ForumsPage />} />
+            <Route path="/forums/thread/:id" element={<ThreadView />} />
           </Routes>
         </BrowserRouter>
       </ConvexAuthProvider>

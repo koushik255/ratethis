@@ -1,0 +1,135 @@
+.forums-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tag-filter {
+  display: flex;
+  gap: 8px;
+}
+
+.tag-button {
+  font-family: var(--font);
+  font-size: 11px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  color: var(--fg-muted);
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: all 0.2s ease;
+}
+
+.tag-button:hover {
+  border-color: var(--border-dark);
+  color: var(--fg);
+}
+
+.tag-button.active {
+  border-color: var(--fg);
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+.create-thread-button {
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-dark);
+  background-color: var(--fg);
+  color: var(--bg);
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: all 0.2s ease;
+}
+
+.create-thread-button:hover {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+.thread-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.thread-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.thread-link:hover .thread-card {
+  background-color: var(--bg-alt);
+}
+
+.thread-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  transition: background-color 0.2s ease;
+}
+
+.thread-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.thread-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  text-transform: lowercase;
+}
+
+.thread-tag.anime {
+  background-color: #e8f4f8;
+  border-color: #b8d4e3;
+}
+
+.thread-tag.manga {
+  background-color: #f8e8f4;
+  border-color: #e3b8d4;
+}
+
+.thread-tag.visual-novel {
+  background-color: #f4f8e8;
+  border-color: #d4e3b8;
+}
+
+.thread-replies {
+  font-size: 11px;
+  color: var(--fg-light);
+}
+
+.thread-title {
+  font-size: 15px;
+  font-weight: normal;
+  margin: 0 0 8px 0;
+  color: var(--fg);
+}
+
+.thread-preview {
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.thread-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--fg-light);
+}
+
+.thread-author {
+  color: var(--accent);
+}

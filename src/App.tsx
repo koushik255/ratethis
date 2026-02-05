@@ -67,6 +67,8 @@ function App() {
             <Link to="/profile">profile</Link>
             <span className="nav-separator">/</span>
             <Link to="/log">log</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/forums">forums</Link>
           </nav>
         </div>
         <div className="header-right">
