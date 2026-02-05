@@ -13,3 +13,6 @@ wheels/
 
 # Large data files
 anime.db
+
+# Python scripts directory (not needed for deployment)
+scripts/
