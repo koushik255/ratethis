@@ -57,23 +57,18 @@ export function AnimeSearchPanel({ listId, onClose, onAnimeAdded }: AnimeSearchP
       <div className="anime-search-panel" onClick={(e) => e.stopPropagation()}>
         <div className="search-panel-header">
           <h3 className="search-panel-title">add anime to list</h3>
-          <button className="search-panel-close" onClick={onClose}>
-            ×
-          </button>
         </div>
         
         <div className="search-panel-content">
-          <div className="search-panel-search">
-            <input
-              type="text"
-              className="search-panel-input"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="search anime..."
-              autoFocus
-            />
-          </div>
+          <input
+            type="text"
+            className="search-panel-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="search anime..."
+            autoFocus
+          />
 
           <div className="search-panel-results">
             {searchResults === undefined ? (
@@ -98,7 +93,7 @@ export function AnimeSearchPanel({ listId, onClose, onAnimeAdded }: AnimeSearchP
                       </div>
                     )}
                     <div className="search-result-content">
-                      <h4 className="search-result-title">{anime.title}</h4>
+                      <div className="search-result-title">{anime.title}</div>
                       <div className="search-result-meta">
                         <span className="search-result-type">{anime.type}</span>
                         {anime.score?.arithmeticMean && (
