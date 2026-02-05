@@ -47,4 +47,18 @@ export default defineSchema({
     bio: v.optional(v.string()),
   })
     .index("by_userId", ["userId"]),
+
+  userAnime: defineTable({
+    userId: v.string(),
+    animeId: v.id("anime"),
+    isFavorite: v.boolean(),
+    isWatched: v.boolean(),
+    watchedAt: v.optional(v.number()),
+    watchedComment: v.optional(v.string()),
+    updatedAt: v.number(),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_userId_favorite", ["userId", "isFavorite"])
+    .index("by_userId_watched", ["userId", "isWatched"])
+    .index("by_userId_animeId", ["userId", "animeId"]),
 });

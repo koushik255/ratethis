@@ -13,6 +13,8 @@ function ProfilePage() {
             <Link to="/">index</Link>
             <span className="nav-separator">/</span>
             <span className="nav-current">profile</span>
+            <span className="nav-separator">/</span>
+            <Link to="/log">log</Link>
           </nav>
         </div>
         <div className="header-right">

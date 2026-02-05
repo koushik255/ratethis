@@ -166,6 +166,13 @@ body {
   background-color: var(--bg-alt);
 }
 
+.entry-actions {
+  margin-left: auto;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
 .entry {
   display: flex;
   align-items: flex-start;

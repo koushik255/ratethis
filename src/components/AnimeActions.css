@@ -1,0 +1,45 @@
+.anime-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.anime-actions.hover {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.entry:hover .anime-actions.hover,
+.entry-link:hover .anime-actions.hover {
+  opacity: 1;
+}
+
+.action-button {
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.action-button:hover {
+  border-color: var(--border-dark);
+  color: var(--fg);
+}
+
+.action-button.active {
+  border-color: var(--border-dark);
+  color: var(--fg);
+}
+
+.action-button.watch.active {
+  color: var(--accent);
+}
+
+.action-button.favorite.active {
+  color: #d4a574;
+}

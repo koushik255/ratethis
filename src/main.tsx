@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import AnimeDetail from "./pages/AnimeDetail";
 import ProfilePage from "./pages/ProfilePage";
+import LogPage from "./pages/LogPage";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="/" element={<App />} />
             <Route path="/anime/:id" element={<AnimeDetail />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/log" element={<LogPage />} />
           </Routes>
         </BrowserRouter>
       </ConvexAuthProvider>

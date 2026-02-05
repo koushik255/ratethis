@@ -2,6 +2,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
+import { AnimeActions } from "../components/AnimeActions";
 import "./AnimeDetail.css";
 
 function AnimeDetail() {
@@ -21,6 +22,10 @@ function AnimeDetail() {
             <h1 className="site-title">analog</h1>
             <nav className="board-nav">
               <Link to="/">index</Link>
+              <span className="nav-separator">/</span>
+              <Link to="/profile">profile</Link>
+              <span className="nav-separator">/</span>
+              <Link to="/log">log</Link>
             </nav>
           </div>
           <div className="header-right">
@@ -42,6 +47,10 @@ function AnimeDetail() {
           <nav className="board-nav">
             <Link to="/">index</Link>
             <span className="nav-separator">/</span>
+            <Link to="/profile">profile</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/log">log</Link>
+            <span className="nav-separator">/</span>
             <span className="nav-current">entry</span>
           </nav>
         </div>
@@ -54,6 +63,11 @@ function AnimeDetail() {
         <button onClick={() => navigate(-1)} className="raw-button">
           &lt; back
         </button>
+        <AnimeActions 
+          animeId={anime._id} 
+          animeTitle={anime.title}
+          variant="inline"
+        />
       </div>
 
       <div className="divider">

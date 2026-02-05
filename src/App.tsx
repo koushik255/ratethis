@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { Link, useSearchParams } from "react-router-dom";
 import { api } from "../convex/_generated/api";
 import { UserMenu } from "./components/UserMenu";
+import { AnimeActions } from "./components/AnimeActions";
 import "./App.css";
 
 function App() {
@@ -64,6 +65,8 @@ function App() {
             <Link to="/">index</Link>
             <span className="nav-separator">/</span>
             <Link to="/profile">profile</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/log">log</Link>
           </nav>
         </div>
         <div className="header-right">
@@ -127,6 +130,13 @@ function App() {
                           </span>
                         )}
                       </div>
+                    </div>
+                    <div className="entry-actions">
+                      <AnimeActions 
+                        animeId={anime._id} 
+                        animeTitle={anime.title}
+                        variant="hover"
+                      />
                     </div>
                   </article>
                 </Link>

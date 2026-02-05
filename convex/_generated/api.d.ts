@@ -12,6 +12,7 @@ import type * as anime from "../anime.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as httpActions from "../httpActions.js";
+import type * as userAnime from "../userAnime.js";
 import type * as userProfiles from "../userProfiles.js";
 
 import type {
@@ -25,6 +26,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
   httpActions: typeof httpActions;
+  userAnime: typeof userAnime;
   userProfiles: typeof userProfiles;
 }>;
 
