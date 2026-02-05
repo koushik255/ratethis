@@ -1,0 +1,33 @@
+.list-view-header {
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  padding: 24px;
+  margin-bottom: 25px;
+}
+
+.list-view-title {
+  font-size: 24px;
+  font-weight: normal;
+  margin: 0 0 16px 0;
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.list-view-description {
+  font-size: 13px;
+  color: var(--fg);
+  margin: 0 0 16px 0;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.list-view-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--fg-light);
+}
+
+.list-view-author {
+  color: var(--accent);
+}

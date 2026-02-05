@@ -43,3 +43,7 @@
 .action-button.favorite.active {
   color: #d4a574;
 }
+
+.anime-actions .anime-list-selector {
+  margin-left: 4px;
+}

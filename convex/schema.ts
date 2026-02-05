@@ -83,4 +83,23 @@ export default defineSchema({
   })
     .index("by_threadId", ["threadId"])
     .index("by_authorId", ["authorId"]),
+
+  animeLists: defineTable({
+    title: v.string(),
+    description: v.string(),
+    authorId: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    itemCount: v.number(),
+  })
+    .index("by_authorId", ["authorId"])
+    .index("by_updatedAt", ["updatedAt"]),
+
+  animeListItems: defineTable({
+    listId: v.id("animeLists"),
+    animeId: v.id("anime"),
+    addedAt: v.number(),
+  })
+    .index("by_listId", ["listId"])
+    .index("by_animeId", ["animeId"]),
 });

@@ -4,6 +4,7 @@ import { useConvexAuth } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { WatchModal } from "./WatchModal";
+import { AnimeListSelector } from "./AnimeListSelector";
 import "./AnimeActions.css";
 
 interface AnimeActionsProps {
@@ -66,6 +67,10 @@ export function AnimeActions({ animeId, animeTitle, variant = "inline" }: AnimeA
         >
           {isFavorite ? "★" : "☆"}
         </button>
+        <AnimeListSelector 
+          animeId={animeId}
+          animeTitle={animeTitle}
+        />
       </div>
 
       {showModal && (

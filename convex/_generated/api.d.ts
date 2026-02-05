@@ -13,6 +13,7 @@ import type * as auth from "../auth.js";
 import type * as forums from "../forums.js";
 import type * as http from "../http.js";
 import type * as httpActions from "../httpActions.js";
+import type * as lists from "../lists.js";
 import type * as userAnime from "../userAnime.js";
 import type * as userProfiles from "../userProfiles.js";
 
@@ -28,6 +29,7 @@ declare const fullApi: ApiFromModules<{
   forums: typeof forums;
   http: typeof http;
   httpActions: typeof httpActions;
+  lists: typeof lists;
   userAnime: typeof userAnime;
   userProfiles: typeof userProfiles;
 }>;

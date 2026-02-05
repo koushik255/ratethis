@@ -1,0 +1,14 @@
+.list-modal {
+  max-width: 500px;
+}
+
+.word-count {
+  font-size: 11px;
+  color: var(--fg-muted);
+  text-align: right;
+  margin-top: 4px;
+}
+
+.word-count.over-limit {
+  color: #c44;
+}
