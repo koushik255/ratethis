@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "convex/react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
 import "./CreateListModal.css";
 
@@ -8,6 +9,7 @@ interface CreateListModalProps {
 }
 
 export function CreateListModal({ onClose }: CreateListModalProps) {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,11 +25,12 @@ export function CreateListModal({ onClose }: CreateListModalProps) {
 
     setIsSubmitting(true);
     try {
-      await createList({
+      const listId = await createList({
         title: title.trim(),
         description: description.trim(),
       });
       onClose();
+      navigate(`/lists/${listId}/edit`);
     } catch (error) {
       console.error("Failed to create list:", error);
       alert("Failed to create list. Please try again.");

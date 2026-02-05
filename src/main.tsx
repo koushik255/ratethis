@@ -11,6 +11,7 @@ import ForumsPage from "./pages/ForumsPage";
 import ThreadView from "./pages/ThreadView";
 import ListsPage from "./pages/ListsPage";
 import ListView from "./pages/ListView";
+import ListBuilder from "./pages/ListBuilder";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="/forums/thread/:id" element={<ThreadView />} />
             <Route path="/lists" element={<ListsPage />} />
             <Route path="/lists/:id" element={<ListView />} />
+            <Route path="/lists/:id/edit" element={<ListBuilder />} />
           </Routes>
         </BrowserRouter>
       </ConvexAuthProvider>

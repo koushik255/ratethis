@@ -56,7 +56,7 @@ function ListsPage() {
             {lists.map((list) => (
               <Link 
                 key={list._id} 
-                to={`/lists/${list._id}`}
+                to={`/lists/${list._id}/edit`}
                 className="list-card-link"
               >
                 <article className="list-card">
