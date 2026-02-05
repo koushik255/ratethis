@@ -1,7 +1,10 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { authTables } from "@convex-dev/auth/server";
 
 export default defineSchema({
+  ...authTables,
+
   anime: defineTable({
     title: v.string(),
     type: v.string(),
@@ -36,4 +39,12 @@ export default defineSchema({
       searchField: "title",
       filterFields: ["type", "status"],
     }),
+
+  userProfiles: defineTable({
+    userId: v.string(),
+    profilePicture: v.optional(v.string()),
+    displayName: v.optional(v.string()),
+    bio: v.optional(v.string()),
+  })
+    .index("by_userId", ["userId"]),
 });

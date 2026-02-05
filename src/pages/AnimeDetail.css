@@ -31,6 +31,33 @@
   margin-bottom: 30px;
   padding-bottom: 15px;
   border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  margin-left: 20px;
+}
+
+/* Auth Button */
+.auth-button {
+  font-family: var(--font);
+  font-size: 11px;
+  padding: 4px 12px;
+  border: 1px solid var(--border-dark);
+  background-color: var(--bg-alt);
+  color: var(--fg);
+  cursor: pointer;
+  text-transform: lowercase;
+}
+
+.auth-button:hover {
+  background-color: var(--border);
 }
 
 .site-title {

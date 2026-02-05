@@ -10,3 +10,6 @@ wheels/
 .venv
 
 .env.local
+
+# Large data files
+anime.db

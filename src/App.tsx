@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { Link, useSearchParams } from "react-router-dom";
 import { api } from "../convex/_generated/api";
+import { UserMenu } from "./components/UserMenu";
 import "./App.css";
 
 function App() {
@@ -25,12 +26,14 @@ function App() {
 
   // Sync search to URL
   useEffect(() => {
+    const newParams = new URLSearchParams(searchParams);
     if (searchQuery) {
-      setSearchParams({ q: searchQuery });
+      newParams.set("q", searchQuery);
     } else {
-      setSearchParams({});
+      newParams.delete("q");
     }
-  }, [searchQuery, setSearchParams]);
+    setSearchParams(newParams);
+  }, [searchQuery]);
 
   // Debounced real-time search
   useEffect(() => {
@@ -55,12 +58,17 @@ function App() {
   return (
     <div className="board">
       <header className="board-header">
-        <h1 className="site-title">anime_db</h1>
-        <nav className="board-nav">
-          <Link to="/">index</Link>
-          <span className="nav-separator">/</span>
-          <a href="#" className="nav-disabled">about</a>
-        </nav>
+        <div className="header-left">
+          <h1 className="site-title">analog</h1>
+          <nav className="board-nav">
+            <Link to="/">index</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/profile">profile</Link>
+          </nav>
+        </div>
+        <div className="header-right">
+          <UserMenu />
+        </div>
       </header>
 
       <div className="search-container">
@@ -141,7 +149,7 @@ function App() {
       </div>
 
       <footer className="board-footer">
-        <p>anime_db v1.0</p>
+        <p>analog v1.0</p>
       </footer>
     </div>
   );

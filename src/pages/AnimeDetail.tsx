@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { UserMenu } from "../components/UserMenu";
 import "./AnimeDetail.css";
 
 function AnimeDetail() {
@@ -16,10 +17,15 @@ function AnimeDetail() {
     return (
       <div className="board">
         <header className="board-header">
-          <h1 className="site-title">anime_db</h1>
-          <nav className="board-nav">
-            <Link to="/">index</Link>
-          </nav>
+          <div className="header-left">
+            <h1 className="site-title">analog</h1>
+            <nav className="board-nav">
+              <Link to="/">index</Link>
+            </nav>
+          </div>
+          <div className="header-right">
+            <UserMenu />
+          </div>
         </header>
         <div className="loading">
           <p>loading...</p>
@@ -31,12 +37,17 @@ function AnimeDetail() {
   return (
     <div className="board">
       <header className="board-header">
-        <h1 className="site-title">anime_db</h1>
-        <nav className="board-nav">
-          <Link to="/">index</Link>
-          <span className="nav-separator">/</span>
-          <span className="nav-current">entry</span>
-        </nav>
+        <div className="header-left">
+          <h1 className="site-title">analog</h1>
+          <nav className="board-nav">
+            <Link to="/">index</Link>
+            <span className="nav-separator">/</span>
+            <span className="nav-current">entry</span>
+          </nav>
+        </div>
+        <div className="header-right">
+          <UserMenu />
+        </div>
       </header>
 
       <div className="action-bar">
@@ -169,7 +180,7 @@ function AnimeDetail() {
       </article>
 
       <footer className="board-footer">
-        <p>anime_db v1.0</p>
+        <p>analog v1.0</p>
       </footer>
     </div>
   );

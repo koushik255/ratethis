@@ -1,0 +1,70 @@
+/* Profile Page - Minimal Grayscale */
+
+.board {
+  max-width: 800px;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Minimal Header */
+.board-header {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  margin-left: 20px;
+}
+
+.site-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: normal;
+  margin: 0 0 10px 0;
+  color: var(--fg);
+  letter-spacing: 2px;
+}
+
+.board-nav {
+  font-size: 12px;
+}
+
+.board-nav a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.board-nav a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.nav-current {
+  color: var(--fg-muted);
+}
+
+.nav-separator {
+  color: var(--fg-light);
+  margin: 0 5px;
+}
+
+/* Footer */
+.board-footer {
+  margin-top: 40px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--fg-light);
+}
+
+.board-footer p {
+  margin: 0;
+}
