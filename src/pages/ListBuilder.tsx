@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { CommentSection } from "../components/CommentSection";
+import { AnimeSearchPanel } from "../components/AnimeSearchPanel";
 import "./ListBuilder.css";
 
 function ListBuilder() {
@@ -195,10 +196,11 @@ function ListBuilder() {
       </div>
 
       {showSearchPanel && (
-        <div className="search-placeholder">
-          <p>Search panel temporarily disabled</p>
-          <button onClick={handleCloseSearch}>Close</button>
-        </div>
+        <AnimeSearchPanel
+          listId={id!}
+          onClose={handleCloseSearch}
+          onAnimeAdded={handleCloseSearch}
+        />
       )}
 
       {/* Comments Section - Below the anime grid */}
