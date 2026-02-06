@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { ConvexClient } from "convex/browser";
-import { api } from "./convex/_generated/api";
+import { api } from "../convex/_generated/api";
 
 const CONVEX_URL = "https://pastel-condor-398.convex.cloud";
 const convex = new ConvexClient(CONVEX_URL);

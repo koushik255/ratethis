@@ -10,11 +10,17 @@ wheels/
 *.egg-info
 
 # Virtual environments
-.venv
-
-.env.local
+.venv/
+mal-scraper/.venv/
 
 # Large data files
-anime.db
+*.db
+*.sqlite
+*.sqlite3
 
+# Environment files
+.env
+.env.local
 
+# Logs
+*.log
