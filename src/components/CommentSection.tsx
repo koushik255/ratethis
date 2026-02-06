@@ -70,7 +70,7 @@ export function CommentSection({ listId }: CommentSectionProps) {
     return date.toLocaleDateString();
   };
 
-  if (!comments || !commentCount || !canComment) {
+  if (!comments || commentCount === undefined || canComment === undefined) {
     return <div className="loading">loading comments...</div>;
   }
 
@@ -192,7 +192,7 @@ export function CommentSection({ listId }: CommentSectionProps) {
 
       {comments.length === 0 && (
         <div className="no-comments">
-          <p>no comments yet. be the first to comment!</p>
+          <p>no comments yet add one!</p>
         </div>
       )}
     </div>
