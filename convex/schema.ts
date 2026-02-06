@@ -128,4 +128,30 @@ export default defineSchema({
     .index("by_commentId", ["commentId"])
     .index("by_userId", ["userId"])
     .index("by_commentId_userId", ["commentId", "userId"]),
+
+  friendRequests: defineTable({
+    senderId: v.string(),
+    receiverId: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("accepted"),
+      v.literal("declined")
+    ),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_senderId", ["senderId"])
+    .index("by_receiverId", ["receiverId"])
+    .index("by_senderId_status", ["senderId", "status"])
+    .index("by_receiverId_status", ["receiverId", "status"])
+    .index("by_senderId_receiverId", ["senderId", "receiverId"]),
+
+  friendships: defineTable({
+    userId1: v.string(),
+    userId2: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_userId1", ["userId1"])
+    .index("by_userId2", ["userId2"])
+    .index("by_userId1_userId2", ["userId1", "userId2"]),
 });

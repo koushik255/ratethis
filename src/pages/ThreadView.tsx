@@ -88,6 +88,8 @@ function ThreadView() {
             <Link to="/forums">forums</Link>
             <span className="nav-separator">/</span>
             <Link to="/lists">lists</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/friends">friends</Link>
           </nav>
         </div>
         <div className="header-right">

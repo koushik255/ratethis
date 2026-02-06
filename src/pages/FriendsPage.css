@@ -1,0 +1,257 @@
+/* Friends Page Styles - Brutalist Theme */
+
+.friends-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.friends-tab {
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  color: var(--fg);
+  cursor: pointer;
+  text-transform: lowercase;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s ease;
+}
+
+.friends-tab:hover {
+  background-color: var(--bg-alt);
+}
+
+.friends-tab.active {
+  border-bottom-color: var(--accent);
+  font-weight: bold;
+}
+
+.friends-auth-prompt {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--fg-muted);
+}
+
+.friends-search {
+  margin-bottom: 30px;
+}
+
+.friends-search-input {
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  color: var(--fg);
+  width: 100%;
+  max-width: 500px;
+  outline: none;
+}
+
+.friends-search-input:focus {
+  border-color: var(--accent);
+}
+
+.friends-search-results {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.friends-section-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: normal;
+  margin: 0 0 20px 0;
+  color: var(--fg);
+  letter-spacing: 1px;
+  text-transform: lowercase;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  transition: background-color 0.2s ease;
+}
+
+.friend-item:hover {
+  background-color: var(--bg-alt);
+}
+
+.friend-avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background-color: var(--bg-alt);
+}
+
+.friend-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--fg-muted);
+  background-color: var(--bg-alt);
+}
+
+.friend-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.friend-name {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--fg);
+}
+
+.friend-meta {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.friend-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.friend-action-button {
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-dark);
+  background-color: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: all 0.2s ease;
+}
+
+.friend-action-button:hover {
+  background-color: var(--border);
+}
+
+.friend-action-button.accept {
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+.friend-action-button.accept:hover {
+  background-color: var(--fg-light);
+}
+
+.friend-action-button.decline,
+.friend-action-button.remove {
+  border-color: #cc0000;
+  color: #cc0000;
+}
+
+.friend-action-button.decline:hover,
+.friend-action-button.remove:hover {
+  background-color: #cc0000;
+  color: white;
+}
+
+.friend-status {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--fg-light);
+  font-style: italic;
+}
+
+.friend-status.pending {
+  color: var(--accent);
+}
+
+.friends-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--fg-muted);
+  font-family: var(--font);
+  font-size: 14px;
+}
+
+.friends-hint {
+  font-size: 12px;
+  margin-top: 8px;
+  color: var(--fg-light);
+}
+
+.friends-list-section {
+  margin-top: 20px;
+}
+
+.friends-requests-section {
+  margin-bottom: 40px;
+}
+
+.friends-requests-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .friends-tab {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  .friend-item {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .friend-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .friend-avatar-placeholder {
+    font-size: 16px;
+  }
+
+  .friend-name {
+    font-size: 14px;
+  }
+
+  .friend-actions {
+    flex-wrap: wrap;
+  }
+
+  .friend-action-button {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}

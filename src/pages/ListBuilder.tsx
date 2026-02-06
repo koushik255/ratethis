@@ -120,6 +120,8 @@ function ListBuilder() {
             <Link to="/forums">forums</Link>
             <span className="nav-separator">/</span>
             <Link to="/lists">lists</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/friends">friends</Link>
           </nav>
         </div>
         <div className="header-right">
@@ -165,10 +167,12 @@ function ListBuilder() {
             {list.items.map((anime) => (
               <div key={anime._id} className="poster-item">
                 {anime.picture && (
-                  <img 
-                    src={anime.picture} 
+                  <img
+                    src={anime.picture}
                     alt={anime.title}
                     className="poster-image"
+                    loading="lazy"
+                    decoding="async"
                   />
                 )}
                 <div className="poster-overlay">

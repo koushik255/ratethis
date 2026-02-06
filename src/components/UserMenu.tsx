@@ -17,11 +17,13 @@ export function UserMenu() {
     <div className="user-menu">
       <Link to="/profile" className="user-menu-link">
         {profile?.profilePicture ? (
-          <img 
-            src={profile.profilePicture} 
-            alt="Profile" 
-            className="user-avatar"
-          />
+           <img
+             src={profile.profilePicture}
+             alt="Profile"
+             className="user-avatar"
+             loading="lazy"
+             decoding="async"
+           />
         ) : (
           <div className="user-avatar-placeholder">
             me

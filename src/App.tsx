@@ -6,10 +6,25 @@ import { UserMenu } from "./components/UserMenu";
 import { AnimeActions } from "./components/AnimeActions";
 import "./App.css";
 
+// Custom debounce hook for better performance
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Use debounced value for search to prevent excessive API calls
+  const debouncedInput = useDebounce(inputValue, 300);
   
   const animes = useQuery(
     api.anime.searchByTitle,
@@ -34,17 +49,14 @@ function App() {
       newParams.delete("q");
     }
     setSearchParams(newParams);
-  }, [searchQuery]);
+  }, [searchQuery, searchParams, setSearchParams]);
 
-  // Debounced real-time search
+  // Update search query when debounced input changes
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (inputValue !== searchQuery) {
-        setSearchQuery(inputValue);
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [inputValue, searchQuery]);
+    if (debouncedInput !== searchQuery) {
+      setSearchQuery(debouncedInput);
+    }
+  }, [debouncedInput, searchQuery]);
 
   const handleSearch = () => {
     setSearchQuery(inputValue);
@@ -71,6 +83,8 @@ function App() {
             <Link to="/forums">forums</Link>
             <span className="nav-separator">/</span>
             <Link to="/lists">lists</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/friends">friends</Link>
           </nav>
         </div>
         <div className="header-right">
@@ -110,10 +124,12 @@ function App() {
                   <article className="entry">
                     {anime.thumbnail && (
                       <div className="entry-thumb">
-                        <img 
-                          src={anime.thumbnail} 
+                        <img
+                          src={anime.thumbnail}
                           alt={anime.title}
                           className="thumb-img"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     )}

@@ -49,6 +49,8 @@ function LogPage() {
             <Link to="/forums">forums</Link>
             <span className="nav-separator">/</span>
             <Link to="/lists">lists</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/friends">friends</Link>
           </nav>
         </div>
         <div className="header-right">
@@ -95,11 +97,13 @@ function LogPage() {
                 <article className="entry">
                   {anime.picture && (
                     <div className="entry-thumb">
-                      <img 
-                        src={anime.picture} 
-                        alt={anime.title}
-                        className="thumb-img"
-                      />
+                       <img
+                         src={anime.picture}
+                         alt={anime.title}
+                         className="thumb-img"
+                         loading="lazy"
+                         decoding="async"
+                       />
                     </div>
                   )}
                   <div className="entry-body">

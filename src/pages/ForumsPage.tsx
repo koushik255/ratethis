@@ -34,6 +34,8 @@ function ForumsPage() {
             <span className="nav-current">forums</span>
             <span className="nav-separator">/</span>
             <Link to="/lists">lists</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/friends">friends</Link>
           </nav>
         </div>
         <div className="header-right">

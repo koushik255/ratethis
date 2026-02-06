@@ -95,11 +95,13 @@ export function Profile() {
     <div className="profile-container">
       <div className="profile-header">
         {profile?.profilePicture ? (
-          <img 
-            src={profile.profilePicture} 
-            alt="Profile" 
-            className="profile-picture large"
-          />
+           <img
+             src={profile.profilePicture}
+             alt="Profile"
+             className="profile-picture large"
+             loading="lazy"
+             decoding="async"
+           />
         ) : (
           <div className="profile-picture-placeholder large">
             no image

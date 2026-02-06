@@ -28,6 +28,8 @@ function ListsPage() {
             <Link to="/forums">forums</Link>
             <span className="nav-separator">/</span>
             <span className="nav-current">lists</span>
+            <span className="nav-separator">/</span>
+            <Link to="/friends">friends</Link>
           </nav>
         </div>
         <div className="header-right">

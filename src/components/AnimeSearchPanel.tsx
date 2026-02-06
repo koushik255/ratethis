@@ -85,10 +85,12 @@ export function AnimeSearchPanel({ listId, onClose, onAnimeAdded }: AnimeSearchP
                   >
                     {anime.thumbnail && (
                       <div className="search-result-thumb">
-                        <img 
-                          src={anime.thumbnail} 
+                        <img
+                          src={anime.thumbnail}
                           alt={anime.title}
                           className="search-result-img"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     )}

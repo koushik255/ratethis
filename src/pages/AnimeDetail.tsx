@@ -27,12 +27,14 @@ function AnimeDetail() {
               <span className="nav-separator">/</span>
               <Link to="/log">log</Link>
               <span className="nav-separator">/</span>
-              <Link to="/forums">forums</Link>
-              <span className="nav-separator">/</span>
-              <Link to="/lists">lists</Link>
-            </nav>
-          </div>
-          <div className="header-right">
+<Link to="/forums">forums</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/lists">lists</Link>
+            <span className="nav-separator">/</span>
+            <Link to="/friends">friends</Link>
+          </nav>
+        </div>
+        <div className="header-right">
             <UserMenu />
           </div>
         </header>
@@ -84,9 +86,11 @@ function AnimeDetail() {
         <div className="detail-layout">
           {anime.picture && (
             <div className="detail-image">
-              <img 
-                src={anime.picture} 
+              <img
+                src={anime.picture}
                 alt={anime.title}
+                loading="lazy"
+                decoding="async"
               />
             </div>
           )}

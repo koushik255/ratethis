@@ -15,22 +15,27 @@ export const getLists = query({
       .order("desc")
       .take(limit);
 
-    const listsWithAuthors = await Promise.all(
-      lists.map(async (list) => {
-        const author = await ctx.db
+    // Batch fetch all authors in parallel to avoid N+1 queries
+    const authorIds = [...new Set(lists.map((l) => l.authorId))];
+    const authors = await Promise.all(
+      authorIds.map((userId) =>
+        ctx.db
           .query("userProfiles")
-          .withIndex("by_userId", (q) => q.eq("userId", list.authorId))
-          .unique();
-
-        return {
-          ...list,
-          authorDisplayName: author?.displayName || "anonymous",
-          isOwner: currentUserId === list.authorId,
-        };
-      })
+          .withIndex("by_userId", (q) => q.eq("userId", userId))
+          .unique()
+      )
     );
 
-    return listsWithAuthors;
+    // Create lookup map for O(1) access
+    const authorMap = new Map(
+      authors.filter(Boolean).map((a) => [a!.userId, a])
+    );
+
+    return lists.map((list) => ({
+      ...list,
+      authorDisplayName: authorMap.get(list.authorId)?.displayName || "anonymous",
+      isOwner: currentUserId === list.authorId,
+    }));
   },
 });
 
@@ -63,17 +68,18 @@ export const getList = query({
     const currentUserId = await getAuthUserId(ctx);
     const isOwner = currentUserId === list.authorId;
 
+    // Limit items to prevent performance issues with large lists
+    const ITEMS_LIMIT = 100;
     const listItems = await ctx.db
       .query("animeListItems")
       .withIndex("by_listId", (q) => q.eq("listId", args.listId))
       .order("desc")
-      .collect();
+      .take(ITEMS_LIMIT);
 
+    // Batch fetch all anime in parallel to avoid N+1 queries
+    const animeIds = listItems.map((item) => item.animeId);
     const animeItems = await Promise.all(
-      listItems.map(async (item) => {
-        const anime = await ctx.db.get(item.animeId);
-        return anime;
-      })
+      animeIds.map((id) => ctx.db.get(id))
     );
 
     return {

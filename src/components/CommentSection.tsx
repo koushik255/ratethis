@@ -52,6 +52,8 @@ function RepliesList({ listId, parentCommentId, formatTimestamp }: RepliesListPr
                 src={reply.authorProfilePicture}
                 alt={reply.authorDisplayName}
                 className="avatar-img"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <div className="avatar-placeholder">
@@ -166,10 +168,12 @@ export function CommentSection({ listId }: CommentSectionProps) {
           <div key={comment._id} className="comment">
             <div className="comment-avatar">
               {comment.authorProfilePicture ? (
-                <img 
-                  src={comment.authorProfilePicture} 
+                <img
+                  src={comment.authorProfilePicture}
                   alt={comment.authorDisplayName}
                   className="avatar-img"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <div className="avatar-placeholder">
