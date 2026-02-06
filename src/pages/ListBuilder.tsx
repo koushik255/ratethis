@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
+import { CommentSection } from "../components/CommentSection";
 import "./ListBuilder.css";
 
 function ListBuilder() {
@@ -199,6 +200,11 @@ function ListBuilder() {
           <button onClick={handleCloseSearch}>Close</button>
         </div>
       )}
+
+      {/* Comments Section - Below the anime grid */}
+      <div className="list-comments-section">
+        <CommentSection listId={id!} />
+      </div>
 
       <footer className="board-footer">
         <p>analog v1.0</p>
