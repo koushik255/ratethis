@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { CreateListModal } from "../components/CreateListModal";
+import { useConvexAuth } from "convex/react";
 import "./ListsPage.css";
 
 function ListsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const { isAuthenticated } = useConvexAuth();
   
   const lists = useQuery(api.lists.getLists, {});
 
@@ -34,12 +36,14 @@ function ListsPage() {
       </header>
 
       <div className="lists-controls">
-        <button 
-          className="create-list-button"
-          onClick={() => setShowCreateModal(true)}
-        >
-          + new list
-        </button>
+        {isAuthenticated && (
+          <button 
+            className="create-list-button"
+            onClick={() => setShowCreateModal(true)}
+          >
+            + new list
+          </button>
+        )}
       </div>
 
       <div className="board-content">
@@ -56,11 +60,16 @@ function ListsPage() {
             {lists.map((list) => (
               <Link 
                 key={list._id} 
-                to={`/lists/${list._id}/edit`}
-                className="list-card-link"
+                to={list.isOwner ? `/lists/${list._id}/edit` : `/lists/${list._id}`}
+                className={`list-card-link ${list.isOwner ? 'owned-list' : 'view-list'}`}
               >
-                <article className="list-card">
-                  <h3 className="list-card-title">{list.title}</h3>
+                <article className={`list-card ${list.isOwner ? 'owned-card' : 'view-card'}`}>
+                  <div className="list-card-header">
+                    <h3 className="list-card-title">{list.title}</h3>
+                    {list.isOwner && (
+                      <span className="owned-badge">owned</span>
+                    )}
+                  </div>
                   <p className="list-card-description">
                     {list.description.length > 100 
                       ? list.description.substring(0, 100) + "..." 
@@ -73,6 +82,9 @@ function ListsPage() {
                     <span className="list-card-count">
                       {list.itemCount} {list.itemCount === 1 ? "anime" : "anime"}
                     </span>
+                  </div>
+                  <div className="list-card-action">
+                    {list.isOwner ? 'edit' : 'view'}
                   </div>
                 </article>
               </Link>

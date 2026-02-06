@@ -68,6 +68,14 @@ function ListView() {
         <button onClick={() => navigate("/lists")} className="raw-button">
           &lt; back to lists
         </button>
+        {list.isOwner && (
+          <button 
+            onClick={() => navigate(`/lists/${id}/edit`)} 
+            className="raw-button"
+          >
+            edit this list
+          </button>
+        )}
       </div>
 
       <div className="list-view-header">
@@ -87,42 +95,31 @@ function ListView() {
             <p>this list is empty. add some anime!</p>
           </div>
         ) : (
-          <div className="entry-list">
-            {list.items.map((anime, index) => (
+          <div className="archive-grid">
+            {list.items.map((anime) => (
               <Link 
                 key={anime._id} 
                 to={`/anime/${anime._id}`}
-                className="entry-link"
+                className="poster-item"
               >
-                <article className="entry">
-                  {anime.picture && (
-                    <div className="entry-thumb">
-                      <img 
-                        src={anime.picture} 
-                        alt={anime.title}
-                        className="thumb-img"
-                      />
-                    </div>
-                  )}
-                  <div className="entry-body">
-                    <span className="entry-id">{String(index + 1).padStart(3, "0")}</span>
-                    <h3 className="entry-title">{anime.title}</h3>
-                    <div className="entry-meta">
-                      <span>{anime.type}</span>
-                      <span className={`status-${anime.status?.toLowerCase().replace(/\s+/g, "-")}`}>
-                        {anime.status}
+                {anime.picture && (
+                  <img 
+                    src={anime.picture} 
+                    alt={anime.title}
+                    className="poster-image"
+                  />
+                )}
+                <div className="poster-overlay">
+                  <h3 className="poster-title">{anime.title}</h3>
+                  <div className="poster-meta">
+                    <span className="poster-type">{anime.type}</span>
+                    {anime.score?.arithmeticMean && (
+                      <span className="poster-score">
+                        {anime.score.arithmeticMean.toFixed(1)}
                       </span>
-                      {anime.animeSeason?.year && (
-                        <span>{anime.animeSeason.year}</span>
-                      )}
-                      {anime.score?.arithmeticMean && (
-                        <span className="entry-score">
-                          {anime.score.arithmeticMean.toFixed(2)}
-                        </span>
-                      )}
-                    </div>
+                    )}
                   </div>
-                </article>
+                </div>
               </Link>
             ))}
           </div>

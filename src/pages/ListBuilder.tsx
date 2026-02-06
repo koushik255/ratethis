@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
-import { AnimeSearchPanel } from "../components/AnimeSearchPanel";
 import "./ListBuilder.css";
 
 function ListBuilder() {
@@ -40,10 +39,6 @@ function ListBuilder() {
     setShowSearchPanel(false);
   };
 
-  const handleAnimeAdded = () => {
-    setShowSearchPanel(false);
-  };
-
   if (!list) {
     return (
       <div className="board">
@@ -73,6 +68,41 @@ function ListBuilder() {
     );
   }
 
+  // Permission guard - redirect non-owners to view page
+  if (!list.isOwner) {
+    return (
+      <div className="board">
+        <header className="board-header">
+          <div className="header-left">
+            <h1 className="site-title">analog</h1>
+            <nav className="board-nav">
+              <Link to="/">index</Link>
+              <span className="nav-separator">/</span>
+              <Link to="/profile">profile</Link>
+              <span className="nav-separator">/</span>
+              <Link to="/log">log</Link>
+              <span className="nav-separator">/</span>
+              <Link to="/forums">forums</Link>
+              <span className="nav-separator">/</span>
+              <Link to="/lists">lists</Link>
+            </nav>
+          </div>
+          <div className="header-right">
+            <UserMenu />
+          </div>
+        </header>
+        <div className="access-denied">
+          <h2>access denied</h2>
+          <p>you don't have permission to edit this list.</p>
+          <p>this list belongs to <strong>{list.authorDisplayName}</strong>.</p>
+          <button onClick={() => navigate(`/lists/${id}`)} className="raw-button">
+            view this list instead
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="board">
       <header className="board-header">
@@ -96,9 +126,9 @@ function ListBuilder() {
       </header>
 
       <div className="action-bar">
-        <button onClick={() => navigate("/lists")} className="raw-button">
-          &lt; back to lists
-        </button>
+          <button onClick={() => navigate("/lists")} className="raw-button">
+            &lt; back to lists
+          </button>
       </div>
 
       <div className="list-builder-header">
@@ -129,24 +159,22 @@ function ListBuilder() {
             <p>start adding anime to your list</p>
           </div>
         ) : (
-          <div className="list-grid">
+          <div className="analog-list-grid">
             {list.items.map((anime) => (
-              <div key={anime._id} className="list-grid-item">
-                <div className="list-item-image">
-                  {anime.picture && (
-                    <img 
-                      src={anime.picture} 
-                      alt={anime.title}
-                      className="list-item-img"
-                    />
-                  )}
-                </div>
-                <div className="list-item-content">
-                  <h3 className="list-item-title">{anime.title}</h3>
-                  <div className="list-item-meta">
-                    <span className="list-item-type">{anime.type}</span>
+              <div key={anime._id} className="poster-item">
+                {anime.picture && (
+                  <img 
+                    src={anime.picture} 
+                    alt={anime.title}
+                    className="poster-image"
+                  />
+                )}
+                <div className="poster-overlay">
+                  <h3 className="poster-title">{anime.title}</h3>
+                  <div className="poster-meta">
+                    <span className="poster-type">{anime.type}</span>
                     {anime.score?.arithmeticMean && (
-                      <span className="list-item-score">
+                      <span className="poster-score">
                         {anime.score.arithmeticMean.toFixed(1)}
                       </span>
                     )}
@@ -166,11 +194,10 @@ function ListBuilder() {
       </div>
 
       {showSearchPanel && (
-        <AnimeSearchPanel
-          listId={id!}
-          onClose={handleCloseSearch}
-          onAnimeAdded={handleAnimeAdded}
-        />
+        <div className="search-placeholder">
+          <p>Search panel temporarily disabled</p>
+          <button onClick={handleCloseSearch}>Close</button>
+        </div>
       )}
 
       <footer className="board-footer">

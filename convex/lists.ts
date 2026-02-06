@@ -7,6 +7,8 @@ export const getLists = query({
   handler: async (ctx, args) => {
     const limit = args.limit ?? 20;
 
+    const currentUserId = await getAuthUserId(ctx);
+
     const lists = await ctx.db
       .query("animeLists")
       .withIndex("by_updatedAt", (q) => q)
@@ -23,6 +25,7 @@ export const getLists = query({
         return {
           ...list,
           authorDisplayName: author?.displayName || "anonymous",
+          isOwner: currentUserId === list.authorId,
         };
       })
     );
@@ -57,6 +60,9 @@ export const getList = query({
       .withIndex("by_userId", (q) => q.eq("userId", list.authorId))
       .unique();
 
+    const currentUserId = await getAuthUserId(ctx);
+    const isOwner = currentUserId === list.authorId;
+
     const listItems = await ctx.db
       .query("animeListItems")
       .withIndex("by_listId", (q) => q.eq("listId", args.listId))
@@ -73,6 +79,7 @@ export const getList = query({
     return {
       ...list,
       authorDisplayName: author?.displayName || "anonymous",
+      isOwner,
       items: animeItems.filter((anime): anime is NonNullable<typeof anime> => anime !== null),
     };
   },

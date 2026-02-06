@@ -39,6 +39,44 @@
   background-color: var(--bg-alt);
 }
 
+.list-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.owned-badge {
+  font-family: var(--font);
+  font-size: 9px;
+  padding: 2px 6px;
+  border: 1px solid var(--accent);
+  background-color: var(--accent);
+  color: var(--bg);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.owned-card {
+  border-left: 3px solid var(--accent);
+}
+
+.view-card {
+  border-left: 3px solid var(--border);
+}
+
+.list-card-action {
+  font-family: var(--font);
+  font-size: 9px;
+  color: var(--fg-light);
+  text-transform: lowercase;
+  margin-top: auto;
+  text-align: right;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+}
+
 .list-card {
   border: 1px solid var(--border);
   background-color: var(--bg);

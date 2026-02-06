@@ -31,3 +31,174 @@
 .list-view-author {
   color: var(--accent);
 }
+
+/* Archive Catalog Grid - Consistent with ListBuilder */
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  background-color: var(--bg);
+  padding: 24px;
+}
+
+/* Subtle technical texture */
+.archive-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent calc(25% - 1px),
+    rgba(0, 0, 0, 0.03) calc(25% - 1px),
+    rgba(0, 0, 0, 0.03) 25%
+  );
+  pointer-events: none;
+}
+
+.archive-grid {
+  position: relative;
+}
+
+.poster-item {
+  position: relative;
+  aspect-ratio: 3/4;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.poster-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.poster-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.poster-item:hover .poster-image {
+  transform: scale(1.02);
+}
+
+.poster-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+  color: white;
+  padding: 40px 8px 12px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.poster-item:hover .poster-overlay {
+  transform: translateY(0);
+}
+
+.poster-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0 0 4px 0;
+  color: white;
+  text-transform: lowercase;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.poster-meta {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: lowercase;
+}
+
+.poster-type {
+  color: var(--accent);
+}
+
+.poster-score {
+  color: white;
+}
+
+.poster-meta span {
+  margin: 0;
+}
+
+/* Staggered entrance animation */
+.archive-grid .poster-item {
+  animation: posterReveal 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes posterReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add staggered delays */
+.poster-item:nth-child(1) { animation-delay: 0.1s; }
+.poster-item:nth-child(2) { animation-delay: 0.2s; }
+.poster-item:nth-child(3) { animation-delay: 0.3s; }
+.poster-item:nth-child(4) { animation-delay: 0.4s; }
+.poster-item:nth-child(5) { animation-delay: 0.5s; }
+.poster-item:nth-child(6) { animation-delay: 0.6s; }
+.poster-item:nth-child(7) { animation-delay: 0.7s; }
+.poster-item:nth-child(8) { animation-delay: 0.8s; }
+.poster-item:nth-child(9) { animation-delay: 0.9s; }
+.poster-item:nth-child(10) { animation-delay: 1.0s; }
+.poster-item:nth-child(11) { animation-delay: 1.1s; }
+.poster-item:nth-child(12) { animation-delay: 1.2s; }
+.poster-item:nth-child(13) { animation-delay: 1.3s; }
+.poster-item:nth-child(14) { animation-delay: 1.4s; }
+.poster-item:nth-child(15) { animation-delay: 1.5s; }
+
+/* Responsive adjustments - Consistent catalog structure */
+@media (max-width: 1200px) {
+  .archive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .archive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .archive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .poster-item {
+    aspect-ratio: 2/3;
+  }
+}
