@@ -217,6 +217,50 @@
   font-style: italic;
 }
 
+/* Reply Toggle Button */
+.reply-toggle-button {
+  background: none;
+  border: none;
+  color: var(--link);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 10px;
+  padding: 0;
+  text-decoration: underline;
+  text-transform: lowercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reply-toggle-button:hover {
+  color: var(--link-hover);
+}
+
+/* Replies List */
+.replies-list {
+  margin-top: 15px;
+  margin-left: 44px;
+}
+
+.reply-comment {
+  background-color: var(--bg-alt);
+  border-color: var(--border-dark);
+  margin-bottom: 10px;
+}
+
+.reply-comment:last-child {
+  margin-bottom: 0;
+}
+
+.replies-loading {
+  margin-left: 44px;
+  padding: 10px;
+  font-size: 10px;
+  color: var(--fg-muted);
+  font-style: italic;
+}
+
 /* Nested Comments (Replies) */
 .comment .comment {
   margin-left: 44px;
@@ -268,5 +312,13 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+  }
+  
+  .replies-list {
+    margin-left: 32px;
+  }
+  
+  .replies-loading {
+    margin-left: 32px;
   }
 }

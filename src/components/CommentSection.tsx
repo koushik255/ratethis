@@ -22,9 +22,69 @@ interface CommentSectionProps {
   listId: string;
 }
 
+interface RepliesListProps {
+  listId: string;
+  parentCommentId: string;
+  formatTimestamp: (timestamp: number) => string;
+}
+
+function RepliesList({ listId, parentCommentId, formatTimestamp }: RepliesListProps) {
+  const replies = useQuery(
+    api.listComments.getListComments,
+    { listId: listId as any, parentId: parentCommentId as any }
+  );
+
+  if (!replies) {
+    return <div className="replies-loading">loading replies...</div>;
+  }
+
+  if (replies.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="replies-list">
+      {replies.map((reply: Comment) => (
+        <div key={reply._id} className="comment reply-comment">
+          <div className="comment-avatar">
+            {reply.authorProfilePicture ? (
+              <img
+                src={reply.authorProfilePicture}
+                alt={reply.authorDisplayName}
+                className="avatar-img"
+              />
+            ) : (
+              <div className="avatar-placeholder">
+                {reply.authorDisplayName.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
+
+          <div className="comment-body">
+            <div className="comment-meta">
+              <span className="comment-author">{reply.authorDisplayName}</span>
+              <span className="comment-time">
+                {formatTimestamp(reply.createdAt)}
+              </span>
+              {reply.updatedAt > reply.createdAt && (
+                <span className="comment-edited">(edited)</span>
+              )}
+            </div>
+
+            <div className="comment-content">
+              {reply.content}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function CommentSection({ listId }: CommentSectionProps) {
   const [showReplyForm, setShowReplyForm] = useState<string | null>(null);
   const [editingComment, setEditingComment] = useState<string | null>(null);
+  const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
 
   const comments = useQuery(
     api.listComments.getListComments,
@@ -52,6 +112,18 @@ export function CommentSection({ listId }: CommentSectionProps) {
       console.error("Failed to delete comment:", error);
       alert("Failed to delete comment.");
     }
+  };
+
+  const toggleReplies = (commentId: string) => {
+    setExpandedReplies(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(commentId)) {
+        newSet.delete(commentId);
+      } else {
+        newSet.add(commentId);
+      }
+      return newSet;
+    });
   };
 
   const formatTimestamp = (timestamp: number) => {
@@ -171,9 +243,12 @@ export function CommentSection({ listId }: CommentSectionProps) {
                 )}
 
                 {comment.replyCount > 0 && (
-                  <span className="reply-count">
-                    {comment.replyCount} {comment.replyCount === 1 ? "reply" : "replies"}
-                  </span>
+                  <button
+                    className="reply-toggle-button"
+                    onClick={() => toggleReplies(comment._id)}
+                  >
+                    {expandedReplies.has(comment._id) ? "▼" : "▶"} {comment.replyCount} {comment.replyCount === 1 ? "reply" : "replies"}
+                  </button>
                 )}
               </div>
 
@@ -183,6 +258,14 @@ export function CommentSection({ listId }: CommentSectionProps) {
                   parentCommentId={comment._id}
                   onCancel={() => setShowReplyForm(null)}
                   onSuccess={() => setShowReplyForm(null)}
+                />
+              )}
+
+              {expandedReplies.has(comment._id) && (
+                <RepliesList
+                  listId={listId}
+                  parentCommentId={comment._id}
+                  formatTimestamp={formatTimestamp}
                 />
               )}
             </div>
