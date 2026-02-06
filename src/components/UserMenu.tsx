@@ -1,14 +1,18 @@
 import { useQuery } from "convex/react";
 import { useConvexAuth } from "convex/react";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 import { api } from "../../convex/_generated/api";
 import { SignIn, SignOut } from "./Auth";
 import "./UserMenu.css";
 
-export function UserMenu() {
+export const UserMenu = memo(function UserMenu() {
   const { isAuthenticated } = useConvexAuth();
-  const profile = useQuery(api.userProfiles.getMyProfile);
-  
+  const profile = useQuery(
+    api.userProfiles.getMyProfile,
+    isAuthenticated ? undefined : "skip"
+  );
+
   if (!isAuthenticated) {
     return <SignIn />;
   }
@@ -33,4 +37,4 @@ export function UserMenu() {
       <SignOut />
     </div>
   );
-}
+});

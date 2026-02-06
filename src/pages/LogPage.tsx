@@ -28,9 +28,15 @@ function isWatchedAnime(anime: Doc<"anime"> | WatchedAnime): anime is WatchedAni
 
 function LogPage() {
   const [activeTab, setActiveTab] = useState<TabType>("favorites");
-  
-  const favorites = useQuery(api.userAnime.getMyFavorites);
-  const watched = useQuery(api.userAnime.getMyWatched);
+
+  const favorites = useQuery(
+    api.userAnime.getMyFavorites,
+    activeTab === "favorites" ? undefined : "skip"
+  );
+  const watched = useQuery(
+    api.userAnime.getMyWatched,
+    activeTab === "watched" ? undefined : "skip"
+  );
 
   const displayItems = activeTab === "favorites" ? favorites : watched;
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
@@ -39,16 +39,29 @@ interface SearchResult extends UserProfile {
   requestStatus: "none" | "pending_sent" | "pending_received";
 }
 
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 function FriendsPage() {
   const [activeTab, setActiveTab] = useState<Tab>("friends");
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useConvexAuth();
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   const friends = useQuery(api.friends.getMyFriends);
   const requests = useQuery(api.friends.getFriendRequests);
   const searchResults = useQuery(
     api.friends.searchUsers,
-    searchQuery.trim() ? { query: searchQuery, limit: 20 } : "skip"
+    debouncedSearchQuery.trim() ? { query: debouncedSearchQuery, limit: 20 } : "skip"
   );
 
   const sendRequest = useMutation(api.friends.sendFriendRequest);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { useConvexAuth } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -13,7 +13,7 @@ interface AnimeActionsProps {
   variant?: "inline" | "hover";
 }
 
-export function AnimeActions({ animeId, animeTitle, variant = "inline" }: AnimeActionsProps) {
+export const AnimeActions = memo(function AnimeActions({ animeId, animeTitle, variant = "inline" }: AnimeActionsProps) {
   const { isAuthenticated } = useConvexAuth();
   const [showModal, setShowModal] = useState(false);
   
@@ -82,4 +82,4 @@ export function AnimeActions({ animeId, animeTitle, variant = "inline" }: AnimeA
       )}
     </>
   );
-}
+});

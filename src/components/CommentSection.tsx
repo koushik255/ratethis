@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { CommentForm } from "./CommentForm";
@@ -26,12 +26,13 @@ interface RepliesListProps {
   listId: string;
   parentCommentId: string;
   formatTimestamp: (timestamp: number) => string;
+  isExpanded: boolean;
 }
 
-function RepliesList({ listId, parentCommentId, formatTimestamp }: RepliesListProps) {
+function RepliesList({ listId, parentCommentId, formatTimestamp, isExpanded }: RepliesListProps) {
   const replies = useQuery(
     api.listComments.getListComments,
-    { listId: listId as any, parentId: parentCommentId as any }
+    isExpanded ? { listId: listId as any, parentId: parentCommentId as any } : "skip"
   );
 
   if (!replies) {
@@ -93,17 +94,14 @@ export function CommentSection({ listId }: CommentSectionProps) {
     { listId: listId as any }
   );
 
-  const commentCount = useQuery(
-    api.listComments.getListCommentCount,
-    { listId: listId as any }
-  );
-
   const canComment = useQuery(
     api.listComments.canUserComment,
     { listId: listId as any }
   );
 
   const deleteCommentMutation = useMutation(api.listComments.deleteComment);
+
+  const commentCount = comments?.length ?? 0;
 
   const handleDelete = async (commentId: string) => {
     if (!window.confirm("Delete this comment?")) return;
@@ -128,7 +126,7 @@ export function CommentSection({ listId }: CommentSectionProps) {
     });
   };
 
-  const formatTimestamp = (timestamp: number) => {
+  const formatTimestamp = useCallback((timestamp: number) => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -140,11 +138,11 @@ export function CommentSection({ listId }: CommentSectionProps) {
     if (diffMinutes < 60) return `${diffMinutes}m ago`;
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
-    
-    return date.toLocaleDateString();
-  };
 
-  if (!comments || commentCount === undefined || canComment === undefined) {
+    return date.toLocaleDateString();
+  }, []);
+
+  if (!comments || canComment === undefined) {
     return <div className="loading">loading comments...</div>;
   }
 
@@ -270,6 +268,7 @@ export function CommentSection({ listId }: CommentSectionProps) {
                   listId={listId}
                   parentCommentId={comment._id}
                   formatTimestamp={formatTimestamp}
+                  isExpanded={true}
                 />
               )}
             </div>
