@@ -102,4 +102,30 @@ export default defineSchema({
   })
     .index("by_listId", ["listId"])
     .index("by_animeId", ["animeId"]),
+
+  animeListComments: defineTable({
+    listId: v.id("animeLists"),
+    authorId: v.string(),
+    content: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    parentCommentId: v.optional(v.id("animeListComments")),
+    replyCount: v.number(),
+    isDeleted: v.boolean(),
+  })
+    .index("by_listId", ["listId"])
+    .index("by_authorId", ["authorId"])
+    .index("by_parentId", ["parentCommentId"])
+    .index("by_createdAt", ["createdAt"])
+    .index("by_listId_parentId", ["listId", "parentCommentId"]),
+
+  animeListCommentVotes: defineTable({
+    commentId: v.id("animeListComments"),
+    userId: v.string(),
+    voteType: v.union(v.literal("upvote"), v.literal("downvote")),
+    createdAt: v.number(),
+  })
+    .index("by_commentId", ["commentId"])
+    .index("by_userId", ["userId"])
+    .index("by_commentId_userId", ["commentId", "userId"]),
 });

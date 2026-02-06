@@ -125,3 +125,19 @@ export const getById = query({
     return await ctx.db.get(id);
   },
 });
+
+// Simple title lookup - returns just the top match for MAL matching
+export const getTopMatchByTitle = query({
+  args: {
+    title: v.string(),
+  },
+  handler: async (ctx, { title }) => {
+    // Use the existing search function but return only the first result
+    const searchResults = await ctx.db
+      .query("anime")
+      .withSearchIndex("search_title", (q) => q.search("title", title))
+      .take(1);
+    
+    return searchResults[0] || null;
+  },
+});

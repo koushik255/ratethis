@@ -16,3 +16,4 @@ anime.db
 
 # Python scripts directory (not needed for deployment)
 scripts/
+mal-scraper/

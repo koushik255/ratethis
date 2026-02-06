@@ -2,6 +2,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
+import { CommentSection } from "../components/CommentSection";
 import "./ListView.css";
 
 function ListView() {
@@ -124,6 +125,11 @@ function ListView() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Comments Section - Only in view mode, below the anime grid */}
+      <div className="list-comments-section">
+        <CommentSection listId={id!} />
       </div>
 
       <footer className="board-footer">

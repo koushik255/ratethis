@@ -1,5 +1,9 @@
-I need to refine the database, meaning i could deadass make it so that it only takes from my anime list,
-a decision should be made to either rely solely on the database per week
+Import feature from mal --,
+lets scrape the completed manga section
+ok i got that working and for "anime" specifically
+but now it needs to
+scrape data -> ok i have it in backend -> frontend receives and someone matches each one with a search
 
-but if they stop deadass what do i do?? how do they get their information???? how tf does MAL auto update all of their stuff???
-
+idea -backend-
+it searchs the database pulls top answer for said anime and then it would just confirm that as a match:
+--would this not have a 100% conversion rate for mal? because its already being scrape from it right?--

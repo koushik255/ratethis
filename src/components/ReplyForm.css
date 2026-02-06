@@ -1,0 +1,98 @@
+.reply-form {
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  padding: 16px;
+  margin: 8px 0;
+}
+
+.reply-textarea {
+  width: 100%;
+  min-height: 60px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-alt);
+  color: var(--fg);
+  padding: 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.reply-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.reply-textarea::placeholder {
+  color: var(--fg-muted);
+}
+
+.reply-form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.reply-char-count {
+  font-family: var(--font);
+  font-size: 10px;
+  color: var(--fg-light);
+}
+
+.reply-form-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.reply-cancel-button {
+  font-family: var(--font);
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: lowercase;
+}
+
+.reply-cancel-button:hover {
+  background-color: var(--bg-alt);
+}
+
+.reply-submit-button {
+  font-family: var(--font);
+  font-size: 11px;
+  padding: 4px 12px;
+  border: 1px solid var(--border-dark);
+  background-color: var(--fg);
+  color: var(--bg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: lowercase;
+}
+
+.reply-submit-button:hover:not(:disabled) {
+  background-color: var(--fg-light);
+}
+
+.reply-submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reply-form-login {
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  padding: 12px;
+  margin: 8px 0;
+  text-align: center;
+}
+
+.reply-form-login p {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--fg-muted);
+  margin: 0;
+}
