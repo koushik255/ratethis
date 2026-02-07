@@ -7,3 +7,10 @@ scrape data -> ok i have it in backend -> frontend receives and someone matches 
 idea -backend-
 it searchs the database pulls top answer for said anime and then it would just confirm that as a match:
 --would this not have a 100% conversion rate for mal? because its already being scrape from it right?--
+add manga(somehow dude and read thorugh code since this could acuallty be somewhat comp so make sure its not selling me thinks)
+
+
+public profile pages 
+
+
+Also make sure the performance is fine on the scraper before i make that public because i dont want to fuck mal with crazy amount of requests

@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 const App = lazy(() => import("./App"));
 const AnimeDetail = lazy(() => import("./pages/AnimeDetail"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const PublicProfilePage = lazy(() => import("./pages/PublicProfilePage"));
 const LogPage = lazy(() => import("./pages/LogPage"));
 const ForumsPage = lazy(() => import("./pages/ForumsPage"));
 const ThreadView = lazy(() => import("./pages/ThreadView"));
@@ -39,6 +40,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/" element={<App />} />
               <Route path="/anime/:id" element={<AnimeDetail />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/:username" element={<PublicProfilePage />} />
               <Route path="/log" element={<LogPage />} />
               <Route path="/forums" element={<ForumsPage />} />
               <Route path="/forums/thread/:id" element={<ThreadView />} />

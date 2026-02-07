@@ -43,6 +43,7 @@ export const getMyFriends = query({
       .map((profile) => ({
         userId: profile!.userId,
         displayName: profile!.displayName || "anonymous",
+        username: profile!.username,
         profilePicture: profile!.profilePicture,
       }))
       .sort((a, b) => a.displayName.localeCompare(b.displayName));
@@ -137,7 +138,8 @@ export const searchUsers = query({
       .filter(
         (p) =>
           p.userId !== userId &&
-          p.displayName?.toLowerCase().includes(searchTerm)
+          (p.displayName?.toLowerCase().includes(searchTerm) ||
+           p.username?.toLowerCase().includes(searchTerm))
       )
       .slice(0, limit);
 
@@ -188,6 +190,7 @@ export const searchUsers = query({
         return {
           userId: profile.userId,
           displayName: profile.displayName || "anonymous",
+          username: profile.username,
           profilePicture: profile.profilePicture,
           isFriend,
           requestStatus,

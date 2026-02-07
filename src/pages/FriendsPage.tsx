@@ -11,6 +11,7 @@ type Tab = "friends" | "requests";
 interface UserProfile {
   userId: string;
   displayName: string;
+  username?: string;
   profilePicture?: string;
 }
 
@@ -113,6 +114,17 @@ function FriendsPage() {
 
   const totalRequests = (requests?.received?.length || 0) + (requests?.sent?.length || 0);
 
+  const UserProfileLink = ({ user, className = "" }: { user: UserProfile; className?: string }) => {
+    if (user.username) {
+      return (
+        <Link to={`/profile/${user.username}`} className={`friend-name-link ${className}`}>
+          {user.displayName}
+        </Link>
+      );
+    }
+    return <span className={`friend-name ${className}`}>{user.displayName}</span>;
+  };
+
   return (
     <div className="board">
       <header className="board-header">
@@ -162,7 +174,7 @@ function FriendsPage() {
             <div className="friends-search">
               <input
                 type="text"
-                placeholder="search users by display name..."
+                placeholder="search users by name or username..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="friends-search-input"
@@ -193,7 +205,10 @@ function FriendsPage() {
                           )}
                         </div>
                         <div className="friend-info">
-                          <span className="friend-name">{user.displayName}</span>
+                          <UserProfileLink user={user} />
+                          {user.username && (
+                            <span className="friend-username">@{user.username}</span>
+                          )}
                         </div>
                         <div className="friend-actions">
                           {user.isFriend ? (
@@ -247,9 +262,12 @@ function FriendsPage() {
                           </div>
                         )}
                       </div>
-                      <div className="friend-info">
-                        <span className="friend-name">{friend.displayName}</span>
-                      </div>
+                       <div className="friend-info">
+                          <UserProfileLink user={friend} />
+                          {friend.username && (
+                            <span className="friend-username">@{friend.username}</span>
+                          )}
+                        </div>
                       <div className="friend-actions">
                         <button
                           className="friend-action-button remove"

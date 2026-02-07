@@ -53,6 +53,53 @@ export const getMyWatched = query({
   },
 });
 
+export const getUserFavorites = query({
+  args: { userId: v.string() },
+  handler: async (ctx, args) => {
+    const userAnimeItems = await ctx.db
+      .query("userAnime")
+      .withIndex("by_userId_favorite", (q) =>
+        q.eq("userId", args.userId).eq("isFavorite", true)
+      )
+      .collect();
+
+    const animeItems = await Promise.all(
+      userAnimeItems.map(async (item) => {
+        const anime = await ctx.db.get(item.animeId);
+        return anime;
+      })
+    );
+
+    return animeItems.filter((anime): anime is NonNullable<typeof anime> => anime !== null);
+  },
+});
+
+export const getUserWatched = query({
+  args: { userId: v.string() },
+  handler: async (ctx, args) => {
+    const userAnimeItems = await ctx.db
+      .query("userAnime")
+      .withIndex("by_userId_watched", (q) =>
+        q.eq("userId", args.userId).eq("isWatched", true)
+      )
+      .collect();
+
+    const result = await Promise.all(
+      userAnimeItems.map(async (item) => {
+        const anime = await ctx.db.get(item.animeId);
+        if (!anime) return null;
+        return {
+          ...anime,
+          watchedAt: item.watchedAt,
+          watchedComment: item.watchedComment,
+        };
+      })
+    );
+
+    return result.filter((item): item is NonNullable<typeof item> => item !== null);
+  },
+});
+
 export const getUserAnimeStatus = query({
   args: { animeId: v.id("anime") },
   handler: async (ctx, args) => {

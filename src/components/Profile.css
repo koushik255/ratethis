@@ -122,3 +122,78 @@
 .raw-button.secondary:hover {
   background-color: var(--bg-alt);
 }
+
+/* Username field styles */
+.raw-input.error {
+  border-color: var(--error, #ef4444);
+  background-color: var(--error-bg, #fef2f2);
+}
+
+.field-error {
+  display: block;
+  font-size: 11px;
+  color: var(--error, #ef4444);
+  margin-top: 4px;
+}
+
+.field-info {
+  display: block;
+  font-size: 11px;
+  color: var(--fg-light);
+  margin-top: 4px;
+}
+
+.field-help {
+  display: block;
+  font-size: 10px;
+  color: var(--fg-light);
+  margin-top: 4px;
+}
+
+.checking-indicator {
+  font-size: 10px;
+  color: var(--fg-light);
+  font-weight: normal;
+}
+
+.form-error {
+  color: var(--error, #ef4444);
+  font-size: 12px;
+  margin-bottom: 15px;
+  padding: 8px;
+  background-color: var(--error-bg, #fef2f2);
+  border: 1px solid var(--error, #ef4444);
+}
+
+/* Username prompt */
+.username-prompt {
+  background-color: var(--bg-alt);
+  border: 1px solid var(--border);
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.username-prompt p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.raw-button.small {
+  font-size: 11px;
+  padding: 6px 12px;
+}
+
+/* Profile username link */
+.profile-username {
+  display: block;
+  font-size: 12px;
+  color: var(--link-color);
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.profile-username:hover {
+  text-decoration: underline;
+}

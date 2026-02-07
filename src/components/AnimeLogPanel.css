@@ -1,0 +1,64 @@
+/* AnimeLogPanel specific styles */
+
+.anime-log-panel {
+  width: 100%;
+}
+
+.log-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-tab {
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 10px 20px;
+  border: none;
+  background-color: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  text-transform: lowercase;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s ease;
+}
+
+.log-tab:hover {
+  color: var(--fg);
+}
+
+.log-tab.active {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+.log-content {
+  width: 100%;
+}
+
+.empty-state {
+  padding: 60px 0;
+  text-align: center;
+  color: var(--fg-muted);
+}
+
+.watched-info {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.watched-date {
+  font-size: 10px;
+  color: var(--fg-light);
+}
+
+.watched-comment {
+  font-size: 11px;
+  color: var(--fg-muted);
+  margin: 6px 0 0 0;
+  font-style: italic;
+  line-height: 1.4;
+}

@@ -45,8 +45,11 @@ export default defineSchema({
     profilePicture: v.optional(v.string()),
     displayName: v.optional(v.string()),
     bio: v.optional(v.string()),
+    username: v.optional(v.string()),
+    usernameLastChangedAt: v.optional(v.number()),
   })
-    .index("by_userId", ["userId"]),
+    .index("by_userId", ["userId"])
+    .index("by_username", ["username"]),
 
   userAnime: defineTable({
     userId: v.string(),
