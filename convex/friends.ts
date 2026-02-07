@@ -480,3 +480,87 @@ export const removeFriend = mutation({
     return true;
   },
 });
+
+// Get recent watched activity from friends (last 7 days, max 15 items)
+export const getFriendsRecentActivity = query({
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    // Get all friendships where user is either userId1 or userId2
+    const [friendshipsAsUser1, friendshipsAsUser2] = await Promise.all([
+      ctx.db
+        .query("friendships")
+        .withIndex("by_userId1", (q) => q.eq("userId1", userId))
+        .collect(),
+      ctx.db
+        .query("friendships")
+        .withIndex("by_userId2", (q) => q.eq("userId2", userId))
+        .collect(),
+    ]);
+
+    // Extract friend userIds
+    const friendIds = [
+      ...friendshipsAsUser1.map((f) => f.userId2),
+      ...friendshipsAsUser2.map((f) => f.userId1),
+    ];
+
+    if (friendIds.length === 0) return [];
+
+    // Calculate timestamp for 7 days ago
+    const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+    // Fetch recent watched anime for all friends
+    const allActivity = await Promise.all(
+      friendIds.map(async (friendId) => {
+        // Get friend's profile
+        const friendProfile = await ctx.db
+          .query("userProfiles")
+          .withIndex("by_userId", (q) => q.eq("userId", friendId))
+          .unique();
+
+        // Get friend's recent watched anime (watched in last 7 days)
+        const recentWatched = await ctx.db
+          .query("userAnime")
+          .withIndex("by_userId_watched", (q) =>
+            q.eq("userId", friendId).eq("isWatched", true)
+          )
+          .order("desc")
+          .take(100);
+
+        // Fetch anime details for each watched item (only from last 7 days)
+        const activityItems = await Promise.all(
+          recentWatched
+            .filter((item) => item.watchedAt && item.watchedAt > oneWeekAgo)
+            .map(async (item) => {
+              const anime = await ctx.db.get(item.animeId);
+              if (!anime) return null;
+
+              return {
+                friendId,
+                friendName: friendProfile?.displayName || "anonymous",
+                friendUsername: friendProfile?.username,
+                friendProfilePicture: friendProfile?.profilePicture,
+                animeId: item.animeId,
+                animeTitle: anime.title,
+                animePicture: anime.picture,
+                animeType: anime.type,
+                watchedAt: item.watchedAt!,
+                watchedComment: item.watchedComment,
+              };
+            })
+        );
+
+        return activityItems.filter((item): item is NonNullable<typeof item> => item !== null);
+      })
+    );
+
+    // Flatten and sort by watchedAt descending (most recent first)
+    const flattenedActivity = allActivity
+      .flat()
+      .sort((a, b) => (b.watchedAt || 0) - (a.watchedAt || 0))
+      .slice(0, 15);
+
+    return flattenedActivity;
+  },
+});
