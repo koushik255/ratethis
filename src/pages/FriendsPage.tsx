@@ -6,7 +6,7 @@ import { UserMenu } from "../components/UserMenu";
 import { useConvexAuth } from "convex/react";
 import "./FriendsPage.css";
 
-type Tab = "friends" | "requests";
+type Tab = "recent" | "friends" | "requests";
 
 interface UserProfile {
   userId: string;
@@ -40,6 +40,19 @@ interface SearchResult extends UserProfile {
   requestStatus: "none" | "pending_sent" | "pending_received";
 }
 
+interface RecentActivityItem {
+  friendId: string;
+  friendName: string;
+  friendUsername?: string;
+  friendProfilePicture?: string;
+  animeId: string;
+  animeTitle: string;
+  animePicture?: string;
+  animeType: string;
+  watchedAt?: number;
+  watchedComment?: string;
+}
+
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -52,7 +65,7 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 function FriendsPage() {
-  const [activeTab, setActiveTab] = useState<Tab>("friends");
+  const [activeTab, setActiveTab] = useState<Tab>("recent");
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated } = useConvexAuth();
 
@@ -60,6 +73,7 @@ function FriendsPage() {
 
   const friends = useQuery(api.friends.getMyFriends);
   const requests = useQuery(api.friends.getFriendRequests);
+  const recentActivity = useQuery(api.friends.getFriendsRecentActivity);
   const searchResults = useQuery(
     api.friends.searchUsers,
     debouncedSearchQuery.trim() ? { query: debouncedSearchQuery, limit: 20 } : "skip"
@@ -151,6 +165,12 @@ function FriendsPage() {
 
       <div className="friends-tabs">
         <button
+          className={`friends-tab ${activeTab === "recent" ? "active" : ""}`}
+          onClick={() => setActiveTab("recent")}
+        >
+          recent
+        </button>
+        <button
           className={`friends-tab ${activeTab === "friends" ? "active" : ""}`}
           onClick={() => setActiveTab("friends")}
         >
@@ -168,6 +188,80 @@ function FriendsPage() {
         {!isAuthenticated ? (
           <div className="friends-auth-prompt">
             <p>please sign in to manage friends</p>
+          </div>
+        ) : activeTab === "recent" ? (
+          <div className="friends-recent">
+            <h3 className="friends-section-title">recent activity</h3>
+            {recentActivity === undefined ? (
+              <div className="loading">
+                <p>loading...</p>
+              </div>
+            ) : recentActivity.length === 0 ? (
+              <div className="friends-empty">
+                <p>no recent activity from friends in the last week</p>
+                <p className="friends-hint">add friends to see what they're watching</p>
+              </div>
+            ) : (
+              <div className="recent-activity-list">
+                {recentActivity.map((activity: RecentActivityItem) => (
+                  <div key={`${activity.friendId}-${activity.animeId}`} className="recent-activity-item">
+                    <div className="recent-activity-friend">
+                      {activity.friendProfilePicture ? (
+                        <img
+                          src={activity.friendProfilePicture}
+                          alt={activity.friendName}
+                          className="recent-activity-avatar"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="recent-activity-avatar-placeholder">
+                          {activity.friendName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="recent-activity-friend-info">
+                        {activity.friendUsername ? (
+                          <Link to={`/profile/${activity.friendUsername}`} className="recent-activity-friend-name">
+                            {activity.friendName}
+                          </Link>
+                        ) : (
+                          <span className="recent-activity-friend-name">{activity.friendName}</span>
+                        )}
+                        <span className="recent-activity-date">
+                          {activity.watchedAt
+                            ? new Date(activity.watchedAt).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              })
+                            : "unknown date"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="recent-activity-anime">
+                      {activity.animePicture && (
+                        <Link to={`/anime/${activity.animeId}`}>
+                          <img
+                            src={activity.animePicture}
+                            alt={activity.animeTitle}
+                            className="recent-activity-anime-thumb"
+                            loading="lazy"
+                          />
+                        </Link>
+                      )}
+                      <div className="recent-activity-anime-info">
+                        <Link to={`/anime/${activity.animeId}`} className="recent-activity-anime-title">
+                          {activity.animeTitle}
+                        </Link>
+                        <span className="recent-activity-anime-type">{activity.animeType}</span>
+                        {activity.watchedComment && (
+                          <p className="recent-activity-comment">"{activity.watchedComment}"</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : activeTab === "friends" ? (
           <>

@@ -239,6 +239,140 @@
   margin-bottom: 0;
 }
 
+/* Recent Activity Styles */
+.friends-recent {
+  width: 100%;
+}
+
+.recent-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.recent-activity-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  transition: background-color 0.2s ease;
+}
+
+.recent-activity-item:hover {
+  background-color: var(--bg-alt);
+}
+
+.recent-activity-friend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.recent-activity-avatar {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  object-fit: cover;
+}
+
+.recent-activity-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--fg-muted);
+  background-color: var(--bg-alt);
+}
+
+.recent-activity-friend-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recent-activity-friend-name {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.recent-activity-friend-name:hover {
+  text-decoration: underline;
+}
+
+.recent-activity-date {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--fg-light);
+}
+
+.recent-activity-anime {
+  display: flex;
+  gap: 12px;
+  margin-left: 52px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.recent-activity-anime-thumb {
+  width: 60px;
+  height: 90px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  transition: opacity 0.2s ease;
+}
+
+.recent-activity-anime-thumb:hover {
+  opacity: 0.8;
+}
+
+.recent-activity-anime-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.recent-activity-anime-title {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--fg);
+  text-decoration: none;
+  line-height: 1.3;
+}
+
+.recent-activity-anime-title:hover {
+  text-decoration: underline;
+}
+
+.recent-activity-anime-type {
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+}
+
+.recent-activity-comment {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--fg-muted);
+  font-style: italic;
+  margin: 6px 0 0 0;
+  padding: 8px;
+  background-color: var(--bg-alt);
+  border-left: 2px solid var(--border);
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
   .friends-tab {
@@ -271,5 +405,16 @@
   .friend-action-button {
     font-size: 11px;
     padding: 4px 8px;
+  }
+
+  .recent-activity-anime {
+    margin-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .recent-activity-anime-thumb {
+    width: 80px;
+    height: 120px;
   }
 }
