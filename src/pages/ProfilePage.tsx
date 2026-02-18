@@ -16,8 +16,6 @@ function ProfilePage() {
             <span className="nav-separator">/</span>
             <Link to="/log">log</Link>
             <span className="nav-separator">/</span>
-            <Link to="/forums">forums</Link>
-            <span className="nav-separator">/</span>
             <Link to="/lists">lists</Link>
             <span className="nav-separator">/</span>
             <Link to="/friends">friends</Link>

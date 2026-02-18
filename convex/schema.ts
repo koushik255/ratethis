@@ -65,28 +65,6 @@ export default defineSchema({
     .index("by_userId_watched", ["userId", "isWatched"])
     .index("by_userId_animeId", ["userId", "animeId"]),
 
-  forumThreads: defineTable({
-    title: v.string(),
-    content: v.string(),
-    authorId: v.string(),
-    tag: v.union(v.literal("anime"), v.literal("manga"), v.literal("visual novel")),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-    replyCount: v.number(),
-  })
-    .index("by_authorId", ["authorId"])
-    .index("by_tag", ["tag"])
-    .index("by_updatedAt", ["updatedAt"]),
-
-  forumPosts: defineTable({
-    threadId: v.id("forumThreads"),
-    content: v.string(),
-    authorId: v.string(),
-    createdAt: v.number(),
-  })
-    .index("by_threadId", ["threadId"])
-    .index("by_authorId", ["authorId"]),
-
   animeLists: defineTable({
     title: v.string(),
     description: v.string(),

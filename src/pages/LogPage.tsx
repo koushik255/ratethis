@@ -32,8 +32,6 @@ function LogPage() {
             <span className="nav-separator">/</span>
             <span className="nav-current">log</span>
             <span className="nav-separator">/</span>
-            <Link to="/forums">forums</Link>
-            <span className="nav-separator">/</span>
             <Link to="/lists">lists</Link>
             <span className="nav-separator">/</span>
             <Link to="/friends">friends</Link>

@@ -10,8 +10,6 @@ const AnimeDetail = lazy(() => import("./pages/AnimeDetail"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const PublicProfilePage = lazy(() => import("./pages/PublicProfilePage"));
 const LogPage = lazy(() => import("./pages/LogPage"));
-const ForumsPage = lazy(() => import("./pages/ForumsPage"));
-const ThreadView = lazy(() => import("./pages/ThreadView"));
 const ListsPage = lazy(() => import("./pages/ListsPage"));
 const ListView = lazy(() => import("./pages/ListView"));
 const ListBuilder = lazy(() => import("./pages/ListBuilder"));
@@ -42,8 +40,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/profile/:username" element={<PublicProfilePage />} />
               <Route path="/log" element={<LogPage />} />
-              <Route path="/forums" element={<ForumsPage />} />
-              <Route path="/forums/thread/:id" element={<ThreadView />} />
               <Route path="/lists" element={<ListsPage />} />
               <Route path="/lists/:id" element={<ListView />} />
               <Route path="/lists/:id/edit" element={<ListBuilder />} />
