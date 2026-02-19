@@ -35,10 +35,10 @@
 /* Archive Catalog Grid - Consistent with ListBuilder */
 .archive-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
   background-color: var(--bg);
-  padding: 24px;
+  padding: 20px;
 }
 
 /* Subtle technical texture */
@@ -181,21 +181,27 @@
 /* Responsive adjustments - Consistent catalog structure */
 @media (max-width: 1200px) {
   .archive-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
 @media (max-width: 900px) {
   .archive-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+  .archive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
   .archive-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    padding: 16px;
+    gap: 10px;
+    padding: 12px;
   }
   
   .poster-item {
