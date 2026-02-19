@@ -1,70 +1,78 @@
-/* Profile Page - Minimal Grayscale */
+/* ============================================
+   PROFILE PAGE - Editorial Layout
+   ============================================ */
 
-.board {
-  max-width: 800px;
-  margin: 0;
-  padding: 20px;
-}
-
-/* Minimal Header */
-.board-header {
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border);
+/* Page Layout */
+.page-layout {
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+}
+
+/* Page Header */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
+  padding: var(--space-4) var(--space-8);
+  background-color: rgba(250, 250, 249, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.header-left {
+/* Page Content */
+.page-content {
   flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-8);
+  width: 100%;
 }
 
-.header-right {
-  margin-left: 20px;
+/* Page Footer */
+.page-footer {
+  padding: var(--space-4) var(--space-8);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
 }
 
-.site-title {
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: normal;
-  margin: 0 0 10px 0;
-  color: var(--fg);
-  letter-spacing: 2px;
-}
-
-.board-nav {
-  font-size: 12px;
-}
-
-.board-nav a {
-  color: var(--link);
-  text-decoration: none;
-}
-
-.board-nav a:hover {
-  color: var(--link-hover);
-  text-decoration: underline;
-}
-
-.nav-current {
-  color: var(--fg-muted);
-}
-
-.nav-separator {
-  color: var(--fg-light);
-  margin: 0 5px;
-}
-
-/* Footer */
-.board-footer {
-  margin-top: 40px;
-  padding-top: 15px;
-  border-top: 1px solid var(--border);
-  font-size: 10px;
-  color: var(--fg-light);
-}
-
-.board-footer p {
+.page-footer p {
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
   margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+  
+  .header-content {
+    justify-content: space-between;
+  }
+  
+  .page-content {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .site-title {
+    font-size: var(--text-2xl);
+  }
+  
+  .main-nav {
+    flex-wrap: wrap;
+  }
+  
+  .nav-link {
+    padding: var(--space-1) var(--space-2);
+  }
 }

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { AnimeLogPanel } from "../components/AnimeLogPanel";
+import "../styles.css";
 import "./LogPage.css";
 
 type TabType = "favorites" | "watched";
@@ -21,43 +22,37 @@ function LogPage() {
   );
 
   return (
-    <div className="board">
-      <header className="board-header">
-        <div className="header-left">
+    <div className="page-layout">
+      <header className="page-header">
+        <div className="header-content">
           <h1 className="site-title">analog</h1>
-          <nav className="board-nav">
-            <Link to="/">index</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/profile">profile</Link>
-            <span className="nav-separator">/</span>
-            <span className="nav-current">log</span>
-            <span className="nav-separator">/</span>
-            <Link to="/lists">lists</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/friends">friends</Link>
+          <nav className="main-nav">
+            <Link to="/" className="nav-link">index</Link>
+            <Link to="/profile" className="nav-link">profile</Link>
+            <Link to="/log" className="nav-link active">log</Link>
+            <Link to="/lists" className="nav-link">lists</Link>
+            <Link to="/friends" className="nav-link">friends</Link>
           </nav>
         </div>
-        <div className="header-right">
-          <UserMenu />
-        </div>
+        <UserMenu />
       </header>
 
-      <div className="log-tabs">
-        <button
-          className={`log-tab ${activeTab === "favorites" ? "active" : ""}`}
-          onClick={() => setActiveTab("favorites")}
-        >
-          favorites ({favorites?.length ?? 0})
-        </button>
-        <button
-          className={`log-tab ${activeTab === "watched" ? "active" : ""}`}
-          onClick={() => setActiveTab("watched")}
-        >
-          watched ({watched?.length ?? 0})
-        </button>
-      </div>
+      <main className="page-content">
+        <div className="log-tabs">
+          <button
+            className={`log-tab ${activeTab === "favorites" ? "active" : ""}`}
+            onClick={() => setActiveTab("favorites")}
+          >
+            favorites ({favorites?.length ?? 0})
+          </button>
+          <button
+            className={`log-tab ${activeTab === "watched" ? "active" : ""}`}
+            onClick={() => setActiveTab("watched")}
+          >
+            watched ({watched?.length ?? 0})
+          </button>
+        </div>
 
-      <div className="board-content">
         <AnimeLogPanel
           favorites={favorites}
           watched={watched}
@@ -67,9 +62,9 @@ function LogPage() {
           emptyMessageFavorites="no favorites yet. search and add some!"
           emptyMessageWatched="no watched anime yet. start watching!"
         />
-      </div>
+      </main>
 
-      <footer className="board-footer">
+      <footer className="page-footer">
         <p>analog v1.0</p>
       </footer>
     </div>

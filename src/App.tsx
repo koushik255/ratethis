@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { api } from "../convex/_generated/api";
 import { UserMenu } from "./components/UserMenu";
 import { AnimeActions } from "./components/AnimeActions";
+import "./styles.css";
 import "./App.css";
 
 function useDebounce<T>(value: T, delay: number): T {
@@ -38,7 +39,6 @@ function App() {
     }
   }, [topRated?.needsRefresh, refreshCache]);
 
-  // Restore search from URL on mount
   useEffect(() => {
     const queryFromUrl = searchParams.get("q");
     if (queryFromUrl) {
@@ -47,7 +47,6 @@ function App() {
     }
   }, []);
 
-  // Sync search to URL
   useEffect(() => {
     const newParams = new URLSearchParams(searchParams);
     if (searchQuery) {
@@ -58,145 +57,131 @@ function App() {
     setSearchParams(newParams);
   }, [searchQuery, searchParams, setSearchParams]);
 
-  // Update search query when debounced input changes
   useEffect(() => {
     if (debouncedInput !== searchQuery) {
       setSearchQuery(debouncedInput);
     }
   }, [debouncedInput, searchQuery]);
 
-  const handleSearch = () => {
-    setSearchQuery(inputValue);
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      handleSearch();
+      setSearchQuery(inputValue);
     }
   };
 
   return (
-    <div className="board">
-      <header className="board-header">
-        <div className="header-left">
+    <div className="index-page">
+      <header className="index-header">
+        <div className="header-content">
           <h1 className="site-title">analog</h1>
-          <nav className="board-nav">
-            <Link to="/">index</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/profile">profile</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/log">log</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/lists">lists</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/friends">friends</Link>
+          <nav className="main-nav">
+            <Link to="/" className="nav-link active">index</Link>
+            <Link to="/profile" className="nav-link">profile</Link>
+            <Link to="/log" className="nav-link">log</Link>
+            <Link to="/lists" className="nav-link">lists</Link>
+            <Link to="/friends" className="nav-link">friends</Link>
           </nav>
         </div>
-        <div className="header-right">
-          <UserMenu />
-        </div>
+        <UserMenu />
       </header>
 
-      <div className="search-container">
-        <label className="search-label">search:</label>
-        <input
-          type="text"
-          placeholder="enter title..."
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="raw-input"
-        />
-        <button onClick={handleSearch} className="raw-button">
-          go
-        </button>
-      </div>
+      <main className="index-main">
+        <aside className="index-sidebar">
+          <div className="sidebar-section">
+            <h2 className="sidebar-title">
+              <span className="season-badge">{topRated?.season?.toUpperCase()}</span>
+              <span className="season-year">{topRated?.year}</span>
+            </h2>
+            <p className="sidebar-subtitle">top rated · currently airing</p>
+          </div>
 
-      <div className="board-content">
-        {searchQuery && (
-          <>
-            <div className="divider">
-              {`${animes?.length ?? 0} results for "${searchQuery}"`}
-            </div>
-
-            <div className="entry-list">
-              {animes?.map((anime, index) => (
-                <Link 
-                  key={anime._id} 
-                  to={`/anime/${anime._id}`}
-                  className="entry-link"
-                >
-                  <article className="entry">
-                    {anime.thumbnail && (
-                      <div className="entry-thumb">
-                        <img
-                          src={anime.thumbnail}
-                          alt={anime.title}
-                          className="thumb-img"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
+          <div className="top-rated-list">
+            {topRated?.anime.map((anime, index) => (
+              <Link
+                key={anime._id}
+                to={`/anime/${anime._id}`}
+                className="top-rated-card"
+                style={{ animationDelay: `${index * 30}ms` }}
+              >
+                <div className="card-rank">
+                  <span className="rank-num">{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                {anime.thumbnail && (
+                  <div className="card-thumb">
+                    <img
+                      src={anime.thumbnail}
+                      alt={anime.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )}
+                <div className="card-info">
+                  <h3 className="card-title">{anime.title}</h3>
+                  <div className="card-meta">
+                    <span className="card-type">{anime.type}</span>
+                    {anime.score?.arithmeticMean && (
+                      <span className="card-score">
+                        {anime.score.arithmeticMean.toFixed(2)}
+                      </span>
                     )}
-                    <div className="entry-body">
-                      <span className="entry-id">{String(index + 1).padStart(3, '0')}</span>
-                      <h3 className="entry-title">{anime.title}</h3>
-                      <div className="entry-meta">
-                        <span>{anime.type}</span>
-                        <span className={`status-${anime.status?.toLowerCase().replace(/\s+/g, '-')}`}>
-                          {anime.status}
-                        </span>
-                        {anime.animeSeason?.year && (
-                          <span>{anime.animeSeason.year}</span>
-                        )}
-                        {anime.score?.arithmeticMean && (
-                          <span className="entry-score">
-                            {anime.score.arithmeticMean.toFixed(2)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="entry-actions">
-                      <AnimeActions 
-                        animeId={anime._id} 
-                        animeTitle={anime.title}
-                        variant="hover"
-                      />
-                    </div>
-                  </article>
-                </Link>
-              ))}
-            </div>
-
-            {animes?.length === 0 && (
-              <div className="no-results">
-                <p>no entries found.</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+            
+            {(!topRated || topRated.anime.length === 0) && (
+              <div className="sidebar-empty">
+                <p>loading seasonal anime...</p>
               </div>
             )}
-          </>
-        )}
+          </div>
+        </aside>
 
-        {!searchQuery && (
-          <div className="welcome">
-            {topRated && topRated.anime.length > 0 ? (
-              <>
-                <div className="season-header">
-                  <span className="season-label">
-                    {topRated.season.toUpperCase()} {topRated.year} · TOP RATED
-                  </span>
-                </div>
-                <div className="top-rated-grid">
-                  {topRated.anime.map((anime, index) => (
+        <section className="index-content">
+          <div className="search-area">
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="search anime..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="search-input"
+              />
+              {inputValue && (
+                <button 
+                  className="search-clear"
+                  onClick={() => {
+                    setInputValue("");
+                    setSearchQuery("");
+                  }}
+                >
+                  clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          {searchQuery && (
+            <div className="results-area">
+              <div className="results-header">
+                <span className="results-count">
+                  {animes?.length ?? 0} result{(animes?.length ?? 0) !== 1 ? 's' : ''} for "{searchQuery}"
+                </span>
+              </div>
+
+              {animes && animes.length > 0 ? (
+                <div className="results-grid">
+                  {animes.map((anime, index) => (
                     <Link
                       key={anime._id}
                       to={`/anime/${anime._id}`}
-                      className="top-rated-item"
+                      className="result-card"
+                      style={{ animationDelay: `${index * 40}ms` }}
                     >
-                      <div className="top-ranked">
-                        <span className="rank-number">{String(index + 1).padStart(2, '0')}</span>
-                      </div>
                       {anime.thumbnail && (
-                        <div className="top-thumb">
+                        <div className="result-thumb">
                           <img
                             src={anime.thumbnail}
                             alt={anime.title}
@@ -205,29 +190,56 @@ function App() {
                           />
                         </div>
                       )}
-                      <div className="top-info">
-                        <h3 className="top-title">{anime.title}</h3>
-                        <div className="top-meta">
-                          <span className="top-type">{anime.type}</span>
-                          {anime.score?.arithmeticMean && (
-                            <span className="top-score">
-                              {anime.score.arithmeticMean.toFixed(2)}
-                            </span>
+                      <div className="result-info">
+                        <h3 className="result-title">{anime.title}</h3>
+                        <div className="result-meta">
+                          <span className="result-type">{anime.type}</span>
+                          <span className={`result-status status-${anime.status?.toLowerCase().replace(/\s+/g, '-')}`}>
+                            {anime.status}
+                          </span>
+                          {anime.animeSeason?.year && (
+                            <span className="result-year">{anime.animeSeason.year}</span>
                           )}
                         </div>
+                        {anime.score?.arithmeticMean && (
+                          <div className="result-score">
+                            <span className="score-value">{anime.score.arithmeticMean.toFixed(2)}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="result-actions">
+                        <AnimeActions 
+                          animeId={anime._id} 
+                          animeTitle={anime.title}
+                          variant="hover"
+                        />
                       </div>
                     </Link>
                   ))}
                 </div>
-              </>
-            ) : (
-              <p className="welcome-text">search above to begin.</p>
-            )}
-          </div>
-        )}
-      </div>
+              ) : (
+                <div className="no-results">
+                  <p>no anime found matching your search.</p>
+                </div>
+              )}
+            </div>
+          )}
 
-      <footer className="board-footer">
+          {!searchQuery && (
+            <div className="welcome-area">
+              <div className="welcome-content">
+                <h2 className="welcome-title">discover anime</h2>
+                <p className="welcome-text">
+                  search for your favorite anime, track what you've watched, 
+                  and share your lists with friends.
+                </p>
+              </div>
+            </div>
+          )}
+        </section>
+      </main>
+
+      <footer className="index-footer">
         <p>analog v1.0</p>
       </footer>
     </div>

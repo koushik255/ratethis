@@ -3,6 +3,7 @@ import { useQuery, useMutation, useConvexAuth } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Link } from "react-router-dom";
 import { SignIn, SignOut } from "./Auth";
+import "../styles.css";
 import "./Profile.css";
 
 const USERNAME_REGEX = /^[a-zA-Z0-9_]+$/;

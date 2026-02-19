@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { AnimeActions } from "../components/AnimeActions";
+import "../styles.css";
 import "./AnimeDetail.css";
 
 function AnimeDetail() {

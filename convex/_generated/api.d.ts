@@ -10,7 +10,6 @@
 
 import type * as anime from "../anime.js";
 import type * as auth from "../auth.js";
-import type * as forums from "../forums.js";
 import type * as friends from "../friends.js";
 import type * as http from "../http.js";
 import type * as httpActions from "../httpActions.js";
@@ -28,7 +27,6 @@ import type {
 declare const fullApi: ApiFromModules<{
   anime: typeof anime;
   auth: typeof auth;
-  forums: typeof forums;
   friends: typeof friends;
   http: typeof http;
   httpActions: typeof httpActions;

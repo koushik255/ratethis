@@ -5,6 +5,7 @@ import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { CreateListModal } from "../components/CreateListModal";
 import { useConvexAuth } from "convex/react";
+import "../styles.css";
 import "./ListsPage.css";
 
 function ListsPage() {
@@ -14,41 +15,35 @@ function ListsPage() {
   const lists = useQuery(api.lists.getLists, {});
 
   return (
-    <div className="board">
-      <header className="board-header">
-        <div className="header-left">
+    <div className="page-layout">
+      <header className="page-header">
+        <div className="header-content">
           <h1 className="site-title">analog</h1>
-          <nav className="board-nav">
-            <Link to="/">index</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/profile">profile</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/log">log</Link>
-            <span className="nav-separator">/</span>
-            <span className="nav-current">lists</span>
-            <span className="nav-separator">/</span>
-            <Link to="/friends">friends</Link>
+          <nav className="main-nav">
+            <Link to="/" className="nav-link">index</Link>
+            <Link to="/profile" className="nav-link">profile</Link>
+            <Link to="/log" className="nav-link">log</Link>
+            <Link to="/lists" className="nav-link active">lists</Link>
+            <Link to="/friends" className="nav-link">friends</Link>
           </nav>
         </div>
-        <div className="header-right">
-          <UserMenu />
-        </div>
+        <UserMenu />
       </header>
 
-      <div className="lists-controls">
-        {isAuthenticated && (
-          <button 
-            className="create-list-button"
-            onClick={() => setShowCreateModal(true)}
-          >
-            + new list
-          </button>
-        )}
-      </div>
+      <main className="page-content">
+        <div className="lists-controls">
+          {isAuthenticated && (
+            <button 
+              className="create-list-button"
+              onClick={() => setShowCreateModal(true)}
+            >
+              + new list
+            </button>
+          )}
+        </div>
 
-      <div className="board-content">
         {lists === undefined ? (
-          <div className="loading">
+          <div className="loading-state">
             <p>loading...</p>
           </div>
         ) : lists.length === 0 ? (
@@ -61,7 +56,7 @@ function ListsPage() {
               <Link 
                 key={list._id} 
                 to={list.isOwner ? `/lists/${list._id}/edit` : `/lists/${list._id}`}
-                className={`list-card-link ${list.isOwner ? 'owned-list' : 'view-list'}`}
+                className="list-card-link"
               >
                 <article className={`list-card ${list.isOwner ? 'owned-card' : 'view-card'}`}>
                   <div className="list-card-header">
@@ -91,9 +86,9 @@ function ListsPage() {
             ))}
           </div>
         )}
-      </div>
+      </main>
 
-      <footer className="board-footer">
+      <footer className="page-footer">
         <p>analog v1.0</p>
       </footer>
 

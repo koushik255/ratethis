@@ -92,7 +92,12 @@ export const refreshTopAnimeCache = mutation({
       return animeSeason === season.toLowerCase();
     });
     
-    const withScore = seasonAnime.filter(
+    const currentlyAiring = seasonAnime.filter((anime) => {
+      const status = anime.status?.toLowerCase() || "";
+      return !status.includes("not yet aired") && !status.includes("upcoming");
+    });
+    
+    const withScore = currentlyAiring.filter(
       (anime) => anime.score?.arithmeticMean !== undefined && anime.score.arithmeticMean > 0
     );
     
@@ -304,7 +309,12 @@ export const getTopRatedCurrentSeason = query({
       return animeSeason === season.toLowerCase();
     });
     
-    const withScore = seasonAnime.filter(
+    const currentlyAiring = seasonAnime.filter((anime) => {
+      const status = anime.status?.toLowerCase() || "";
+      return !status.includes("not yet aired") && !status.includes("upcoming");
+    });
+    
+    const withScore = currentlyAiring.filter(
       (anime) => anime.score?.arithmeticMean !== undefined && anime.score.arithmeticMean > 0
     );
     

@@ -54,6 +54,15 @@ async function scrapeMalList(username: string): Promise<string[]> {
 }
 
 const app = new Elysia()
+  .onRequest(({ request, set }) => {
+    set.headers["Access-Control-Allow-Origin"] = "*";
+    set.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
+    set.headers["Access-Control-Allow-Headers"] = "Content-Type";
+    
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204 });
+    }
+  })
   .post("/sync", async ({ body }): Promise<SyncResponse> => {
     const { malUsername, userId } = body as SyncRequest;
     

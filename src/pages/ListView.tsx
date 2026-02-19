@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { CommentSection } from "../components/CommentSection";
+import "../styles.css";
 import "./ListView.css";
 
 function ListView() {
@@ -16,53 +17,43 @@ function ListView() {
 
   if (!list) {
     return (
-      <div className="board">
-        <header className="board-header">
-          <div className="header-left">
+      <div className="page-layout">
+        <header className="page-header">
+          <div className="header-content">
             <h1 className="site-title">analog</h1>
-            <nav className="board-nav">
-              <Link to="/">index</Link>
-              <span className="nav-separator">/</span>
-              <Link to="/profile">profile</Link>
-              <span className="nav-separator">/</span>
-              <Link to="/log">log</Link>
-              <span className="nav-separator">/</span>
-              <Link to="/lists">lists</Link>
-              <span className="nav-separator">/</span>
-              <Link to="/friends">friends</Link>
+            <nav className="main-nav">
+              <Link to="/" className="nav-link">index</Link>
+              <Link to="/profile" className="nav-link">profile</Link>
+              <Link to="/log" className="nav-link">log</Link>
+              <Link to="/lists" className="nav-link">lists</Link>
+              <Link to="/friends" className="nav-link">friends</Link>
             </nav>
           </div>
-          <div className="header-right">
-            <UserMenu />
-          </div>
+          <UserMenu />
         </header>
-        <div className="loading">
-          <p>loading...</p>
-        </div>
+        <main className="page-content">
+          <div className="loading-state">
+            <p>loading...</p>
+          </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="board">
-      <header className="board-header">
-        <div className="header-left">
+    <div className="page-layout">
+      <header className="page-header">
+        <div className="header-content">
           <h1 className="site-title">analog</h1>
-          <nav className="board-nav">
-            <Link to="/">index</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/profile">profile</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/log">log</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/lists">lists</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/friends">friends</Link>
+          <nav className="main-nav">
+            <Link to="/" className="nav-link">index</Link>
+            <Link to="/profile" className="nav-link">profile</Link>
+            <Link to="/log" className="nav-link">log</Link>
+            <Link to="/lists" className="nav-link active">lists</Link>
+            <Link to="/friends" className="nav-link">friends</Link>
           </nav>
         </div>
-        <div className="header-right">
-          <UserMenu />
-        </div>
+        <UserMenu />
       </header>
 
       <div className="action-bar">

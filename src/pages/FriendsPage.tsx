@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { useConvexAuth } from "convex/react";
+import "../styles.css";
 import "./FriendsPage.css";
 
 type Tab = "recent" | "friends" | "requests";
@@ -140,28 +141,23 @@ function FriendsPage() {
   };
 
   return (
-    <div className="board">
-      <header className="board-header">
-        <div className="header-left">
+    <div className="page-layout">
+      <header className="page-header">
+        <div className="header-content">
           <h1 className="site-title">analog</h1>
-          <nav className="board-nav">
-            <Link to="/">index</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/profile">profile</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/log">log</Link>
-            <span className="nav-separator">/</span>
-            <Link to="/lists">lists</Link>
-            <span className="nav-separator">/</span>
-            <span className="nav-current">friends</span>
+          <nav className="main-nav">
+            <Link to="/" className="nav-link">index</Link>
+            <Link to="/profile" className="nav-link">profile</Link>
+            <Link to="/log" className="nav-link">log</Link>
+            <Link to="/lists" className="nav-link">lists</Link>
+            <Link to="/friends" className="nav-link active">friends</Link>
           </nav>
         </div>
-        <div className="header-right">
-          <UserMenu />
-        </div>
+        <UserMenu />
       </header>
 
-      <div className="friends-tabs">
+      <main className="page-content">
+        <div className="friends-tabs">
         <button
           className={`friends-tab ${activeTab === "recent" ? "active" : ""}`}
           onClick={() => setActiveTab("recent")}
@@ -182,12 +178,11 @@ function FriendsPage() {
         </button>
       </div>
 
-      <div className="board-content">
-        {!isAuthenticated ? (
-          <div className="friends-auth-prompt">
-            <p>please sign in to manage friends</p>
-          </div>
-        ) : activeTab === "recent" ? (
+      {!isAuthenticated ? (
+        <div className="friends-auth-prompt">
+          <p>please sign in to manage friends</p>
+        </div>
+      ) : activeTab === "recent" ? (
           <div className="friends-recent">
             <h3 className="friends-section-title">recent activity</h3>
             {recentActivity === undefined ? (
@@ -475,9 +470,9 @@ function FriendsPage() {
             </div>
           </div>
         )}
-      </div>
+      </main>
 
-      <footer className="board-footer">
+      <footer className="page-footer">
         <p>analog v1.0</p>
       </footer>
     </div>
