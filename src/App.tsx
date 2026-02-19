@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery } from "convex/react";
 import { Link, useSearchParams } from "react-router-dom";
 import { api } from "../convex/_generated/api";
 import { UserMenu } from "./components/UserMenu";
@@ -31,13 +31,6 @@ function App() {
   );
 
   const topRated = useQuery(api.anime.getTopRatedCurrentSeason);
-  const refreshCache = useMutation(api.anime.refreshTopAnimeCache);
-
-  useEffect(() => {
-    if (topRated?.needsRefresh) {
-      refreshCache().catch(console.error);
-    }
-  }, [topRated?.needsRefresh, refreshCache]);
 
   useEffect(() => {
     const queryFromUrl = searchParams.get("q");

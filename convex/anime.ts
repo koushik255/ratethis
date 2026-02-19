@@ -279,25 +279,6 @@ export const getTopRatedCurrentSeason = query({
   args: {},
   handler: async (ctx) => {
     const { season, year } = getCurrentSeason();
-    const CACHE_STALENESS_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
-    const now = Date.now();
-    
-    const cached = await ctx.db
-      .query("topAnimeCache")
-      .withIndex("by_season_year", (q) => q.eq("season", season).eq("year", year))
-      .first();
-    
-    if (cached && (now - cached.lastUpdated) < CACHE_STALENESS_MS) {
-      const animeDocs = await Promise.all(
-        cached.animeIds.map((id) => ctx.db.get(id))
-      );
-      return {
-        anime: animeDocs.filter((a): a is NonNullable<typeof a> => a !== null),
-        season,
-        year,
-        needsRefresh: false,
-      };
-    }
     
     const allAnimeForYear = await ctx.db
       .query("anime")
@@ -311,7 +292,8 @@ export const getTopRatedCurrentSeason = query({
     
     const currentlyAiring = seasonAnime.filter((anime) => {
       const status = anime.status?.toLowerCase() || "";
-      return !status.includes("not yet aired") && !status.includes("upcoming");
+      const isNotAired = status.includes("not yet aired") || status === "upcoming" || status.includes("not yet");
+      return !isNotAired;
     });
     
     const withScore = currentlyAiring.filter(
@@ -332,7 +314,6 @@ export const getTopRatedCurrentSeason = query({
       anime: top15,
       season,
       year,
-      needsRefresh: true,
     };
   },
 });

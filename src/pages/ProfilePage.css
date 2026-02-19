@@ -27,10 +27,14 @@
 /* Page Content */
 .page-content {
   flex: 1;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: var(--space-8);
   width: 100%;
+}
+
+.page-content.wide {
+  max-width: 1200px;
 }
 
 /* Page Footer */

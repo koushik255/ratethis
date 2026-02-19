@@ -30,7 +30,7 @@ function ListsPage() {
         <UserMenu />
       </header>
 
-      <main className="page-content">
+      <main className="page-content wide">
         <div className="lists-controls">
           {isAuthenticated && (
             <button 
