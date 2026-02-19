@@ -162,3 +162,40 @@ export const updateProfile = mutation({
     return { success: true, username: updateData.username };
   },
 });
+
+export const getUserStats = query({
+  args: { userId: v.string() },
+  handler: async (ctx, args) => {
+    const [favorites, watched, lists, friendshipsAsUser1, friendshipsAsUser2] = await Promise.all([
+      ctx.db
+        .query("userAnime")
+        .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+        .filter((q) => q.eq(q.field("isFavorite"), true))
+        .collect(),
+      ctx.db
+        .query("userAnime")
+        .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+        .filter((q) => q.eq(q.field("isWatched"), true))
+        .collect(),
+      ctx.db
+        .query("animeLists")
+        .withIndex("by_authorId", (q) => q.eq("authorId", args.userId))
+        .collect(),
+      ctx.db
+        .query("friendships")
+        .withIndex("by_userId1", (q) => q.eq("userId1", args.userId))
+        .collect(),
+      ctx.db
+        .query("friendships")
+        .withIndex("by_userId2", (q) => q.eq("userId2", args.userId))
+        .collect(),
+    ]);
+
+    return {
+      favorites: favorites.length,
+      watched: watched.length,
+      lists: lists.length,
+      friends: friendshipsAsUser1.length + friendshipsAsUser2.length,
+    };
+  },
+});

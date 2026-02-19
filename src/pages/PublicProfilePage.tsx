@@ -15,6 +15,11 @@ function PublicProfilePage() {
     normalizedUsername ? { username: normalizedUsername } : "skip"
   );
 
+  const stats = useQuery(
+    api.userProfiles.getUserStats,
+    profile?.userId ? { userId: profile.userId } : "skip"
+  );
+
   const favorites = useQuery(
     api.userAnime.getUserFavorites,
     profile?.userId ? { userId: profile.userId } : "skip"
@@ -97,43 +102,60 @@ function PublicProfilePage() {
         <UserMenu />
       </header>
 
-      <main className="page-content">
-        <div className="public-profile">
-          <div className="public-profile-header">
-            <div className="public-profile-avatar">
+      <main className="page-content wide">
+        <div className="user-profile-header">
+          <div className="user-profile-identity">
+            <div className="user-avatar">
               {profile.profilePicture ? (
                 <img
                   src={profile.profilePicture}
                   alt={profile.displayName || profile.username}
-                  className="public-profile-avatar-img"
                 />
               ) : (
-                <div className="public-profile-avatar-placeholder">
+                <span className="user-avatar-placeholder">
                   {(profile.displayName || profile.username || "?").charAt(0).toUpperCase()}
-                </div>
+                </span>
               )}
             </div>
-            <div className="public-profile-info">
-              <h2 className="public-profile-name">
-                {profile.displayName || profile.username || "anonymous"}
-              </h2>
+            <div className="user-info">
+              <h2 className="user-name">{profile.displayName || profile.username || "anonymous"}</h2>
               {profile.username && (
-                <span className="public-profile-username">@{profile.username}</span>
-              )}
-              {profile.bio && (
-                <p className="public-profile-bio">{profile.bio}</p>
+                <span className="user-username">@{profile.username}</span>
               )}
             </div>
           </div>
 
-          <div className="public-profile-content">
-            <AnimeLogPanel
-              favorites={favorites}
-              watched={watched}
-              emptyMessageFavorites={`${profile.displayName || "this user"} hasn't added any favorites yet.`}
-              emptyMessageWatched={`${profile.displayName || "this user"} hasn't marked any anime as watched yet.`}
-            />
+          {profile.bio && (
+            <p className="user-bio">{profile.bio}</p>
+          )}
+
+          <div className="user-stats">
+            <div className="stat-item">
+              <span className="stat-value">{stats?.favorites ?? 0}</span>
+              <span className="stat-label">favorites</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{stats?.watched ?? 0}</span>
+              <span className="stat-label">watched</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{stats?.lists ?? 0}</span>
+              <span className="stat-label">lists</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{stats?.friends ?? 0}</span>
+              <span className="stat-label">friends</span>
+            </div>
           </div>
+        </div>
+
+        <div className="user-content">
+          <AnimeLogPanel
+            favorites={favorites}
+            watched={watched}
+            emptyMessageFavorites={`no favorites yet`}
+            emptyMessageWatched={`nothing watched yet`}
+          />
         </div>
       </main>
 
