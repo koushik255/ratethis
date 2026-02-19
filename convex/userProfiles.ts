@@ -82,6 +82,7 @@ export const updateProfile = mutation({
     displayName: v.optional(v.string()),
     bio: v.optional(v.string()),
     username: v.optional(v.string()),
+    malUsername: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -98,10 +99,12 @@ export const updateProfile = mutation({
       bio?: string;
       username?: string;
       usernameLastChangedAt?: number;
+      malUsername?: string;
     } = {
       profilePicture: args.profilePicture,
       displayName: args.displayName,
       bio: args.bio,
+      malUsername: args.malUsername,
     };
 
     // Handle username update
@@ -152,6 +155,7 @@ export const updateProfile = mutation({
         bio: args.bio,
         username: updateData.username,
         usernameLastChangedAt: updateData.usernameLastChangedAt,
+        malUsername: args.malUsername,
       });
     }
 

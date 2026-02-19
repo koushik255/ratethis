@@ -210,3 +210,49 @@ export const toggleWatched = mutation({
     }
   },
 });
+
+export const bulkMarkAsWatched = mutation({
+  args: {
+    userId: v.string(),
+    animeIds: v.array(v.id("anime")),
+  },
+  handler: async (ctx, args) => {
+    const now = Date.now();
+    let imported = 0;
+    let skipped = 0;
+
+    for (const animeId of args.animeIds) {
+      const existing = await ctx.db
+        .query("userAnime")
+        .withIndex("by_userId_animeId", (q) =>
+          q.eq("userId", args.userId).eq("animeId", animeId)
+        )
+        .unique();
+
+      if (existing) {
+        if (!existing.isWatched) {
+          await ctx.db.patch(existing._id, {
+            isWatched: true,
+            watchedAt: now,
+            updatedAt: now,
+          });
+          imported++;
+        } else {
+          skipped++;
+        }
+      } else {
+        await ctx.db.insert("userAnime", {
+          userId: args.userId,
+          animeId,
+          isFavorite: false,
+          isWatched: true,
+          watchedAt: now,
+          updatedAt: now,
+        });
+        imported++;
+      }
+    }
+
+    return { imported, skipped };
+  },
+});

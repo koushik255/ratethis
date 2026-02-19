@@ -47,6 +47,7 @@ export default defineSchema({
     bio: v.optional(v.string()),
     username: v.optional(v.string()),
     usernameLastChangedAt: v.optional(v.number()),
+    malUsername: v.optional(v.string()),
   })
     .index("by_userId", ["userId"])
     .index("by_username", ["username"]),
@@ -64,6 +65,14 @@ export default defineSchema({
     .index("by_userId_favorite", ["userId", "isFavorite"])
     .index("by_userId_watched", ["userId", "isWatched"])
     .index("by_userId_animeId", ["userId", "animeId"]),
+
+  topAnimeCache: defineTable({
+    season: v.string(),
+    year: v.number(),
+    animeIds: v.array(v.id("anime")),
+    lastUpdated: v.number(),
+  })
+    .index("by_season_year", ["season", "year"]),
 
   animeLists: defineTable({
     title: v.string(),

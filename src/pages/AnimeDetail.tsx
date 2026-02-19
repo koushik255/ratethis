@@ -170,17 +170,6 @@ function AnimeDetail() {
               </div>
             )}
 
-            {anime.tags && anime.tags.length > 0 && (
-              <div className="detail-section">
-                <div className="section-title">tags</div>
-                <div className="detail-tags">
-                  {anime.tags.map((tag: string, i: number) => (
-                    <span key={i} className="detail-tag">{tag}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {anime.sources && anime.sources.length > 0 && (
               <div className="detail-section">
                 <div className="section-title">sources</div>

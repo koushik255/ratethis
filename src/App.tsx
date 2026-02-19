@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { Link, useSearchParams } from "react-router-dom";
 import { api } from "../convex/_generated/api";
 import { UserMenu } from "./components/UserMenu";
 import { AnimeActions } from "./components/AnimeActions";
 import "./App.css";
 
-// Custom debounce hook for better performance
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -23,13 +22,21 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   
-  // Use debounced value for search to prevent excessive API calls
   const debouncedInput = useDebounce(inputValue, 300);
   
   const animes = useQuery(
     api.anime.searchByTitle,
     searchQuery ? { query: searchQuery, limit: 50 } : "skip"
   );
+
+  const topRated = useQuery(api.anime.getTopRatedCurrentSeason);
+  const refreshCache = useMutation(api.anime.refreshTopAnimeCache);
+
+  useEffect(() => {
+    if (topRated?.needsRefresh) {
+      refreshCache().catch(console.error);
+    }
+  }, [topRated?.needsRefresh, refreshCache]);
 
   // Restore search from URL on mount
   useEffect(() => {
@@ -171,7 +178,51 @@ function App() {
 
         {!searchQuery && (
           <div className="welcome">
-            <p className="welcome-text">search above to begin.</p>
+            {topRated && topRated.anime.length > 0 ? (
+              <>
+                <div className="season-header">
+                  <span className="season-label">
+                    {topRated.season.toUpperCase()} {topRated.year} · TOP RATED
+                  </span>
+                </div>
+                <div className="top-rated-grid">
+                  {topRated.anime.map((anime, index) => (
+                    <Link
+                      key={anime._id}
+                      to={`/anime/${anime._id}`}
+                      className="top-rated-item"
+                    >
+                      <div className="top-ranked">
+                        <span className="rank-number">{String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                      {anime.thumbnail && (
+                        <div className="top-thumb">
+                          <img
+                            src={anime.thumbnail}
+                            alt={anime.title}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                      )}
+                      <div className="top-info">
+                        <h3 className="top-title">{anime.title}</h3>
+                        <div className="top-meta">
+                          <span className="top-type">{anime.type}</span>
+                          {anime.score?.arithmeticMean && (
+                            <span className="top-score">
+                              {anime.score.arithmeticMean.toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="welcome-text">search above to begin.</p>
+            )}
           </div>
         )}
       </div>

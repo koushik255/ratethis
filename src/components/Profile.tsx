@@ -8,6 +8,16 @@ import "./Profile.css";
 const USERNAME_REGEX = /^[a-zA-Z0-9_]+$/;
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 20;
+const TOOLS_URL = "http://localhost:3001";
+
+interface SyncResult {
+  success: boolean;
+  imported: number;
+  skipped: number;
+  notFound: string[];
+  total: number;
+  error?: string;
+}
 
 export function Profile() {
   const { isAuthenticated } = useConvexAuth();
@@ -19,20 +29,24 @@ export function Profile() {
   const [displayName, setDisplayName] = useState(profile?.displayName || "");
   const [bio, setBio] = useState(profile?.bio || "");
   const [username, setUsername] = useState(profile?.username || "");
+  const [malUsername, setMalUsername] = useState(profile?.malUsername || "");
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  
+  const [isImporting, setIsImporting] = useState(false);
+  const [importResult, setImportResult] = useState<SyncResult | null>(null);
+  const [importError, setImportError] = useState<string | null>(null);
 
-  // Update local state when profile loads
   useEffect(() => {
     if (profile) {
       setProfilePicture(profile.profilePicture || "");
       setDisplayName(profile.displayName || "");
       setBio(profile.bio || "");
       setUsername(profile.username || "");
+      setMalUsername(profile.malUsername || "");
     }
   }, [profile]);
 
-  // Validate username format
   const validateUsernameFormat = useCallback((value: string): string | null => {
     if (!value) return null;
     if (value.length < USERNAME_MIN_LENGTH) {
@@ -47,11 +61,9 @@ export function Profile() {
     return null;
   }, []);
 
-  // Validate username on change
   useEffect(() => {
     const normalizedUsername = username.toLowerCase().trim();
     
-    // Skip if username hasn't changed or is empty
     if (!normalizedUsername || normalizedUsername === profile?.username) {
       setUsernameError(null);
       return;
@@ -70,6 +82,7 @@ export function Profile() {
         displayName: displayName || undefined,
         bio: bio || undefined,
         username: username ? username.toLowerCase().trim() : undefined,
+        malUsername: malUsername.trim() || undefined,
       });
       setIsEditing(false);
     } catch (error) {
@@ -82,6 +95,7 @@ export function Profile() {
     setDisplayName(profile?.displayName || "");
     setBio(profile?.bio || "");
     setUsername(profile?.username || "");
+    setMalUsername(profile?.malUsername || "");
     setUsernameError(null);
     setSaveError(null);
     setIsEditing(false);
@@ -90,7 +104,7 @@ export function Profile() {
   const canChangeUsername = useCallback(() => {
     if (!profile?.username) return true;
     if (!profile?.usernameLastChangedAt) return true;
-    const cooldownPeriod = 7 * 24 * 60 * 60 * 1000; // 7 days
+    const cooldownPeriod = 7 * 24 * 60 * 60 * 1000;
     const timeSinceChange = Date.now() - profile.usernameLastChangedAt;
     return timeSinceChange >= cooldownPeriod;
   }, [profile]);
@@ -102,6 +116,49 @@ export function Profile() {
     const remaining = cooldownPeriod - timeSinceChange;
     return Math.ceil(remaining / (24 * 60 * 60 * 1000));
   }, [profile]);
+
+  const handleMalImport = async () => {
+    if (!malUsername.trim()) {
+      setImportError("enter your MAL username first");
+      return;
+    }
+    
+    if (!profile?.userId) {
+      setImportError("profile not loaded");
+      return;
+    }
+    
+    setIsImporting(true);
+    setImportError(null);
+    setImportResult(null);
+    
+    try {
+      const response = await fetch(`${TOOLS_URL}/sync`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          malUsername: malUsername.trim(),
+          userId: profile.userId,
+        }),
+      });
+      
+      const result: SyncResult = await response.json();
+      
+      if (result.success) {
+        setImportResult(result);
+        
+        await updateProfile({
+          malUsername: malUsername.trim(),
+        });
+      } else {
+        setImportError(result.error || "import failed");
+      }
+    } catch (error) {
+      setImportError(error instanceof Error ? error.message : "failed to connect to import service");
+    } finally {
+      setIsImporting(false);
+    }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -238,6 +295,57 @@ export function Profile() {
           edit profile
         </button>
         <SignOut />
+      </div>
+
+      <div className="mal-import-section">
+        <h3 className="mal-import-title">import from myanimelist</h3>
+        <p className="mal-import-desc">
+          import your completed anime from MAL to your watched list
+        </p>
+        
+        <div className="mal-import-form">
+          <input
+            type="text"
+            value={malUsername}
+            onChange={(e) => setMalUsername(e.target.value)}
+            placeholder="MAL username"
+            className="raw-input"
+            disabled={isImporting}
+          />
+          <button
+            onClick={handleMalImport}
+            className="raw-button"
+            disabled={isImporting || !malUsername.trim()}
+          >
+            {isImporting ? "importing..." : "import"}
+          </button>
+        </div>
+        
+        {importError && (
+          <div className="mal-import-error">{importError}</div>
+        )}
+        
+        {importResult && (
+          <div className="mal-import-result">
+            <p className="mal-import-success">
+              imported {importResult.imported} anime
+              {importResult.skipped > 0 && ` (${importResult.skipped} already watched)`}
+            </p>
+            {importResult.notFound.length > 0 && (
+              <div className="mal-not-found">
+                <p>{importResult.notFound.length} not found in database:</p>
+                <ul>
+                  {importResult.notFound.slice(0, 10).map((title, i) => (
+                    <li key={i}>{title}</li>
+                  ))}
+                  {importResult.notFound.length > 10 && (
+                    <li>...and {importResult.notFound.length - 10} more</li>
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
