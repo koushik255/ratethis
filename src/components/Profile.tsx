@@ -3,6 +3,7 @@ import { useQuery, useMutation, useConvexAuth } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Link } from "react-router-dom";
 import { SignIn, SignOut } from "./Auth";
+import { AnimeLogPanel } from "./AnimeLogPanel";
 import "../styles.css";
 import "./Profile.css";
 
@@ -23,7 +24,11 @@ interface SyncResult {
 export function Profile() {
   const { isAuthenticated } = useConvexAuth();
   const profile = useQuery(api.userProfiles.getMyProfile);
+  const stats = useQuery(api.userProfiles.getMyStats);
   const updateProfile = useMutation(api.userProfiles.updateProfile);
+  
+  const favorites = useQuery(api.userAnime.getMyFavorites);
+  const watched = useQuery(api.userAnime.getMyWatched);
 
   const [isEditing, setIsEditing] = useState(false);
   const [profilePicture, setProfilePicture] = useState(profile?.profilePicture || "");
@@ -174,12 +179,14 @@ export function Profile() {
     const showUsernameCooldown = profile?.username && !canChangeUsername();
 
     return (
-      <div className="profile-container">
-        <h2 className="profile-title">edit profile</h2>
+      <div className="profile-edit-mode">
+        <div className="profile-edit-header">
+          <h2>edit profile</h2>
+        </div>
 
-        <div className="profile-form">
+        <div className="profile-edit-form">
           <div className="form-group">
-            <label>profile picture url:</label>
+            <label>profile picture url</label>
             <input
               type="text"
               value={profilePicture}
@@ -190,7 +197,7 @@ export function Profile() {
           </div>
 
           <div className="form-group">
-            <label>display name:</label>
+            <label>display name</label>
             <input
               type="text"
               value={displayName}
@@ -201,7 +208,7 @@ export function Profile() {
           </div>
 
           <div className="form-group">
-            <label>username:</label>
+            <label>username</label>
             <input
               type="text"
               value={username}
@@ -225,7 +232,7 @@ export function Profile() {
           </div>
 
           <div className="form-group">
-            <label>bio:</label>
+            <label>bio</label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
@@ -267,35 +274,67 @@ export function Profile() {
         </div>
       )}
 
-      <div className="profile-header">
-        {profile?.profilePicture ? (
-          <img
-            src={profile.profilePicture}
-            alt="Profile"
-            className="profile-picture large"
-            loading="lazy"
-            decoding="async"
-          />
-        ) : (
-          <div className="profile-picture-placeholder large">no image</div>
+      <div className="user-profile-header">
+        <div className="user-profile-identity">
+          <div className="user-avatar">
+            {profile?.profilePicture ? (
+              <img
+                src={profile.profilePicture}
+                alt={profile.displayName || profile.username || "Profile"}
+              />
+            ) : (
+              <span className="user-avatar-placeholder">
+                {(profile?.displayName || profile?.username || "?").charAt(0).toUpperCase()}
+              </span>
+            )}
+          </div>
+          <div className="user-info">
+            <h2 className="user-name">{profile?.displayName || "anonymous"}</h2>
+            {hasUsername && (
+              <Link to={`/profile/${profile.username}`} className="user-username">
+                @{profile.username}
+              </Link>
+            )}
+          </div>
+          <div className="profile-header-actions">
+            <button onClick={() => setIsEditing(true)} className="raw-button small">
+              edit
+            </button>
+            <SignOut />
+          </div>
+        </div>
+
+        {profile?.bio && (
+          <p className="user-bio">{profile.bio}</p>
         )}
 
-        <div className="profile-info">
-          <h2 className="profile-name">{profile?.displayName || "Anonymous"}</h2>
-          {hasUsername && (
-            <Link to={`/profile/${profile.username}`} className="profile-username">
-              @{profile.username}
-            </Link>
-          )}
-          {profile?.bio && <p className="profile-bio">{profile.bio}</p>}
+        <div className="user-stats">
+          <div className="stat-item">
+            <span className="stat-value">{stats?.favorites ?? 0}</span>
+            <span className="stat-label">favorites</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-value">{stats?.watched ?? 0}</span>
+            <span className="stat-label">watched</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-value">{stats?.lists ?? 0}</span>
+            <span className="stat-label">lists</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-value">{stats?.friends ?? 0}</span>
+            <span className="stat-label">friends</span>
+          </div>
         </div>
       </div>
 
-      <div className="profile-actions">
-        <button onClick={() => setIsEditing(true)} className="raw-button">
-          edit profile
-        </button>
-        <SignOut />
+      <div className="user-content">
+        <AnimeLogPanel
+          favorites={favorites}
+          watched={watched}
+          emptyMessageFavorites="no favorites yet"
+          emptyMessageWatched="nothing watched yet"
+        />
       </div>
 
       <div className="mal-import-section">

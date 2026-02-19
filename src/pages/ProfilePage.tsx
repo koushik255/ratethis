@@ -21,7 +21,7 @@ function ProfilePage() {
         <UserMenu />
       </header>
 
-      <main className="page-content">
+      <main className="page-content wide">
         <Profile />
       </main>
 
