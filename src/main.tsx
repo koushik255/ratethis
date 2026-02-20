@@ -26,7 +26,9 @@ function PageLoader() {
   );
 }
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL, {
+  verbose: true,
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
