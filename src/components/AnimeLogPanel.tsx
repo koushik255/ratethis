@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Doc } from "../../convex/_generated/dataModel";
 import "./AnimeLogPanel.css";
 
-type TabType = "favorites" | "watched";
+type TabType = "favorites" | "watched" | "diary";
 
 interface WatchedAnime extends Doc<"anime"> {
   watchedAt?: number;

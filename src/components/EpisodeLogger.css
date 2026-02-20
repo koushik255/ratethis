@@ -1,0 +1,247 @@
+/* ============================================
+   EPISODE LOGGER - Editorial Diary Style
+   ============================================ */
+
+.episode-logger {
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--color-border);
+}
+
+.logger-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.logger-label {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--color-fg);
+  letter-spacing: -0.01em;
+}
+
+.logger-meta {
+  font-size: var(--text-xs);
+  color: var(--color-fg-light);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.logger-form {
+  margin-bottom: var(--space-6);
+}
+
+.logger-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.episode-input-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.input-label {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+  margin-right: var(--space-2);
+  font-weight: 500;
+}
+
+.episode-number-input {
+  width: 64px;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-card);
+  color: var(--color-fg);
+  text-align: center;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.episode-number-input:focus {
+  border-color: var(--color-accent);
+}
+
+.episode-number-input::-webkit-inner-spin-button,
+.episode-number-input::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+.comment-input-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-card);
+  color: var(--color-fg);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.comment-input:focus {
+  border-color: var(--color-accent);
+}
+
+.comment-input::placeholder {
+  color: var(--color-fg-light);
+  font-style: italic;
+}
+
+.log-submit {
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius-md);
+  background-color: var(--color-fg);
+  color: var(--color-bg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.log-submit:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.log-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.progress-section {
+  padding-top: var(--space-4);
+  border-top: 1px dashed var(--color-border);
+}
+
+.progress-header {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-fg-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-3);
+}
+
+.progress-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.progress-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  animation: slideIn var(--transition-slow) ease-out;
+}
+
+.progress-item:last-child {
+  border-bottom: none;
+}
+
+.progress-episode {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.ep-badge {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-fg);
+  min-width: 48px;
+}
+
+.ep-date {
+  font-size: var(--text-xs);
+  color: var(--color-fg-light);
+}
+
+.ep-comment {
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+  font-style: italic;
+  margin: 0;
+  min-width: 0;
+  line-height: 1.5;
+}
+
+.remove-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-fg-light);
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--transition-fast);
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+.progress-item:hover .remove-btn {
+  opacity: 1;
+}
+
+.remove-btn:hover {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .logger-row {
+    flex-wrap: wrap;
+  }
+
+  .comment-input-group {
+    order: 3;
+    width: 100%;
+    flex-basis: 100%;
+    margin-top: var(--space-2);
+  }
+
+  .log-submit {
+    margin-left: auto;
+  }
+}

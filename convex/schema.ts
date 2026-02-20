@@ -146,4 +146,18 @@ export default defineSchema({
     .index("by_userId1", ["userId1"])
     .index("by_userId2", ["userId2"])
     .index("by_userId1_userId2", ["userId1", "userId2"]),
+
+  episodeLogs: defineTable({
+    userId: v.string(),
+    animeId: v.id("anime"),
+    animeTitle: v.string(),
+    episodeNumber: v.number(),
+    comment: v.optional(v.string()),
+    loggedAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_animeId", ["animeId"])
+    .index("by_userId_animeId", ["userId", "animeId"])
+    .index("by_userId_loggedAt", ["userId", "loggedAt"]),
 });

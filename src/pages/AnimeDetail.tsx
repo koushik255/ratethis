@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { AnimeActions } from "../components/AnimeActions";
+import { EpisodeLogger } from "../components/EpisodeLogger";
 import "../styles.css";
 import "./AnimeDetail.css";
 
@@ -187,6 +188,12 @@ function AnimeDetail() {
             )}
           </div>
         </div>
+
+        <EpisodeLogger
+          animeId={anime._id}
+          animeTitle={anime.title}
+          totalEpisodes={anime.episodes ?? undefined}
+        />
       </article>
 
       <footer className="board-footer">

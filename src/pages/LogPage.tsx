@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
 import { UserMenu } from "../components/UserMenu";
 import { AnimeLogPanel } from "../components/AnimeLogPanel";
+import { DiaryFeed } from "../components/DiaryFeed";
 import "../styles.css";
 import "./LogPage.css";
 
-type TabType = "favorites" | "watched";
+type TabType = "favorites" | "watched" | "diary";
 
 function LogPage() {
   const [activeTab, setActiveTab] = useState<TabType>("favorites");
@@ -19,6 +20,10 @@ function LogPage() {
   const watched = useQuery(
     api.userAnime.getMyWatched,
     activeTab === "watched" ? undefined : "skip"
+  );
+  const diaryLogs = useQuery(
+    api.episodeLogs.getMyEpisodeLogs,
+    activeTab === "diary" ? undefined : "skip"
   );
 
   return (
@@ -51,17 +56,30 @@ function LogPage() {
           >
             watched ({watched?.length ?? 0})
           </button>
+          <button
+            className={`log-tab ${activeTab === "diary" ? "active" : ""}`}
+            onClick={() => setActiveTab("diary")}
+          >
+            diary ({diaryLogs?.length ?? 0})
+          </button>
         </div>
 
-        <AnimeLogPanel
-          favorites={favorites}
-          watched={watched}
-          showTabs={false}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          emptyMessageFavorites="no favorites yet. search and add some!"
-          emptyMessageWatched="no watched anime yet. start watching!"
-        />
+        {activeTab === "diary" ? (
+          <DiaryFeed
+            logs={diaryLogs}
+            emptyMessage="no episode logs yet. start tracking your progress!"
+          />
+        ) : (
+          <AnimeLogPanel
+            favorites={favorites}
+            watched={watched}
+            showTabs={false}
+            activeTab={activeTab as "favorites" | "watched"}
+            onTabChange={(tab) => setActiveTab(tab)}
+            emptyMessageFavorites="no favorites yet. search and add some!"
+            emptyMessageWatched="no watched anime yet. start watching!"
+          />
+        )}
       </main>
 
       <footer className="page-footer">
