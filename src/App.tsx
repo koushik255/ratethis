@@ -231,10 +231,6 @@ function App() {
           )}
         </section>
       </main>
-
-      <footer className="index-footer">
-        <p>analog v1.0</p>
-      </footer>
     </div>
   );
 }
