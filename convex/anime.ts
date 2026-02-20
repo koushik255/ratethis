@@ -221,6 +221,33 @@ export const clearAllAnime = mutation({
   },
 });
 
+export const clearAuthSessions = mutation({
+  args: {
+    batch: v.optional(v.number()),
+  },
+  handler: async (ctx, { batch }) => {
+    const batchSize = batch ?? 1000;
+    
+    const sessions = await ctx.db.query("authSessions").take(batchSize);
+    for (const item of sessions) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const refreshTokens = await ctx.db.query("authRefreshTokens").take(batchSize);
+    for (const item of refreshTokens) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const hasMore = sessions.length === batchSize || refreshTokens.length === batchSize;
+    
+    return {
+      sessionsCleared: sessions.length,
+      refreshTokensCleared: refreshTokens.length,
+      hasMore,
+    };
+  },
+});
+
 export const bulkInsert = mutation({
   args: {
     animes: v.array(v.object({
