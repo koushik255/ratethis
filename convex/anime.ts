@@ -20,120 +20,6 @@ function getCurrentSeason(): { season: string; year: number } {
   return { season, year };
 }
 
-function deduplicateAnime(animes: any[]): any[] {
-  const groupedByMal = new Map<string, { anime: any; priority: number }>();
-  const groupedByTitle = new Map<string, { anime: any; priority: number }>();
-  
-  for (const anime of animes) {
-    let malId = "";
-    let bestPriority = 0;
-    
-    for (const source of anime.sources || []) {
-      if (source.includes("myanimelist.net")) {
-        const match = source.match(/myanimelist\.net\/anime\/(\d+)/);
-        if (match) {
-          malId = match[1];
-          bestPriority = Math.max(bestPriority, 3);
-        }
-      } else if (source.includes("anidb.net")) {
-        bestPriority = Math.max(bestPriority, 2);
-      } else if (source.includes("anilist.co")) {
-        bestPriority = Math.max(bestPriority, 1);
-      }
-    }
-    
-    const normalizedTitle = anime.title.toLowerCase().trim();
-    
-    if (malId) {
-      const key = `mal:${malId}`;
-      const existing = groupedByMal.get(key);
-      if (!existing || bestPriority > existing.priority) {
-        groupedByMal.set(key, { anime, priority: bestPriority });
-      }
-    } else {
-      let matchedMalKey: string | null = null;
-      for (const [key, { anime: existingAnime }] of groupedByMal) {
-        if (existingAnime.title.toLowerCase().trim() === normalizedTitle) {
-          matchedMalKey = key;
-          break;
-        }
-      }
-      
-      if (matchedMalKey) {
-        continue;
-      }
-      
-      const existing = groupedByTitle.get(normalizedTitle);
-      if (!existing || bestPriority > existing.priority) {
-        groupedByTitle.set(normalizedTitle, { anime, priority: bestPriority });
-      }
-    }
-  }
-  
-  return [
-    ...Array.from(groupedByMal.values()).map(({ anime }) => anime),
-    ...Array.from(groupedByTitle.values()).map(({ anime }) => anime),
-  ];
-}
-
-export const refreshTopAnimeCache = mutation({
-  args: {},
-  handler: async (ctx) => {
-    const { season, year } = getCurrentSeason();
-    const now = Date.now();
-    
-    const allAnimeForYear = await ctx.db
-      .query("anime")
-      .withIndex("by_year", (q) => q.eq("animeSeason.year", year))
-      .collect();
-    
-    const seasonAnime = allAnimeForYear.filter((anime) => {
-      const animeSeason = anime.animeSeason?.season?.toLowerCase();
-      return animeSeason === season.toLowerCase();
-    });
-    
-    const currentlyAiring = seasonAnime.filter((anime) => {
-      const status = anime.status?.toLowerCase() || "";
-      return !status.includes("not yet aired") && !status.includes("upcoming");
-    });
-    
-    const withScore = currentlyAiring.filter(
-      (anime) => anime.score?.arithmeticMean !== undefined && anime.score.arithmeticMean > 0
-    );
-    
-    const deduped = deduplicateAnime(withScore);
-    
-    deduped.sort((a, b) => {
-      const scoreA = a.score?.arithmeticMean ?? 0;
-      const scoreB = b.score?.arithmeticMean ?? 0;
-      return scoreB - scoreA;
-    });
-    
-    const top15 = deduped.slice(0, 15);
-    
-    const existingCache = await ctx.db
-      .query("topAnimeCache")
-      .withIndex("by_season_year", (q) => q.eq("season", season).eq("year", year))
-      .first();
-    
-    if (existingCache) {
-      await ctx.db.patch(existingCache._id, {
-        animeIds: top15.map((a) => a._id),
-        lastUpdated: now,
-      });
-    } else {
-      await ctx.db.insert("topAnimeCache", {
-        season,
-        year,
-        animeIds: top15.map((a) => a._id),
-        lastUpdated: now,
-      });
-    }
-    
-    return { success: true, season, year, count: top15.length };
-  },
-});
-
 // Insert a single anime entry
 export const insert = mutation({
   args: {
@@ -168,84 +54,19 @@ export const insert = mutation({
   },
 });
 
-// Search anime by title using Convex search index with provider priority deduplication
+// Search anime by title using Convex search index
 export const searchByTitle = query({
   args: {
     query: v.string(),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, { query: searchQuery, limit }) => {
-    // Use Convex search index for full-text search across all entries
     const animes = await ctx.db
       .query("anime")
       .withSearchIndex("search_title", (q) => q.search("title", searchQuery))
-      .take((limit ?? 50) * 3); // Get more results to account for duplicates
+      .take(limit ?? 50);
     
-    // Deduplicate by provider priority
-    // Priority: MyAnimeList (3) > AniDB (2) > AniList (1) > Others (0)
-    
-    // Group by canonical ID (MyAnimeList ID or normalized title)
-    const groupedByMal = new Map<string, { anime: any; priority: number }>();
-    const groupedByTitle = new Map<string, { anime: any; priority: number }>();
-    
-    for (const anime of animes) {
-      // Extract MyAnimeList ID if available
-      let malId = "";
-      let bestPriority = 0;
-      
-      for (const source of anime.sources) {
-        if (source.includes("myanimelist.net")) {
-          const match = source.match(/myanimelist\.net\/anime\/(\d+)/);
-          if (match) {
-            malId = match[1];
-            bestPriority = Math.max(bestPriority, 3);
-          }
-        } else if (source.includes("anidb.net")) {
-          bestPriority = Math.max(bestPriority, 2);
-        } else if (source.includes("anilist.co")) {
-          bestPriority = Math.max(bestPriority, 1);
-        }
-      }
-      
-      const normalizedTitle = anime.title.toLowerCase().trim();
-      
-      // If has MAL ID, group by that
-      if (malId) {
-        const key = `mal:${malId}`;
-        const existing = groupedByMal.get(key);
-        if (!existing || bestPriority > existing.priority) {
-          groupedByMal.set(key, { anime, priority: bestPriority });
-        }
-      } else {
-        // No MAL ID - check if this title matches any existing MAL entry
-        let matchedMalKey: string | null = null;
-        for (const [key, { anime: existingAnime }] of groupedByMal) {
-          if (existingAnime.title.toLowerCase().trim() === normalizedTitle) {
-            matchedMalKey = key;
-            break;
-          }
-        }
-        
-        if (matchedMalKey) {
-          // This entry matches a MAL entry - skip it (MAL version is better)
-          continue;
-        }
-        
-        // No MAL match - group by title
-        const existing = groupedByTitle.get(normalizedTitle);
-        if (!existing || bestPriority > existing.priority) {
-          groupedByTitle.set(normalizedTitle, { anime, priority: bestPriority });
-        }
-      }
-    }
-    
-    // Combine results: MAL entries first, then title-grouped entries
-    const results = [
-      ...Array.from(groupedByMal.values()).map(({ anime }) => anime),
-      ...Array.from(groupedByTitle.values()).map(({ anime }) => anime),
-    ];
-    
-    return results.slice(0, limit ?? 50);
+    return animes;
   },
 });
 
@@ -265,7 +86,6 @@ export const getTopMatchByTitle = query({
     title: v.string(),
   },
   handler: async (ctx, { title }) => {
-    // Use the existing search function but return only the first result
     const searchResults = await ctx.db
       .query("anime")
       .withSearchIndex("search_title", (q) => q.search("title", title))
@@ -300,20 +120,160 @@ export const getTopRatedCurrentSeason = query({
       (anime) => anime.score?.arithmeticMean !== undefined && anime.score.arithmeticMean > 0
     );
     
-    const deduped = deduplicateAnime(withScore);
-    
-    deduped.sort((a, b) => {
+    withScore.sort((a, b) => {
       const scoreA = a.score?.arithmeticMean ?? 0;
       const scoreB = b.score?.arithmeticMean ?? 0;
       return scoreB - scoreA;
     });
     
-    const top15 = deduped.slice(0, 15);
+    const top15 = withScore.slice(0, 15);
     
     return {
       anime: top15,
       season,
       year,
+    };
+  },
+});
+
+// Migration helpers - for database deduplication
+
+export const getAllAnime = query({
+  args: {
+    cursor: v.optional(v.union(v.string(), v.null())),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, { cursor, limit }) => {
+    const results = await ctx.db
+      .query("anime")
+      .paginate({
+        cursor: cursor ?? null,
+        numItems: limit ?? 500,
+      });
+    return {
+      page: results.page,
+      continueCursor: results.continueCursor,
+      isDone: results.isDone,
+    };
+  },
+});
+
+export const clearAllAnime = mutation({
+  args: {
+    batch: v.optional(v.number()),
+  },
+  handler: async (ctx, { batch }) => {
+    const batchSize = batch ?? 1000;
+    
+    const userAnime = await ctx.db.query("userAnime").take(batchSize);
+    for (const item of userAnime) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const listComments = await ctx.db.query("animeListComments").take(batchSize);
+    for (const item of listComments) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const commentVotes = await ctx.db.query("animeListCommentVotes").take(batchSize);
+    for (const item of commentVotes) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const listItems = await ctx.db.query("animeListItems").take(batchSize);
+    for (const item of listItems) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const lists = await ctx.db.query("animeLists").take(batchSize);
+    for (const item of lists) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const cache = await ctx.db.query("topAnimeCache").take(batchSize);
+    for (const item of cache) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const anime = await ctx.db.query("anime").take(batchSize);
+    for (const item of anime) {
+      await ctx.db.delete(item._id);
+    }
+    
+    const hasMore = userAnime.length === batchSize || 
+                   listComments.length === batchSize || 
+                   commentVotes.length === batchSize || 
+                   listItems.length === batchSize || 
+                   lists.length === batchSize || 
+                   cache.length === batchSize || 
+                   anime.length === batchSize;
+    
+    return {
+      userAnimeCleared: userAnime.length,
+      listCommentsCleared: listComments.length,
+      commentVotesCleared: commentVotes.length,
+      listItemsCleared: listItems.length,
+      listsCleared: lists.length,
+      cacheCleared: cache.length,
+      animeCleared: anime.length,
+      hasMore,
+    };
+  },
+});
+
+export const bulkInsert = mutation({
+  args: {
+    animes: v.array(v.object({
+      title: v.string(),
+      type: v.string(),
+      episodes: v.optional(v.number()),
+      status: v.string(),
+      animeSeason: v.optional(v.object({
+        season: v.optional(v.string()),
+        year: v.optional(v.number()),
+      })),
+      picture: v.optional(v.string()),
+      thumbnail: v.optional(v.string()),
+      malId: v.optional(v.string()),
+      duration: v.optional(v.object({
+        value: v.optional(v.number()),
+        unit: v.optional(v.string()),
+      })),
+      score: v.optional(v.object({
+        arithmeticGeometricMean: v.optional(v.number()),
+        arithmeticMean: v.optional(v.number()),
+        median: v.optional(v.number()),
+      })),
+      sources: v.array(v.string()),
+      synonyms: v.array(v.string()),
+      studios: v.array(v.string()),
+      producers: v.array(v.string()),
+      relatedAnime: v.array(v.string()),
+      tags: v.array(v.string()),
+    })),
+  },
+  handler: async (ctx, args) => {
+    let imported = 0;
+    let failed = 0;
+    const errors: string[] = [];
+
+    for (const anime of args.animes) {
+      try {
+        await ctx.db.insert("anime", anime);
+        imported++;
+      } catch (error) {
+        failed++;
+        if (errors.length < 10) {
+          errors.push(`${anime.title}: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+    }
+
+    return {
+      imported,
+      failed,
+      total: args.animes.length,
+      errors,
     };
   },
 });

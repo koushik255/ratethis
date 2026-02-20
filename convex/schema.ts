@@ -16,6 +16,7 @@ export default defineSchema({
     })),
     picture: v.optional(v.string()),
     thumbnail: v.optional(v.string()),
+    malId: v.optional(v.string()),
     duration: v.optional(v.object({
       value: v.optional(v.number()),
       unit: v.optional(v.string()),
@@ -35,6 +36,7 @@ export default defineSchema({
     .index("by_title", ["title"])
     .index("by_type", ["type"])
     .index("by_year", ["animeSeason.year"])
+    .index("by_malId", ["malId"])
     .searchIndex("search_title", {
       searchField: "title",
       filterFields: ["type", "status"],

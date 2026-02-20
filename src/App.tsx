@@ -99,10 +99,10 @@ function App() {
                 <div className="card-rank">
                   <span className="rank-num">{String(index + 1).padStart(2, '0')}</span>
                 </div>
-                {anime.thumbnail && (
+                {anime.picture && (
                   <div className="card-thumb">
                     <img
-                      src={anime.thumbnail}
+                      src={anime.picture}
                       alt={anime.title}
                       loading="lazy"
                       decoding="async"
@@ -173,10 +173,10 @@ function App() {
                       className="result-card"
                       style={{ animationDelay: `${index * 40}ms` }}
                     >
-                      {anime.thumbnail && (
+                      {anime.picture && (
                         <div className="result-thumb">
                           <img
-                            src={anime.thumbnail}
+                            src={anime.picture}
                             alt={anime.title}
                             loading="lazy"
                             decoding="async"
