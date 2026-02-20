@@ -20,7 +20,7 @@ from tqdm import tqdm
 
 # Paths
 DB_PATH = Path(__file__).parent.parent.parent / "anime.db"
-CONVEX_URL = "https://adventurous-greyhound-84.convex.site"
+CONVEX_URL = "https://pastel-condor-398.convex.site"
 BATCH_SIZE = 100
 
 

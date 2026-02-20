@@ -15,7 +15,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 JSON_PATH = Path("/home/koushikk/Documents/newanimedb.json")
-CONVEX_URL = "https://adventurous-greyhound-84.convex.site"
+CONVEX_URL = "https://pastel-condor-398.convex.site"
 BATCH_SIZE = 100
 
 

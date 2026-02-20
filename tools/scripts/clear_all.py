@@ -6,7 +6,7 @@ import urllib.request
 import urllib.error
 import time
 
-CONVEX_URL = "https://adventurous-greyhound-84.convex.site"
+CONVEX_URL = "https://pastel-condor-398.convex.site"
 
 
 def clear_batch():

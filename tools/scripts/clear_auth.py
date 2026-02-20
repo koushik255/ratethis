@@ -5,12 +5,13 @@ import json
 import urllib.request
 import urllib.error
 
-CONVEX_URL = "https://adventurous-greyhound-84.convex.site"
+CONVEX_URL = "https://pastel-condor-398.convex.site"
+
 
 def clear_auth():
     """Clear auth sessions via HTTP action."""
     url = f"{CONVEX_URL}/api/auth/clear-sessions"
-    
+
     try:
         req = urllib.request.Request(
             url,
@@ -25,6 +26,7 @@ def clear_auth():
         return {"success": False, "error": f"HTTP {e.code}: {error_body}"}
     except Exception as e:
         return {"success": False, "error": str(e)}
+
 
 if __name__ == "__main__":
     print("Clearing auth sessions...")
