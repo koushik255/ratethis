@@ -4,7 +4,7 @@ export function SignIn() {
   const { signIn } = useAuthActions();
   return (
     <button 
-      onClick={() => void signIn("google")}
+      onClick={() => void signIn("google", { redirectTo: "/" })}
       className="auth-button"
     >
       sign in
