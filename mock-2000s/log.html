@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/a/ - My Log - Anonymous</title>
+  <style>
+    /* ============================================
+       EARLY 2000s / 4chan STYLE - User Log/Diary
+       ============================================ */
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 10pt;
+      background-color: #FFFFEE;
+      color: #000000;
+      margin: 0;
+      padding: 8px;
+    }
+    
+    a {
+      color: #0000EE;
+      text-decoration: underline;
+    }
+    
+    a:visited {
+      color: #551A8B;
+    }
+    
+    a:hover {
+      color: #DD0000;
+    }
+    
+    /* Header */
+    .board-banner {
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #B7C5D9;
+      background-color: #FEDCBA;
+    }
+    
+    .board-title {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 28px;
+      font-weight: bold;
+      color: #800000;
+      letter-spacing: -1px;
+      margin: 0;
+    }
+    
+    /* Navigation Bar */
+    .nav-bar {
+      background-color: #FEDCBA;
+      border-bottom: 1px solid #B7C5D9;
+      padding: 4px 8px;
+      font-size: 9pt;
+    }
+    
+    .nav-bar a {
+      margin-right: 8px;
+    }
+    
+    .nav-bar .current {
+      font-weight: bold;
+      color: #800000;
+      text-decoration: none;
+    }
+    
+    /* Tab Navigation */
+    .tab-nav {
+      background-color: #E0E0E0;
+      border-bottom: 1px solid #999;
+      padding: 0;
+      margin: 8px 0;
+    }
+    
+    .tab-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .tab-nav li {
+      display: inline-block;
+      margin: 0;
+    }
+    
+    .tab-nav a {
+      display: block;
+      padding: 6px 16px;
+      text-decoration: none;
+      color: #000;
+      background-color: #E0E0E0;
+      border-right: 1px solid #999;
+      border-bottom: none;
+    }
+    
+    .tab-nav a:hover {
+      background-color: #F0F0F0;
+    }
+    
+    .tab-nav a.active {
+      background-color: #FFFFEE;
+      font-weight: bold;
+      border-bottom: 1px solid #FFFFEE;
+      margin-bottom: -1px;
+      color: #800000;
+    }
+    
+    /* Stats Box */
+    .stats-box {
+      background-color: #F0E0D6;
+      border: 1px solid #D9BFB7;
+      padding: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 24px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #800000;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 8pt;
+      color: #666;
+      text-transform: uppercase;
+    }
+    
+    /* Content */
+    .content {
+      margin: 16px 0;
+    }
+    
+    /* Date Section */
+    .date-section {
+      margin-bottom: 24px;
+    }
+    
+    .date-header {
+      background-color: #D9BFB7;
+      padding: 6px 12px;
+      font-weight: bold;
+      color: #800000;
+      border: 1px solid #B7A597;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .date-count {
+      font-weight: normal;
+      font-size: 8pt;
+      color: #666;
+    }
+    
+    /* Log Entry */
+    .log-entries {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .log-entry {
+      background-color: #F0E0D6;
+      border: 1px solid #D9BFB7;
+      margin-bottom: 4px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    .log-entry:hover {
+      background-color: #E8D8CE;
+    }
+    
+    .log-time {
+      color: #666;
+      font-size: 9pt;
+      min-width: 60px;
+      padding-top: 2px;
+    }
+    
+    .log-anime {
+      min-width: 180px;
+    }
+    
+    .log-anime-title {
+      font-weight: bold;
+      color: #0000EE;
+      text-decoration: none;
+    }
+    
+    .log-anime-title:hover {
+      color: #DD0000;
+    }
+    
+    .log-episode {
+      font-size: 9pt;
+      color: #800000;
+      font-weight: bold;
+    }
+    
+    .log-comment {
+      flex: 1;
+      font-size: 9pt;
+      color: #000;
+      font-style: italic;
+      border-left: 2px solid #D9BFB7;
+      padding-left: 12px;
+    }
+    
+    .log-actions {
+      font-size: 8pt;
+    }
+    
+    .log-actions a {
+      color: #800000;
+      text-decoration: none;
+    }
+    
+    .log-actions a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Favorites Tab Content */
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+    }
+    
+    .favorite-item {
+      background-color: #F0E0D6;
+      border: 1px solid #D9BFB7;
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .favorite-item img {
+      width: 50px;
+      height: 70px;
+      object-fit: cover;
+      border: 1px solid #999;
+    }
+    
+    .favorite-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .favorite-title {
+      font-weight: bold;
+      font-size: 9pt;
+      margin-bottom: 4px;
+    }
+    
+    .favorite-title a {
+      color: #0000EE;
+      text-decoration: none;
+    }
+    
+    .favorite-title a:hover {
+      text-decoration: underline;
+    }
+    
+    .favorite-meta {
+      font-size: 8pt;
+      color: #666;
+    }
+    
+    /* Watched List */
+    .watched-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .watched-item {
+      background-color: #F0E0D6;
+      border: 1px solid #D9BFB7;
+      padding: 8px 12px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .watched-item:hover {
+      background-color: #E8D8CE;
+    }
+    
+    .watched-title {
+      font-weight: bold;
+    }
+    
+    .watched-title a {
+      color: #0000EE;
+      text-decoration: none;
+    }
+    
+    .watched-date {
+      font-size: 8pt;
+      color: #666;
+    }
+    
+    .watched-comment {
+      font-size: 9pt;
+      font-style: italic;
+      color: #666;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: #666;
+      font-style: italic;
+      background-color: #F0E0D6;
+      border: 1px solid #D9BFB7;
+    }
+    
+    /* Pagination */
+    .pagination {
+      text-align: center;
+      padding: 16px;
+      font-size: 9pt;
+      background-color: #E0E0E0;
+      border: 1px solid #999;
+      margin-top: 16px;
+    }
+    
+    .pagination a {
+      padding: 2px 8px;
+    }
+    
+    .pagination .current {
+      font-weight: bold;
+      color: #800000;
+    }
+    
+    /* Footer */
+    .board-footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 8pt;
+      color: #666;
+      border-top: 1px solid #B7C5D9;
+      margin-top: 32px;
+    }
+    
+    /* Greentext */
+    .greentext {
+      color: #789922;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="board-banner">
+    <h1 class="board-title">/a/ - ANIME LOG</h1>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    [<a href="#">index</a>]
+    [<a href="#">search</a>]
+    [<a href="#" class="current">my log</a>]
+    [<a href="#">favorites</a>]
+    [<a href="#">watched</a>]
+    [<a href="#">settings</a>]
+    <span style="float: right;">
+      Logged in as: <b style="color: #117743;">Anonymous</b>
+      [<a href="#">logout</a>]
+    </span>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <ul>
+      <li><a href="#" class="active">diary</a></li>
+      <li><a href="#">favorites (12)</a></li>
+      <li><a href="#">watched (34)</a></li>
+      <li><a href="#">stats</a></li>
+    </ul>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-box">
+    <div class="stat-item">
+      <span class="stat-number">127</span>
+      <span class="stat-label">Episodes Logged</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">23</span>
+      <span class="stat-label">Anime Started</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">12</span>
+      <span class="stat-label">Completed</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">45</span>
+      <span class="stat-label">Hours Watched</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">8</span>
+      <span class="stat-label">Day Streak</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Today -->
+    <div class="date-section">
+      <div class="date-header">
+        <span>Today - February 18, 2024</span>
+        <span class="date-count">3 entries</span>
+      </div>
+      <ul class="log-entries">
+        <li class="log-entry">
+          <span class="log-time">15:02</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Cowboy Bebop</a>
+            <span class="log-episode">Ep. 5</span>
+          </div>
+          <span class="log-comment">"Ballad of Fallen Angels is PEAK"</span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+        <li class="log-entry">
+          <span class="log-time">12:30</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Neon Genesis Evangelion</a>
+            <span class="log-episode">Ep. 3</span>
+          </div>
+          <span class="log-comment"></span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+        <li class="log-entry">
+          <span class="log-time">09:15</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Mob Psycho 100</a>
+            <span class="log-episode">Ep. 7</span>
+          </div>
+          <span class="log-comment">"the animation in this fight scene is insane"</span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Yesterday -->
+    <div class="date-section">
+      <div class="date-header">
+        <span>Yesterday - February 17, 2024</span>
+        <span class="date-count">5 entries</span>
+      </div>
+      <ul class="log-entries">
+        <li class="log-entry">
+          <span class="log-time">22:45</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Cowboy Bebop</a>
+            <span class="log-episode">Ep. 4</span>
+          </div>
+          <span class="log-comment"></span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+        <li class="log-entry">
+          <span class="log-time">21:00</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Neon Genesis Evangelion</a>
+            <span class="log-episode">Ep. 2</span>
+          </div>
+          <span class="log-comment">"getting interesting"</span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+        <li class="log-entry">
+          <span class="log-time">20:32</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Cowboy Bebop</a>
+            <span class="log-episode">Ep. 3</span>
+          </div>
+          <span class="log-comment">"faye introduction"</span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+        <li class="log-entry">
+          <span class="log-time">19:15</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Cowboy Bebop</a>
+            <span class="log-episode">Ep. 2</span>
+          </div>
+          <span class="log-comment"></span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+        <li class="log-entry">
+          <span class="log-time">18:00</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Mob Psycho 100</a>
+            <span class="log-episode">Ep. 6</span>
+          </div>
+          <span class="log-comment">"reigen is the best character"</span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Earlier -->
+    <div class="date-section">
+      <div class="date-header">
+        <span>February 16, 2024 (Friday)</span>
+        <span class="date-count">2 entries</span>
+      </div>
+      <ul class="log-entries">
+        <li class="log-entry">
+          <span class="log-time">21:30</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Steins;Gate</a>
+            <span class="log-episode">Ep. 12</span>
+          </div>
+          <span class="log-comment">"things are getting serious now..."</span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+        <li class="log-entry">
+          <span class="log-time">18:45</span>
+          <div class="log-anime">
+            <a href="#" class="log-anime-title">Cowboy Bebop</a>
+            <span class="log-episode">Ep. 4</span>
+          </div>
+          <span class="log-comment"></span>
+          <span class="log-actions">[<a href="#">view</a>] [<a href="#">edit</a>] [<a href="#">del</a>]</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <a href="#">[First]</a>
+      <a href="#">[Prev]</a>
+      [<span class="current">1</span>]
+      [<a href="#">2</a>]
+      [<a href="#">3</a>]
+      [<a href="#">4</a>]
+      [<a href="#">5</a>]
+      ...
+      [<a href="#">12</a>]
+      <a href="#">[Next]</a>
+      <a href="#">[Last]</a>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="board-footer">
+    All trademarks and copyrights on this page are owned by their respective parties.<br>
+    <a href="#">Index</a> | <a href="#">Top</a> | <a href="#">Settings</a> | <a href="#">Export Data</a>
+  </div>
+
+</body>
+</html>

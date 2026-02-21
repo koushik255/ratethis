@@ -1,62 +1,77 @@
 /* ============================================
-   LOG PAGE - Editorial Design
+   LOG PAGE - Diary, Favorites, Watched
    ============================================ */
 
-.log-tabs {
-  display: flex;
-  gap: 0;
-  margin-bottom: var(--space-6);
-  border-bottom: 2px solid var(--color-border);
+.log-view {
+  max-width: 900px;
 }
 
-.log-tab {
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: 500;
-  padding: var(--space-3) var(--space-5);
-  border: none;
-  background-color: transparent;
-  color: var(--color-fg-muted);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  transition: all var(--transition-base);
+.log-view .content-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
 }
 
-.log-tab:hover {
-  color: var(--color-fg);
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
 }
 
-.log-tab.active {
-  color: var(--color-fg);
-  border-bottom-color: var(--color-fg);
-}
-
-.empty-state {
-  padding: var(--space-16);
+.stat-card {
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   text-align: center;
-  color: var(--color-fg-muted);
 }
 
-.empty-state p {
-  font-size: var(--text-lg);
+.stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: bold;
+  color: var(--accent);
 }
 
-.watched-info {
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
+.stat-label {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  margin-top: var(--space-1);
 }
 
-.watched-date {
-  font-size: var(--text-sm);
-  color: var(--color-fg-light);
+.log-content {
+  min-height: 300px;
 }
 
-.watched-comment {
-  font-size: var(--text-sm);
-  color: var(--color-fg-muted);
-  margin: var(--space-2) 0 0;
-  font-style: italic;
-  line-height: 1.5;
+/* Responsive */
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-1);
+  }
+
+  .stat-card {
+    padding: var(--space-2);
+  }
+
+  .stat-num {
+    font-size: var(--text-2xl);
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+  }
 }

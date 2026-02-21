@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { useQuery } from "convex/react";
-import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
-import { UserMenu } from "../components/UserMenu";
+import RetroLayout from "../components/RetroLayout";
 import { AnimeLogPanel } from "../components/AnimeLogPanel";
 import { DiaryFeed } from "../components/DiaryFeed";
-import "../styles.css";
 import "./LogPage.css";
 
 type TabType = "favorites" | "watched" | "diary";
 
 function LogPage() {
-  const [activeTab, setActiveTab] = useState<TabType>("favorites");
+  const [activeTab, setActiveTab] = useState<TabType>("diary");
 
   const favorites = useQuery(
     api.userAnime.getMyFavorites,
@@ -26,66 +24,74 @@ function LogPage() {
     activeTab === "diary" ? undefined : "skip"
   );
 
+  const stats = {
+    episodes: diaryLogs?.length ?? 0,
+    favorites: favorites?.length ?? 0,
+    watched: watched?.length ?? 0,
+  };
+
   return (
-    <div className="page-layout">
-      <header className="page-header">
-        <div className="header-content">
-          <h1 className="site-title">analog</h1>
-          <nav className="main-nav">
-            <Link to="/" className="nav-link">index</Link>
-            <Link to="/profile" className="nav-link">profile</Link>
-            <Link to="/log" className="nav-link active">log</Link>
-            <Link to="/lists" className="nav-link">lists</Link>
-            <Link to="/friends" className="nav-link">friends</Link>
-          </nav>
-        </div>
-        <UserMenu />
-      </header>
-
-      <main className="page-content">
-        <div className="log-tabs">
-          <button
-            className={`log-tab ${activeTab === "favorites" ? "active" : ""}`}
-            onClick={() => setActiveTab("favorites")}
-          >
-            favorites ({favorites?.length ?? 0})
-          </button>
-          <button
-            className={`log-tab ${activeTab === "watched" ? "active" : ""}`}
-            onClick={() => setActiveTab("watched")}
-          >
-            watched ({watched?.length ?? 0})
-          </button>
-          <button
-            className={`log-tab ${activeTab === "diary" ? "active" : ""}`}
-            onClick={() => setActiveTab("diary")}
-          >
-            diary ({diaryLogs?.length ?? 0})
-          </button>
+    <RetroLayout>
+      <div className="log-view">
+        <div className="content-header">
+          <h2 className="page-title">my log</h2>
+          <div className="tabs">
+            <button
+              className={`tab ${activeTab === "diary" ? "active" : ""}`}
+              onClick={() => setActiveTab("diary")}
+            >
+              diary ({diaryLogs?.length ?? 0})
+            </button>
+            <button
+              className={`tab ${activeTab === "favorites" ? "active" : ""}`}
+              onClick={() => setActiveTab("favorites")}
+            >
+              favorites ({favorites?.length ?? 0})
+            </button>
+            <button
+              className={`tab ${activeTab === "watched" ? "active" : ""}`}
+              onClick={() => setActiveTab("watched")}
+            >
+              watched ({watched?.length ?? 0})
+            </button>
+          </div>
         </div>
 
-        {activeTab === "diary" ? (
-          <DiaryFeed
-            logs={diaryLogs}
-            emptyMessage="no episode logs yet. start tracking your progress!"
-          />
-        ) : (
-          <AnimeLogPanel
-            favorites={favorites}
-            watched={watched}
-            showTabs={false}
-            activeTab={activeTab as "favorites" | "watched"}
-            onTabChange={(tab) => setActiveTab(tab)}
-            emptyMessageFavorites="no favorites yet. search and add some!"
-            emptyMessageWatched="no watched anime yet. start watching!"
-          />
-        )}
-      </main>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <span className="stat-num">{stats.episodes}</span>
+            <span className="stat-label">episodes logged</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-num">{stats.favorites}</span>
+            <span className="stat-label">favorites</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-num">{stats.watched}</span>
+            <span className="stat-label">completed</span>
+          </div>
+        </div>
 
-      <footer className="page-footer">
-        <p>analog v1.0</p>
-      </footer>
-    </div>
+        <div className="log-content card animate-fade-in">
+          {activeTab === "diary" ? (
+            <DiaryFeed
+              logs={diaryLogs}
+              emptyMessage="no episode logs yet. search for anime and start tracking your progress!"
+            />
+          ) : (
+            <AnimeLogPanel
+              favorites={favorites}
+              watched={watched}
+              showTabs={false}
+              activeTab={activeTab as "favorites" | "watched"}
+              onTabChange={(tab) => setActiveTab(tab)}
+              emptyMessageFavorites="no favorites yet. search for anime and add some!"
+              emptyMessageWatched="no watched anime yet. mark anime as watched to track them!"
+            />
+          )}
+        </div>
+      </div>
+    </RetroLayout>
   );
 }
 

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/a/ - Cowboy Bebop - Entry #4829101</title>
+  <style>
+    /* ============================================
+       EARLY 2000s / 4chan STYLE - Entry Page
+       ============================================ */
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 10pt;
+      background-color: #FFFFEE;
+      color: #000000;
+      margin: 0;
+      padding: 8px;
+    }
+    
+    a {
+      color: #0000EE;
+      text-decoration: underline;
+    }
+    
+    a:visited {
+      color: #551A8B;
+    }
+    
+    a:hover {
+      color: #DD0000;
+    }
+    
+    /* Header */
+    .board-banner {
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #B7C5D9;
+      background-color: #FEDCBA;
+    }
+    
+    .board-title {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 28px;
+      font-weight: bold;
+      color: #800000;
+      letter-spacing: -1px;
+      margin: 0;
+      text-shadow: 1px 1px 0 #FFF;
+    }
+    
+    /* Navigation Bar */
+    .nav-bar {
+      background-color: #FEDCBA;
+      border-bottom: 1px solid #B7C5D9;
+      padding: 4px 8px;
+      font-size: 9pt;
+    }
+    
+    .nav-bar a {
+      margin-right: 8px;
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+      background-color: #E0E0E0;
+      border: 1px solid #B7C5D9;
+      padding: 6px 12px;
+      margin: 8px 0;
+      font-size: 9pt;
+    }
+    
+    .breadcrumb a {
+      color: #0000EE;
+    }
+    
+    /* Main Content */
+    .content {
+      margin: 16px 0;
+    }
+    
+    /* Anime Info Table */
+    .anime-info {
+      background-color: #F0E0D6;
+      border: 2px solid #D9BFB7;
+      padding: 0;
+      margin-bottom: 16px;
+    }
+    
+    .anime-info-header {
+      background-color: #D9BFB7;
+      padding: 6px 12px;
+      font-weight: bold;
+      color: #800000;
+      font-size: 14pt;
+      border-bottom: 1px solid #B7A597;
+    }
+    
+    .anime-info-body {
+      padding: 12px;
+      display: flex;
+      gap: 16px;
+    }
+    
+    .anime-info-image {
+      flex-shrink: 0;
+    }
+    
+    .anime-info-image img {
+      width: 180px;
+      height: auto;
+      border: 1px solid #999;
+    }
+    
+    .anime-info-details {
+      flex: 1;
+    }
+    
+    .anime-info-details table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+    }
+    
+    .anime-info-details td {
+      padding: 3px 8px;
+      vertical-align: top;
+    }
+    
+    .anime-info-details .label {
+      width: 80px;
+      font-weight: bold;
+      color: #666;
+      background-color: #E8D8CE;
+      border-right: 1px solid #D9BFB7;
+    }
+    
+    .anime-info-details .value {
+      color: #000;
+    }
+    
+    /* Description */
+    .anime-description {
+      margin-top: 12px;
+      padding: 8px;
+      background-color: #FFFFEE;
+      border: 1px solid #CCC;
+      font-size: 9pt;
+      line-height: 1.5;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #C0A69C;
+    }
+    
+    .action-btn {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 9pt;
+      padding: 3px 10px;
+      background: linear-gradient(to bottom, #FEFEFE 0%, #D0D0D0 100%);
+      border: 1px solid #999;
+      cursor: pointer;
+      color: #000;
+      text-decoration: none;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    
+    .action-btn:hover {
+      background: linear-gradient(to bottom, #FFF 0%, #E8E8E8 100%);
+      border-color: #666;
+    }
+    
+    .action-btn.active {
+      background: linear-gradient(to bottom, #FFE4C4 0%, #F0C8A0 100%);
+      border-color: #C08040;
+      color: #800000;
+    }
+    
+    .action-btn-small {
+      font-size: 8pt;
+      padding: 1px 6px;
+    }
+    
+    /* Episode Logger */
+    .episode-logger {
+      background-color: #F0E0D6;
+      border: 2px solid #D9BFB7;
+      margin-bottom: 16px;
+    }
+    
+    .episode-logger-header {
+      background-color: #D9BFB7;
+      padding: 6px 12px;
+      font-weight: bold;
+      color: #800000;
+      border-bottom: 1px solid #B7A597;
+    }
+    
+    .episode-logger-body {
+      padding: 12px;
+    }
+    
+    .episode-logger-form {
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #D9BFB7;
+    }
+    
+    .episode-logger-form table {
+      border-collapse: collapse;
+    }
+    
+    .episode-logger-form td {
+      padding: 2px 6px;
+      vertical-align: middle;
+    }
+    
+    .episode-logger-form input[type="number"] {
+      width: 60px;
+      font-family: monospace;
+      font-size: 10pt;
+      border: 1px solid #999;
+      padding: 2px 4px;
+      text-align: center;
+    }
+    
+    .episode-logger-form input[type="text"] {
+      width: 280px;
+      font-family: arial, helvetica, sans-serif;
+      font-size: 9pt;
+      border: 1px solid #999;
+      padding: 2px 4px;
+    }
+    
+    .episode-logger-form input[type="submit"] {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 9pt;
+      padding: 2px 16px;
+      background: linear-gradient(to bottom, #FEFEFE 0%, #D0D0D0 100%);
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+    
+    /* Progress */
+    .progress-header {
+      font-weight: bold;
+      color: #800000;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px dotted #C0A69C;
+      font-size: 9pt;
+    }
+    
+    .progress-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .progress-item {
+      padding: 4px 0;
+      border-bottom: 1px dotted #D9BFB7;
+      font-size: 9pt;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    
+    .progress-item:last-child {
+      border-bottom: none;
+    }
+    
+    .progress-ep {
+      font-weight: bold;
+      color: #0000EE;
+      min-width: 50px;
+    }
+    
+    .progress-date {
+      color: #666;
+      font-size: 8pt;
+    }
+    
+    .progress-comment {
+      color: #000;
+      font-style: italic;
+      flex: 1;
+    }
+    
+    .progress-delete {
+      color: #800000;
+      font-size: 8pt;
+      text-decoration: none;
+    }
+    
+    .progress-delete:hover {
+      text-decoration: underline;
+    }
+    
+    /* Episode Comments Section */
+    .episode-comments {
+      background-color: #F0E0D6;
+      border: 2px solid #D9BFB7;
+    }
+    
+    .episode-comments-header {
+      background-color: #D9BFB7;
+      padding: 6px 12px;
+      font-weight: bold;
+      color: #800000;
+      border-bottom: 1px solid #B7A597;
+    }
+    
+    .episode-comments-body {
+      padding: 0;
+    }
+    
+    .comment-thread {
+      border-bottom: 1px solid #D9BFB7;
+    }
+    
+    .comment-thread:last-child {
+      border-bottom: none;
+    }
+    
+    .comment-thread-header {
+      background-color: #E8D8CE;
+      padding: 4px 12px;
+      font-weight: bold;
+      font-size: 9pt;
+      color: #800000;
+      cursor: pointer;
+    }
+    
+    .comment-thread-header:hover {
+      background-color: #E0D0C6;
+    }
+    
+    .comment-thread-posts {
+      padding: 8px 12px;
+    }
+    
+    .comment-post {
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px dotted #D9BFB7;
+    }
+    
+    .comment-post:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .comment-post-info {
+      font-size: 8pt;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    
+    .comment-post-name {
+      color: #117743;
+      font-weight: bold;
+    }
+    
+    .comment-post-message {
+      font-size: 9pt;
+      line-height: 1.4;
+    }
+    
+    .greentext {
+      color: #789922;
+    }
+    
+    /* Sources */
+    .anime-sources {
+      background-color: #F0E0D6;
+      border: 2px solid #D9BFB7;
+      margin-bottom: 16px;
+    }
+    
+    .anime-sources-header {
+      background-color: #D9BFB7;
+      padding: 6px 12px;
+      font-weight: bold;
+      color: #800000;
+      border-bottom: 1px solid #B7A597;
+    }
+    
+    .anime-sources-body {
+      padding: 8px 12px;
+    }
+    
+    .anime-sources ul {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 9pt;
+    }
+    
+    .anime-sources li {
+      margin: 2px 0;
+    }
+    
+    /* Tags */
+    .anime-tags {
+      margin-top: 8px;
+    }
+    
+    .tag {
+      display: inline-block;
+      background-color: #E0E0E0;
+      border: 1px solid #CCC;
+      padding: 1px 6px;
+      font-size: 8pt;
+      margin: 2px;
+      color: #333;
+      text-decoration: none;
+    }
+    
+    .tag:hover {
+      background-color: #D0D0D0;
+    }
+    
+    /* Reply Form */
+    .reply-form {
+      background-color: #F0E0D6;
+      border: 2px solid #D9BFB7;
+      margin-bottom: 16px;
+    }
+    
+    .reply-form-header {
+      background-color: #D9BFB7;
+      padding: 6px 12px;
+      font-weight: bold;
+      color: #800000;
+      border-bottom: 1px solid #B7A597;
+    }
+    
+    .reply-form-body {
+      padding: 12px;
+    }
+    
+    .reply-form textarea {
+      width: 100%;
+      min-height: 100px;
+      font-family: arial, helvetica, sans-serif;
+      font-size: 10pt;
+      border: 1px solid #999;
+      padding: 4px;
+      resize: vertical;
+    }
+    
+    .reply-form input[type="submit"] {
+      margin-top: 8px;
+      font-family: arial, helvetica, sans-serif;
+      font-size: 9pt;
+      padding: 3px 16px;
+      background: linear-gradient(to bottom, #FEFEFE 0%, #D0D0D0 100%);
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+    
+    /* Footer */
+    .board-footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 8pt;
+      color: #666;
+      border-top: 1px solid #B7C5D9;
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="board-banner">
+    <h1 class="board-title">/a/ - ANIME LOG</h1>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    [<a href="#">index</a>]
+    [<a href="#">search</a>]
+    [<a href="#">my log</a>]
+    [<a href="#">favorites</a>]
+    [<a href="#">watched</a>]
+    <span style="float: right;">
+      Logged in as: <b style="color: #117743;">Anonymous</b>
+      [<a href="#">logout</a>]
+    </span>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="#">Index</a> &raquo;
+    <a href="#">TV</a> &raquo;
+    <a href="#">1998</a> &raquo;
+    <b>Cowboy Bebop</b>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+
+    <!-- Anime Info -->
+    <div class="anime-info">
+      <div class="anime-info-header">Cowboy Bebop</div>
+      <div class="anime-info-body">
+        <div class="anime-info-image">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='256' viewBox='0 0 180 256'%3E%3Crect fill='%23222' width='180' height='256'/%3E%3Ctext fill='%23888' font-family='monospace' font-size='12' x='50%25' y='50%25' text-anchor='middle'%3E[poster]%3C/text%3E%3C/svg%3E" alt="Cowboy Bebop">
+        </div>
+        <div class="anime-info-details">
+          <table>
+            <tr>
+              <td class="label">Type</td>
+              <td class="value">TV</td>
+            </tr>
+            <tr>
+              <td class="label">Episodes</td>
+              <td class="value">26</td>
+            </tr>
+            <tr>
+              <td class="label">Status</td>
+              <td class="value" style="color: #117743;">Finished Airing</td>
+            </tr>
+            <tr>
+              <td class="label">Year</td>
+              <td class="value">1998 (Spring)</td>
+            </tr>
+            <tr>
+              <td class="label">Duration</td>
+              <td class="value">24 min/ep</td>
+            </tr>
+            <tr>
+              <td class="label">Score</td>
+              <td class="value" style="color: #0000EE; font-weight: bold;">8.75 / 10</td>
+            </tr>
+            <tr>
+              <td class="label">Studios</td>
+              <td class="value">Sunrise</td>
+            </tr>
+            <tr>
+              <td class="label">Producers</td>
+              <td class="value">Bandai Visual, TV Tokyo</td>
+            </tr>
+          </table>
+          
+          <div class="anime-description">
+            In the year 2071, humanity has colonized several of the planets and moons of the solar system with an estimated 1.3 million inhabitants. Amidst a rising crime rate, the Inter Solar System Police (ISSP) set up a legalized contract system, in which registered bounty hunters chase criminals...
+          </div>
+          
+          <div class="action-buttons">
+            <a href="#" class="action-btn active">★ Favorited</a>
+            <a href="#" class="action-btn active">👁 Watched</a>
+            <a href="#" class="action-btn">+ Add to List</a>
+          </div>
+          
+          <div class="anime-tags">
+            <a href="#" class="tag">action</a>
+            <a href="#" class="tag">adventure</a>
+            <a href="#" class="tag">sci-fi</a>
+            <a href="#" class="tag">comedy</a>
+            <a href="#" class="tag">drama</a>
+            <a href="#" class="tag">space</a>
+            <a href="#" class="tag">bounty hunters</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Episode Logger -->
+    <div class="episode-logger">
+      <div class="episode-logger-header">Episode Logger - Your Progress: 5/26</div>
+      <div class="episode-logger-body">
+        <div class="episode-logger-form">
+          <form>
+            <table>
+              <tr>
+                <td><b>Episode:</b></td>
+                <td><input type="number" min="1" max="26" value="6" placeholder="#"> / 26</td>
+                <td><b>Comment:</b></td>
+                <td><input type="text" placeholder="(optional) your thoughts on this episode..."></td>
+                <td><input type="submit" value="Log Episode"></td>
+              </tr>
+            </table>
+          </form>
+        </div>
+        
+        <div class="progress-header">Your Logged Episodes:</div>
+        <ul class="progress-list">
+          <li class="progress-item">
+            <span class="progress-ep">Ep. 1</span>
+            <span class="progress-date">02/14/24 20:32</span>
+            <span class="progress-comment">"great opener, hooked immediately"</span>
+            <a href="#" class="progress-delete">[del]</a>
+          </li>
+          <li class="progress-item">
+            <span class="progress-ep">Ep. 2</span>
+            <span class="progress-date">02/15/24 19:15</span>
+            <span class="progress-comment"></span>
+            <a href="#" class="progress-delete">[del]</a>
+          </li>
+          <li class="progress-item">
+            <span class="progress-ep">Ep. 3</span>
+            <span class="progress-date">02/15/24 21:00</span>
+            <span class="progress-comment">"faye introduction"</span>
+            <a href="#" class="progress-delete">[del]</a>
+          </li>
+          <li class="progress-item">
+            <span class="progress-ep">Ep. 4</span>
+            <span class="progress-date">02/16/24 18:45</span>
+            <span class="progress-comment"></span>
+            <a href="#" class="progress-delete">[del]</a>
+          </li>
+          <li class="progress-item">
+            <span class="progress-ep">Ep. 5</span>
+            <span class="progress-date">02/18/24 15:02</span>
+            <span class="progress-comment">"Ballad of Fallen Angels is PEAK"</span>
+            <a href="#" class="progress-delete">[del]</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Episode Comments -->
+    <div class="episode-comments">
+      <div class="episode-comments-header">Episode Comments</div>
+      <div class="episode-comments-body">
+        
+        <div class="comment-thread">
+          <div class="comment-thread-header">
+            Episode 5 - "Ballad of Fallen Angels" (2 comments)
+          </div>
+          <div class="comment-thread-posts">
+            <div class="comment-post">
+              <div class="comment-post-info">
+                <span class="comment-post-name">Anonymous</span>
+                02/18/24(Tue)15:02:44
+                <a href="#">No.192847</a>
+              </div>
+              <div class="comment-post-message">
+                <span class="greentext">&gt;that church scene</span><br>
+                <span class="greentext">&gt;green bird playing</span><br>
+                <span class="greentext">&gt;falling through the stained glass</span><br><br>
+                absolute cinema
+              </div>
+            </div>
+            <div class="comment-post">
+              <div class="comment-post-info">
+                <span class="comment-post-name">Anonymous</span>
+                02/18/24(Tue)15:15:22
+                <a href="#">No.192853</a>
+              </div>
+              <div class="comment-post-message">
+                <a href="#" style="color: #D00;">&gt;&gt;192847</a><br>
+                peak fiction, i cried
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="comment-thread">
+          <div class="comment-thread-header">
+            Episode 1 - "Asteroid Blues" (1 comment)
+          </div>
+          <div class="comment-thread-posts">
+            <div class="comment-post">
+              <div class="comment-post-info">
+                <span class="comment-post-name">Anonymous</span>
+                02/14/24(Tue)20:32:15
+                <a href="#">No.192700</a>
+              </div>
+              <div class="comment-post-message">
+                Tank! is such a banger opening. What a way to start a show.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Reply Form -->
+    <div class="reply-form">
+      <div class="reply-form-header">Post a Comment</div>
+      <div class="reply-form-body">
+        <form>
+          <textarea placeholder="Type your comment here..."></textarea>
+          <br>
+          <input type="submit" value="Post Reply">
+        </form>
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div class="anime-sources">
+      <div class="anime-sources-header">External Links</div>
+      <div class="anime-sources-body">
+        <ul>
+          <li><a href="#">myanimelist.net</a></li>
+          <li><a href="#">anidb.net</a></li>
+          <li><a href="#">anilist.co</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="board-footer">
+    All trademarks and copyrights on this page are owned by their respective parties.<br>
+    <a href="#">Index</a> | <a href="#">Back</a> | <a href="#">Top</a> | <a href="#">Report</a>
+  </div>
+
+</body>
+</html>

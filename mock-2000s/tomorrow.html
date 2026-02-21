@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/a/ - Anime Board [Tomorrow Theme]</title>
+  <style>
+    /* ============================================
+       EARLY 2000s - DARK "TOMORROW" THEME
+       Popular 4chan dark theme variant
+       ============================================ */
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 10pt;
+      background-color: #1D1F21;
+      color: #C5C8C6;
+      margin: 0;
+      padding: 8px;
+    }
+    
+    a {
+      color: #81A2BE;
+      text-decoration: none;
+    }
+    
+    a:visited {
+      color: #8565A7;
+    }
+    
+    a:hover {
+      color: #D19FD6;
+    }
+    
+    /* Header */
+    .board-banner {
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #282A2E;
+      background-color: #282A2E;
+    }
+    
+    .board-title {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 28px;
+      font-weight: bold;
+      color: #F0C674;
+      letter-spacing: -1px;
+      margin: 0;
+    }
+    
+    .board-subtitle {
+      font-size: 10px;
+      color: #969896;
+      margin: 4px 0 0 0;
+    }
+    
+    /* Navigation Bar */
+    .nav-bar {
+      background-color: #282A2E;
+      border-bottom: 1px solid #373B41;
+      padding: 4px 8px;
+      font-size: 9pt;
+    }
+    
+    .nav-bar a {
+      margin-right: 8px;
+      color: #81A2BE;
+    }
+    
+    .nav-bar .current {
+      font-weight: bold;
+      color: #F0C674;
+    }
+    
+    /* Post Form */
+    .post-form-container {
+      background-color: #282A2E;
+      border: 1px solid #373B41;
+      padding: 8px;
+      margin: 8px 0;
+      float: left;
+    }
+    
+    .post-form-container table {
+      border-collapse: collapse;
+    }
+    
+    .post-form-container td {
+      padding: 2px 4px;
+    }
+    
+    .post-form-container .label {
+      background-color: #373B41;
+      font-weight: bold;
+      text-align: right;
+      border: 1px solid #373B41;
+      color: #B5BD68;
+    }
+    
+    .post-form-container input[type="text"],
+    .post-form-container input[type="password"],
+    .post-form-container textarea {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 10pt;
+      border: 1px solid #373B41;
+      background-color: #1D1F21;
+      color: #C5C8C6;
+      padding: 2px 4px;
+      width: 240px;
+    }
+    
+    .post-form-container textarea {
+      width: 320px;
+      height: 80px;
+      resize: vertical;
+    }
+    
+    .post-form-container input[type="submit"] {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 9pt;
+      padding: 2px 12px;
+      background: #373B41;
+      border: 1px solid #373B41;
+      cursor: pointer;
+      color: #C5C8C6;
+    }
+    
+    .post-form-container input[type="submit"]:hover {
+      background: #4A4E51;
+    }
+    
+    /* Thread / Post */
+    .thread {
+      clear: both;
+      margin: 16px 0;
+      padding: 0;
+    }
+    
+    .op-post,
+    .reply-post {
+      background-color: #282A2E;
+      border: 1px solid #373B41;
+      display: inline-block;
+      margin: 4px;
+      padding: 4px;
+      max-width: 600px;
+    }
+    
+    .reply-post {
+      margin-left: 20px;
+    }
+    
+    .post-info {
+      font-size: 9pt;
+      padding: 2px 0;
+    }
+    
+    .post-subject {
+      color: #B294BB;
+      font-weight: bold;
+    }
+    
+    .post-name {
+      color: #B5BD68;
+      font-weight: bold;
+    }
+    
+    .post-date {
+      color: #969896;
+    }
+    
+    .post-number a {
+      color: #CC6666;
+    }
+    
+    .post-image {
+      float: left;
+      margin: 0 12px 8px 4px;
+    }
+    
+    .post-image img {
+      max-width: 150px;
+      max-height: 150px;
+      border: 1px solid #373B41;
+      cursor: pointer;
+    }
+    
+    .file-info {
+      font-size: 8pt;
+      color: #969896;
+      margin: 2px 0;
+    }
+    
+    .file-info a {
+      color: #81A2BE;
+    }
+    
+    .post-message {
+      padding: 4px;
+      line-height: 1.4;
+    }
+    
+    .greentext {
+      color: #B5BD68;
+    }
+    
+    .quotelink {
+      color: #DE935F;
+    }
+    
+    /* Episode log */
+    .episode-log {
+      background-color: #1D1F21;
+      border: 1px solid #373B41;
+      padding: 8px;
+      margin: 8px 0;
+      font-size: 9pt;
+    }
+    
+    .episode-log-header {
+      font-weight: bold;
+      color: #F0C674;
+      margin-bottom: 4px;
+    }
+    
+    .episode-log-entry {
+      padding: 2px 0;
+      border-bottom: 1px dotted #373B41;
+    }
+    
+    .episode-log-entry:last-child {
+      border-bottom: none;
+    }
+    
+    .episode-num {
+      color: #81A2BE;
+      font-weight: bold;
+    }
+    
+    /* Action Buttons */
+    .action-btn {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 8pt;
+      padding: 1px 6px;
+      background: #373B41;
+      border: 1px solid #373B41;
+      cursor: pointer;
+      color: #C5C8C6;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .action-btn:hover {
+      background: #4A4E51;
+    }
+    
+    .action-btn.active {
+      background: #8565A7;
+      color: #1D1F21;
+    }
+    
+    /* HR */
+    hr {
+      border: none;
+      border-top: 1px solid #373B41;
+      height: 0;
+      margin: 16px 0;
+      clear: both;
+    }
+    
+    /* Footer */
+    .board-footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 8pt;
+      color: #969896;
+      border-top: 1px solid #373B41;
+      margin-top: 32px;
+      clear: both;
+    }
+    
+    /* Selection */
+    ::selection {
+      background-color: #F0C674;
+      color: #1D1F21;
+    }
+    
+    /* Stats bar */
+    .board-stats {
+      text-align: center;
+      font-size: 8pt;
+      color: #969896;
+      padding: 8px;
+      background-color: #282A2E;
+      border-bottom: 1px solid #373B41;
+    }
+    
+    /* Monospace code */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      background-color: #1D1F21;
+      padding: 1px 3px;
+      border-radius: 2px;
+      color: #DE935F;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="board-banner">
+    <h1 class="board-title">/a/ - ANIME LOG</h1>
+    <p class="board-subtitle">[ tomorrow theme ] track your progress</p>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    [<a href="#" class="current">index</a>]
+    [<a href="#">search</a>]
+    [<a href="#">my log</a>]
+    [<a href="#">favorites</a>]
+    [<a href="#">watched</a>]
+    [<a href="#">settings</a>]
+    <span style="float: right;">
+      Theme: [<b style="color: #F0C674;">tomorrow</b>]
+    </span>
+  </div>
+
+  <!-- Stats -->
+  <div class="board-stats">
+    Anime: <code>14,293</code> | Users: <code>2,847</code> | Logs today: <code>1,293</code>
+  </div>
+
+  <!-- Search Form -->
+  <div class="post-form-container">
+    <table>
+      <tr>
+        <td class="label">Search</td>
+        <td><input type="text" placeholder="search anime..."></td>
+      </tr>
+      <tr>
+        <td class="label">Type</td>
+        <td>
+          <select style="font-size: 10pt; background: #1D1F21; color: #C5C8C6; border: 1px solid #373B41;">
+            <option>all</option>
+            <option>TV</option>
+            <option>Movie</option>
+            <option>OVA</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Search"></td>
+      </tr>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- Thread 1 -->
+  <div class="thread">
+    <div class="op-post" style="display: block; max-width: none;">
+      <div class="post-info">
+        <span class="post-subject">Serial Experiments Lain</span>
+        <span class="post-name">Anonymous</span>
+        <span class="post-date">02/18/24(Tue)14:32:15</span>
+        <span class="post-number">No.<a href="#">4829101</a></span>
+        <span style="margin-left: 8px;">
+          [<a href="#" class="action-btn">★ fav</a>]
+          [<a href="#" class="action-btn active">👁 watching</a>]
+          [<a href="#">view</a>]
+        </span>
+      </div>
+      <div class="post-image">
+        <div class="file-info">File: lain.jpg (67 KB, 200x283)</div>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='200' viewBox='0 0 150 200'%3E%3Crect fill='%23231E33' width='150' height='200'/%3E%3Ctext fill='%23A5AEC4' font-family='monospace' font-size='10' x='50%25' y='50%25' text-anchor='middle'%3E[lain]%3C/text%3E%3C/svg%3E" alt="cover">
+      </div>
+      <div class="post-message">
+        <span class="greentext">&gt;TV, 13 episodes, 1998</span><br>
+        <span class="greentext">&gt;Score: 8.08/10</span><br>
+        <span class="greentext">&gt;Status: Finished</span><br><br>
+        And you don't seem to understand<br>
+        A shame you seemed an honest man<br><br>
+        <code>Duvet - Bôa</code>
+      </div>
+      
+      <!-- Episode Log -->
+      <div class="episode-log" style="clear: both; margin-top: 8px;">
+        <div class="episode-log-header">Progress: 4/13</div>
+        <div class="episode-log-entry">
+          <span class="episode-num">Ep. 1</span> - Weird, subtle, loving it.
+        </div>
+        <div class="episode-log-entry">
+          <span class="episode-num">Ep. 2</span> - <span class="greentext">&gt;present day, present time</span>
+        </div>
+        <div class="episode-log-entry">
+          <span class="episode-num">Ep. 3</span> - The wired is getting creepy
+        </div>
+        <div class="episode-log-entry">
+          <span class="episode-num">Ep. 4</span> - (no comment)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Thread 2 -->
+  <div class="thread">
+    <div class="op-post" style="display: block; max-width: none;">
+      <div class="post-info">
+        <span class="post-subject">Ghost in the Shell (1995)</span>
+        <span class="post-name">Anonymous</span>
+        <span class="post-date">02/18/24(Tue)12:15:33</span>
+        <span class="post-number">No.<a href="#">4828800</a></span>
+        <span style="margin-left: 8px;">
+          [<a href="#" class="action-btn active">★ fav</a>]
+          [<a href="#" class="action-btn active">👁 watched</a>]
+          [<a href="#">view</a>]
+        </span>
+      </div>
+      <div class="post-image">
+        <div class="file-info">File: gits.jpg (102 KB, 300x424)</div>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='200' viewBox='0 0 150 200'%3E%3Crect fill='%231966B3' width='150' height='200'/%3E%3Ctext fill='%2300D4FF' font-family='monospace' font-size='10' x='50%25' y='50%25' text-anchor='middle'%3E[gits]%3C/text%3E%3C/svg%3E" alt="cover">
+      </div>
+      <div class="post-message">
+        <span class="greentext">&gt;Movie, 1 episode, 1995</span><br>
+        <span class="greentext">&gt;Score: 8.36/10</span><br>
+        <span class="greentext">&gt;Status: Finished</span><br><br>
+        <code>"I think therefore I am"</code><br><br>
+        cyberpunk essential
+      </div>
+    </div>
+    
+    <div class="replies-container" style="margin-left: 24px;">
+      <div class="reply-post">
+        <div class="post-info">
+          <span class="post-name">Anonymous</span>
+          <span class="post-date">02/18/24(Tue)13:45:22</span>
+          <span class="post-number">No.<a href="#">4828950</a></span>
+        </div>
+        <div class="post-message">
+          <a href="#" class="quotelink">&gt;&gt;4828800</a><br>
+          the boat scene is pure kino
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Thread 3 -->
+  <div class="thread">
+    <div class="op-post" style="display: block; max-width: none;">
+      <div class="post-info">
+        <span class="post-subject">Perfect Blue</span>
+        <span class="post-name">Anonymous</span>
+        <span class="post-date">02/18/24(Tue)10:45:12</span>
+        <span class="post-number">No.<a href="#">4828500</a></span>
+        <span style="margin-left: 8px;">
+          [<a href="#" class="action-btn">★ fav</a>]
+          [<a href="#" class="action-btn">👁 watched</a>]
+          [<a href="#">view</a>]
+        </span>
+      </div>
+      <div class="post-image">
+        <div class="file-info">File: pb.jpg (89 KB, 280x400)</div>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='200' viewBox='0 0 150 200'%3E%3Crect fill='%23D4145A' width='150' height='200'/%3E%3Ctext fill='%23FF6B9D' font-family='monospace' font-size='10' x='50%25' y='50%25' text-anchor='middle'%3E[pb]%3C/text%3E%3C/svg%3E" alt="cover">
+      </div>
+      <div class="post-message">
+        <span class="greentext">&gt;Movie, 1 episode, 1997</span><br>
+        <span class="greentext">&gt;Score: 8.20/10</span><br>
+        <span class="greentext">&gt;Status: Finished</span><br><br>
+        Satoshi Kon's masterpiece. Psychological horror done right.
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Pagination -->
+  <div style="text-align: center; padding: 16px; font-size: 10pt;">
+    [<a href="#">First</a>]
+    [<a href="#">Prev</a>]
+    [<b style="color: #F0C674;">1</b>]
+    [<a href="#">2</a>]
+    [<a href="#">3</a>]
+    [<a href="#">4</a>]
+    ...
+    [<a href="#">142</a>]
+    [<a href="#">Next</a>]
+    [<a href="#">Last</a>]
+  </div>
+
+  <!-- Footer -->
+  <div class="board-footer">
+    All trademarks and copyrights on this page are owned by their respective parties.<br>
+    This is a mock design - Tomorrow Theme (Dark) | <a href="#">Switch to Yotsuba</a>
+  </div>
+
+</body>
+</html>

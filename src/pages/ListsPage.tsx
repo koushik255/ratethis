@@ -2,39 +2,25 @@ import { useState } from "react";
 import { useQuery } from "convex/react";
 import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
-import { UserMenu } from "../components/UserMenu";
+import RetroLayout from "../components/RetroLayout";
 import { CreateListModal } from "../components/CreateListModal";
 import { useConvexAuth } from "convex/react";
-import "../styles.css";
 import "./ListsPage.css";
 
 function ListsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const { isAuthenticated } = useConvexAuth();
-  
+
   const lists = useQuery(api.lists.getLists, {});
 
   return (
-    <div className="page-layout">
-      <header className="page-header">
-        <div className="header-content">
-          <h1 className="site-title">analog</h1>
-          <nav className="main-nav">
-            <Link to="/" className="nav-link">index</Link>
-            <Link to="/profile" className="nav-link">profile</Link>
-            <Link to="/log" className="nav-link">log</Link>
-            <Link to="/lists" className="nav-link active">lists</Link>
-            <Link to="/friends" className="nav-link">friends</Link>
-          </nav>
-        </div>
-        <UserMenu />
-      </header>
-
-      <main className="page-content wide">
-        <div className="lists-controls">
+    <RetroLayout>
+      <div className="lists-view animate-fade-in">
+        <div className="content-header">
+          <h2 className="page-title">lists</h2>
           {isAuthenticated && (
-            <button 
-              className="create-list-button"
+            <button
+              className="btn"
               onClick={() => setShowCreateModal(true)}
             >
               + new list
@@ -43,7 +29,7 @@ function ListsPage() {
         </div>
 
         {lists === undefined ? (
-          <div className="loading-state">
+          <div className="loading">
             <p>loading...</p>
           </div>
         ) : lists.length === 0 ? (
@@ -53,51 +39,39 @@ function ListsPage() {
         ) : (
           <div className="lists-grid">
             {lists.map((list) => (
-              <Link 
-                key={list._id} 
+              <Link
+                key={list._id}
                 to={list.isOwner ? `/lists/${list._id}/edit` : `/lists/${list._id}`}
-                className="list-card-link"
+                className="list-card"
               >
-                <article className={`list-card ${list.isOwner ? 'owned-card' : 'view-card'}`}>
-                  <div className="list-card-header">
-                    <h3 className="list-card-title">{list.title}</h3>
-                    {list.isOwner && (
-                      <span className="owned-badge">owned</span>
-                    )}
-                  </div>
-                  <p className="list-card-description">
-                    {list.description.length > 100 
-                      ? list.description.substring(0, 100) + "..." 
-                      : list.description}
-                  </p>
-                  <div className="list-card-meta">
-                    <span className="list-card-author">
-                      by {list.authorDisplayName}
-                    </span>
-                    <span className="list-card-count">
-                      {list.itemCount} {list.itemCount === 1 ? "anime" : "anime"}
-                    </span>
-                  </div>
-                  <div className="list-card-action">
-                    {list.isOwner ? 'edit' : 'view'}
-                  </div>
-                </article>
+                <div className="list-card-header">
+                  <h3 className="list-card-title">{list.title}</h3>
+                  {list.isOwner && (
+                    <span className="badge badge-success">owned</span>
+                  )}
+                </div>
+                <p className="list-card-desc">
+                  {list.description.length > 100
+                    ? list.description.substring(0, 100) + "..."
+                    : list.description}
+                </p>
+                <div className="list-card-meta">
+                  <span>by {list.authorDisplayName}</span>
+                  <span>{list.itemCount} anime</span>
+                </div>
+                <div className="list-card-action">
+                  {list.isOwner ? "edit →" : "view →"}
+                </div>
               </Link>
             ))}
           </div>
         )}
-      </main>
-
-      <footer className="page-footer">
-        <p>analog v1.0</p>
-      </footer>
+      </div>
 
       {showCreateModal && (
-        <CreateListModal
-          onClose={() => setShowCreateModal(false)}
-        />
+        <CreateListModal onClose={() => setShowCreateModal(false)} />
       )}
-    </div>
+    </RetroLayout>
   );
 }
 

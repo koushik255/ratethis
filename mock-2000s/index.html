@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/a/ - Anime Board</title>
+  <style>
+    /* ============================================
+       EARLY 2000s / 4chan STYLE
+       Raw HTML Forum Aesthetic
+       ============================================ */
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 10pt;
+      background-color: #FFFFEE;
+      color: #000000;
+      margin: 0;
+      padding: 8px;
+    }
+    
+    a {
+      color: #0000EE;
+      text-decoration: underline;
+    }
+    
+    a:visited {
+      color: #551A8B;
+    }
+    
+    a:hover {
+      color: #DD0000;
+    }
+    
+    /* Header */
+    .board-banner {
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #B7C5D9;
+      background-color: #FEDCBA;
+    }
+    
+    .board-title {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 28px;
+      font-weight: bold;
+      color: #800000;
+      letter-spacing: -1px;
+      margin: 0;
+      text-shadow: 1px 1px 0 #FFF;
+    }
+    
+    .board-subtitle {
+      font-size: 10px;
+      color: #666;
+      margin: 4px 0 0 0;
+    }
+    
+    /* Navigation Bar */
+    .nav-bar {
+      background-color: #FEDCBA;
+      border-bottom: 1px solid #B7C5D9;
+      padding: 4px 8px;
+      font-size: 9pt;
+    }
+    
+    .nav-bar a {
+      margin-right: 8px;
+    }
+    
+    .nav-bar .current {
+      font-weight: bold;
+      color: #800000;
+      text-decoration: none;
+    }
+    
+    /* Post Form */
+    .post-form-container {
+      background-color: #F0E0D6;
+      border: 1px solid #D9BFB7;
+      padding: 8px;
+      margin: 8px 0;
+      float: left;
+    }
+    
+    .post-form-container table {
+      border-collapse: collapse;
+    }
+    
+    .post-form-container td {
+      padding: 2px 4px;
+    }
+    
+    .post-form-container .label {
+      background-color: #E0D6CF;
+      font-weight: bold;
+      text-align: right;
+      border: 1px solid #C0A69C;
+    }
+    
+    .post-form-container input[type="text"],
+    .post-form-container input[type="password"],
+    .post-form-container textarea {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 10pt;
+      border: 1px solid #AAA;
+      padding: 2px 4px;
+      width: 240px;
+    }
+    
+    .post-form-container textarea {
+      width: 320px;
+      height: 80px;
+      resize: vertical;
+    }
+    
+    .post-form-container input[type="submit"] {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 9pt;
+      padding: 2px 12px;
+      background: linear-gradient(to bottom, #FEFEFE 0%, #E0E0E0 100%);
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+    
+    .post-form-container input[type="submit"]:hover {
+      background: linear-gradient(to bottom, #FFF 0%, #F0F0F0 100%);
+    }
+    
+    /* Thread / Post */
+    .thread {
+      clear: both;
+      margin: 16px 0;
+      padding: 0;
+    }
+    
+    .op-post,
+    .reply-post {
+      background-color: #F0E0D6;
+      border: 1px solid #D9BFB7;
+      display: inline-block;
+      margin: 4px;
+      padding: 4px;
+      max-width: 600px;
+    }
+    
+    .reply-post {
+      margin-left: 20px;
+    }
+    
+    .post-info {
+      font-size: 9pt;
+      padding: 2px 0;
+    }
+    
+    .post-subject {
+      color: #0F0C5D;
+      font-weight: bold;
+    }
+    
+    .post-name {
+      color: #117743;
+      font-weight: bold;
+    }
+    
+    .post-date {
+      color: #666;
+    }
+    
+    .post-number {
+      color: #000;
+    }
+    
+    .post-number a {
+      color: #800000;
+    }
+    
+    .post-image {
+      float: left;
+      margin: 0 12px 8px 4px;
+    }
+    
+    .post-image img {
+      max-width: 150px;
+      max-height: 150px;
+      border: 1px solid #B7C5D9;
+      cursor: pointer;
+    }
+    
+    .file-info {
+      font-size: 8pt;
+      color: #666;
+      margin: 2px 0;
+    }
+    
+    .file-info a {
+      text-decoration: none;
+      color: #0000EE;
+    }
+    
+    .file-info a:hover {
+      text-decoration: underline;
+    }
+    
+    .post-message {
+      padding: 4px;
+      line-height: 1.4;
+    }
+    
+    .post-message .greentext {
+      color: #789922;
+    }
+    
+    .post-message .quote-link {
+      color: #D00;
+      text-decoration: underline;
+    }
+    
+    .quotelink {
+      color: #D00;
+    }
+    
+    /* Reply Container */
+    .replies-container {
+      margin-left: 24px;
+    }
+    
+    /* Post Actions */
+    .post-actions {
+      font-size: 8pt;
+      color: #666;
+    }
+    
+    .post-actions a {
+      color: #800000;
+      text-decoration: none;
+    }
+    
+    .post-actions a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Watch/Log Button */
+    .action-btn {
+      font-family: arial, helvetica, sans-serif;
+      font-size: 8pt;
+      padding: 1px 6px;
+      background: linear-gradient(to bottom, #FEFEFE 0%, #D0D0D0 100%);
+      border: 1px solid #999;
+      cursor: pointer;
+      color: #000;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .action-btn:hover {
+      background: linear-gradient(to bottom, #FFF 0%, #E0E0E0 100%);
+    }
+    
+    .action-btn.active {
+      background: linear-gradient(to bottom, #D0D0D0 0%, #A0A0A0 100%);
+      color: #800000;
+    }
+    
+    /* HR */
+    hr {
+      border: none;
+      border-top: 1px solid #B7C5D9;
+      height: 0;
+      margin: 16px 0;
+      clear: both;
+    }
+    
+    /* Footer */
+    .board-footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 8pt;
+      color: #666;
+      border-top: 1px solid #B7C5D9;
+      margin-top: 32px;
+      clear: both;
+    }
+    
+    /* Status indicators */
+    .status-watched {
+      color: #117743;
+      font-weight: bold;
+    }
+    
+    .status-watching {
+      color: #0000EE;
+    }
+    
+    /* Stats */
+    .board-stats {
+      text-align: center;
+      font-size: 8pt;
+      color: #666;
+      padding: 8px;
+      background-color: #FEDCBA;
+      border-bottom: 1px solid #B7C5D9;
+    }
+    
+    /* Episode log styling */
+    .episode-log {
+      background-color: #FFFFEE;
+      border: 1px solid #CCC;
+      padding: 8px;
+      margin: 8px 0;
+      font-size: 9pt;
+    }
+    
+    .episode-log-header {
+      font-weight: bold;
+      color: #800000;
+      margin-bottom: 4px;
+    }
+    
+    .episode-log-entry {
+      padding: 2px 0;
+      border-bottom: 1px dotted #DDD;
+    }
+    
+    .episode-log-entry:last-child {
+      border-bottom: none;
+    }
+    
+    .episode-num {
+      color: #0000EE;
+      font-weight: bold;
+    }
+    
+    /* Clear floats */
+    .clearfix::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="board-banner">
+    <h1 class="board-title">/a/ - ANIME LOG</h1>
+    <p class="board-subtitle">track your progress anonymously</p>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    [<a href="#" class="current">index</a>]
+    [<a href="#">search</a>]
+    [<a href="#">my log</a>]
+    [<a href="#">favorites</a>]
+    [<a href="#">watched</a>]
+    [<a href="#">settings</a>]
+    <span style="float: right; color: #800000;">[Login]</span>
+  </div>
+
+  <!-- Stats -->
+  <div class="board-stats">
+    Total anime: 14,293 | Users tracking: 2,847 | Episode logs today: 1,293
+  </div>
+
+  <!-- Search Form -->
+  <div class="post-form-container">
+    <table>
+      <tr>
+        <td class="label">Search</td>
+        <td><input type="text" placeholder="search anime..."></td>
+      </tr>
+      <tr>
+        <td class="label">Type</td>
+        <td>
+          <select style="font-size: 10pt;">
+            <option>all</option>
+            <option>TV</option>
+            <option>Movie</option>
+            <option>OVA</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Search"></td>
+      </tr>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- Anime Threads -->
+  
+  <!-- Thread 1 -->
+  <div class="thread">
+    <div class="op-post clearfix">
+      <div class="post-info">
+        <span class="post-subject">Cowboy Bebop</span>
+        <span class="post-name">Anonymous</span>
+        <span class="post-date">02/18/24(Tue)14:32:15</span>
+        <span class="post-number">No.<a href="#">4829101</a></span>
+        <span class="post-actions">
+          [<a href="#" class="action-btn">★ fav</a>]
+          [<a href="#" class="action-btn active">👁 watched</a>]
+          [<a href="#">view</a>]
+          [<a href="#">log</a>]
+        </span>
+      </div>
+      <div class="post-image">
+        <div class="file-info">File: bebop_cover.jpg (85 KB, 225x319)</div>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='200' viewBox='0 0 150 200'%3E%3Crect fill='%23333' width='150' height='200'/%3E%3Ctext fill='%23999' font-family='monospace' font-size='10' x='50%25' y='50%25' text-anchor='middle'%3E[cover]%3C/text%3E%3C/svg%3E" alt="cover">
+      </div>
+      <div class="post-message">
+        <span class="greentext">&gt;TV, 26 episodes, 1998</span><br>
+        <span class="greentext">&gt;Score: 8.75/10</span><br>
+        <span class="greentext">&gt;Status: Finished</span><br><br>
+        The work, which becomes a new genre itself, will be called... COWBOY BEBOP
+      </div>
+    </div>
+    
+    <!-- Replies -->
+    <div class="replies-container">
+      <div class="reply-post">
+        <div class="post-info">
+          <span class="post-name">Anonymous</span>
+          <span class="post-date">02/18/24(Tue)15:02:44</span>
+          <span class="post-number">No.<a href="#">4829155</a></span>
+        </div>
+        <div class="post-message">
+          <a href="#" class="quotelink">&gt;&gt;4829101</a><br>
+          logged ep. 5 - "Ballad of Fallen Angels" is peak<br>
+          <span class="greentext">&gt;that church scene</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Thread 2 -->
+  <div class="thread">
+    <div class="op-post clearfix">
+      <div class="post-info">
+        <span class="post-subject">Neon Genesis Evangelion</span>
+        <span class="post-name">Anonymous</span>
+        <span class="post-date">02/18/24(Tue)12:15:33</span>
+        <span class="post-number">No.<a href="#">4828800</a></span>
+        <span class="post-actions">
+          [<a href="#" class="action-btn active">★ fav</a>]
+          [<a href="#" class="action-btn">👁 watched</a>]
+          [<a href="#">view</a>]
+          [<a href="#">log</a>]
+        </span>
+      </div>
+      <div class="post-image">
+        <div class="file-info">File: eva_cover.jpg (92 KB, 300x424)</div>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='200' viewBox='0 0 150 200'%3E%3Crect fill='%23661a00' width='150' height='200'/%3E%3Ctext fill='%23ff6633' font-family='monospace' font-size='10' x='50%25' y='50%25' text-anchor='middle'%3E[eva]%3C/text%3E%3C/svg%3E" alt="cover">
+      </div>
+      <div class="post-message">
+        <span class="greentext">&gt;TV, 26 episodes, 1995</span><br>
+        <span class="greentext">&gt;Score: 8.53/10</span><br>
+        <span class="greentext">&gt;Status: Finished</span><br><br>
+        get in the robot shinji
+      </div>
+    </div>
+    
+    <!-- Episode Log -->
+    <div class="episode-log">
+      <div class="episode-log-header">Your Progress: 3/26</div>
+      <div class="episode-log-entry">
+        <span class="episode-num">Ep. 1</span> - "Angel Attack" <span style="color: #666;">[02/17/24]</span>
+      </div>
+      <div class="episode-log-entry">
+        <span class="episode-num">Ep. 2</span> - "The Beast" <span style="color: #666;">[02/17/24]</span> - "getting interesting"
+      </div>
+      <div class="episode-log-entry">
+        <span class="episode-num">Ep. 3</span> - "A Transfer" <span style="color: #666;">[02/18/24]</span>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Thread 3 -->
+  <div class="thread">
+    <div class="op-post clearfix">
+      <div class="post-info">
+        <span class="post-subject">Steins;Gate</span>
+        <span class="post-name">Anonymous</span>
+        <span class="post-date">02/18/24(Tue)10:45:12</span>
+        <span class="post-number">No.<a href="#">4828500</a></span>
+        <span class="post-actions">
+          [<a href="#" class="action-btn">★ fav</a>]
+          [<a href="#" class="action-btn">👁 watched</a>]
+          [<a href="#">view</a>]
+          [<a href="#">log</a>]
+        </span>
+      </div>
+      <div class="post-image">
+        <div class="file-info">File: sg_cover.jpg (78 KB, 280x400)</div>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='200' viewBox='0 0 150 200'%3E%3Crect fill='%231a1a2e' width='150' height='200'/%3E%3Ctext fill='%2300d4ff' font-family='monospace' font-size='10' x='50%25' y='50%25' text-anchor='middle'%3E[sg]%3C/text%3E%3C/svg%3E" alt="cover">
+      </div>
+      <div class="post-message">
+        <span class="greentext">&gt;TV, 24 episodes, 2011</span><br>
+        <span class="greentext">&gt;Score: 9.07/10</span><br>
+        <span class="greentext">&gt;Status: Finished</span><br><br>
+        El. Psy. Kongroo.
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Pagination -->
+  <div style="text-align: center; padding: 16px; font-size: 10pt;">
+    [<a href="#">First</a>]
+    [<a href="#">Prev</a>]
+    [<b>1</b>]
+    [<a href="#">2</a>]
+    [<a href="#">3</a>]
+    [<a href="#">4</a>]
+    [<a href="#">5</a>]
+    ...
+    [<a href="#">142</a>]
+    [<a href="#">Next</a>]
+    [<a href="#">Last</a>]
+  </div>
+
+  <!-- Footer -->
+  <div class="board-footer">
+    All trademarks and copyrights on this page are owned by their respective parties.<br>
+    This is a mock design - Early 2000s / 4chan Style<br>
+    <a href="#">Top</a> | <a href="#">Refresh</a> | <a href="#">Settings</a>
+  </div>
+
+</body>
+</html>

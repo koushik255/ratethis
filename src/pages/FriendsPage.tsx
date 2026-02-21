@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { Link } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
-import { UserMenu } from "../components/UserMenu";
+import RetroLayout from "../components/RetroLayout";
 import { useConvexAuth } from "convex/react";
-import "../styles.css";
 import "./FriendsPage.css";
 
 type Tab = "recent" | "friends" | "requests";
@@ -19,21 +18,16 @@ interface UserProfile {
 interface ReceivedFriendRequest {
   _id: string;
   senderId: string;
-  receiverId: string;
-  status: string;
-  createdAt: number;
   senderDisplayName: string;
   senderProfilePicture?: string;
+  createdAt: number;
 }
 
 interface SentFriendRequest {
   _id: string;
-  senderId: string;
-  receiverId: string;
-  status: string;
-  createdAt: number;
   receiverDisplayName: string;
   receiverProfilePicture?: string;
+  createdAt: number;
 }
 
 interface SearchResult extends UserProfile {
@@ -56,12 +50,10 @@ interface RecentActivityItem {
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
-
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedValue(value), delay);
     return () => clearTimeout(timer);
   }, [value, delay]);
-
   return debouncedValue;
 }
 
@@ -129,352 +121,310 @@ function FriendsPage() {
 
   const totalRequests = (requests?.received?.length || 0) + (requests?.sent?.length || 0);
 
-  const UserProfileLink = ({ user, className = "" }: { user: UserProfile; className?: string }) => {
-    if (user.username) {
-      return (
-        <Link to={`/profile/${user.username}`} className={`friend-name-link ${className}`}>
-          {user.displayName}
-        </Link>
-      );
-    }
-    return <span className={`friend-name ${className}`}>{user.displayName}</span>;
-  };
+  return (
+    <RetroLayout>
+      <div className="friends-view animate-fade-in">
+        <div className="content-header">
+          <h2 className="page-title">friends</h2>
+        </div>
+
+        <div className="tabs">
+          <button
+            className={`tab ${activeTab === "recent" ? "active" : ""}`}
+            onClick={() => setActiveTab("recent")}
+          >
+            recent
+          </button>
+          <button
+            className={`tab ${activeTab === "friends" ? "active" : ""}`}
+            onClick={() => setActiveTab("friends")}
+          >
+            friends ({friends?.length || 0})
+          </button>
+          <button
+            className={`tab ${activeTab === "requests" ? "active" : ""}`}
+            onClick={() => setActiveTab("requests")}
+          >
+            requests {totalRequests > 0 && `(${totalRequests})`}
+          </button>
+        </div>
+
+        <div className="friends-content card">
+          {!isAuthenticated ? (
+            <div className="empty-state">
+              <p>sign in to manage friends</p>
+            </div>
+          ) : activeTab === "recent" ? (
+            <RecentActivityTab activity={recentActivity} />
+          ) : activeTab === "friends" ? (
+            <FriendsTab
+              friends={friends}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              searchResults={searchResults}
+              onSendRequest={handleSendRequest}
+              onRemoveFriend={handleRemoveFriend}
+            />
+          ) : (
+            <RequestsTab
+              requests={requests}
+              onAccept={handleAcceptRequest}
+              onDecline={handleDeclineRequest}
+              onCancel={handleCancelRequest}
+            />
+          )}
+        </div>
+      </div>
+    </RetroLayout>
+  );
+}
+
+function RecentActivityTab({ activity }: { activity: RecentActivityItem[] | undefined }) {
+  if (activity === undefined) {
+    return <div className="loading"><p>loading...</p></div>;
+  }
+
+  if (activity.length === 0) {
+    return (
+      <div className="empty-state">
+        <p>no recent activity from friends</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="page-layout">
-      <header className="page-header">
-        <div className="header-content">
-          <h1 className="site-title">analog</h1>
-          <nav className="main-nav">
-            <Link to="/" className="nav-link">index</Link>
-            <Link to="/profile" className="nav-link">profile</Link>
-            <Link to="/log" className="nav-link">log</Link>
-            <Link to="/lists" className="nav-link">lists</Link>
-            <Link to="/friends" className="nav-link active">friends</Link>
-          </nav>
+    <div className="activity-list">
+      {activity.map((item) => (
+        <div key={`${item.friendId}-${item.animeId}`} className="activity-item">
+          <div className="activity-friend">
+            <div className="friend-avatar">
+              {item.friendProfilePicture ? (
+                <img src={item.friendProfilePicture} alt={item.friendName} />
+              ) : (
+                <span>{item.friendName[0]}</span>
+              )}
+            </div>
+            <div className="activity-friend-info">
+              <span className="activity-friend-name">{item.friendName}</span>
+              <span className="activity-date">
+                {item.watchedAt ? new Date(item.watchedAt).toLocaleDateString() : ""}
+              </span>
+            </div>
+          </div>
+          <Link to={`/anime/${item.animeId}`} className="activity-anime">
+            {item.animePicture && (
+              <img src={item.animePicture} alt={item.animeTitle} className="activity-anime-thumb" />
+            )}
+            <div className="activity-anime-info">
+              <span className="activity-anime-title">{item.animeTitle}</span>
+              <span className="activity-anime-type">{item.animeType}</span>
+              {item.watchedComment && (
+                <span className="activity-comment">"{item.watchedComment}"</span>
+              )}
+            </div>
+          </Link>
         </div>
-        <UserMenu />
-      </header>
+      ))}
+    </div>
+  );
+}
 
-      <main className="page-content">
-        <div className="friends-tabs">
-        <button
-          className={`friends-tab ${activeTab === "recent" ? "active" : ""}`}
-          onClick={() => setActiveTab("recent")}
-        >
-          recent
-        </button>
-        <button
-          className={`friends-tab ${activeTab === "friends" ? "active" : ""}`}
-          onClick={() => setActiveTab("friends")}
-        >
-          friends ({friends?.length || 0})
-        </button>
-        <button
-          className={`friends-tab ${activeTab === "requests" ? "active" : ""}`}
-          onClick={() => setActiveTab("requests")}
-        >
-          requests {totalRequests > 0 && `(${totalRequests})`}
-        </button>
+function FriendsTab({
+  friends,
+  searchQuery,
+  setSearchQuery,
+  searchResults,
+  onSendRequest,
+  onRemoveFriend,
+}: {
+  friends: UserProfile[] | undefined;
+  searchQuery: string;
+  setSearchQuery: (q: string) => void;
+  searchResults: SearchResult[] | undefined;
+  onSendRequest: (userId: string) => void;
+  onRemoveFriend: (userId: string) => void;
+}) {
+  return (
+    <>
+      <div className="search-section">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="search users..."
+          className="input"
+        />
       </div>
 
-      {!isAuthenticated ? (
-        <div className="friends-auth-prompt">
-          <p>please sign in to manage friends</p>
-        </div>
-      ) : activeTab === "recent" ? (
-          <div className="friends-recent">
-            <h3 className="friends-section-title">recent activity</h3>
-            {recentActivity === undefined ? (
-              <div className="loading">
-                <p>loading...</p>
-              </div>
-            ) : recentActivity.length === 0 ? (
-              <div className="friends-empty">
-                <p>no recent activity from friends in the last week</p>
-                <p className="friends-hint">add friends to see what they're watching</p>
-              </div>
+      {searchQuery.trim() && searchResults !== undefined && (
+        <div className="friends-section">
+          <div className="section-bar"><span className="section-bar-title">search results</span></div>
+          <div className="friends-list">
+            {searchResults.length === 0 ? (
+              <div className="empty-state"><p>no users found</p></div>
             ) : (
-              <div className="recent-activity-list">
-                {recentActivity.map((activity: RecentActivityItem) => (
-                  <div key={`${activity.friendId}-${activity.animeId}`} className="recent-activity-item">
-                    <div className="recent-activity-friend">
-                      {activity.friendProfilePicture ? (
-                        <img
-                          src={activity.friendProfilePicture}
-                          alt={activity.friendName}
-                          className="recent-activity-avatar"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="recent-activity-avatar-placeholder">
-                          {activity.friendName.charAt(0).toUpperCase()}
-                        </div>
-                      )}
-                      <div className="recent-activity-friend-info">
-                        {activity.friendUsername ? (
-                          <Link to={`/profile/${activity.friendUsername}`} className="recent-activity-friend-name">
-                            {activity.friendName}
-                          </Link>
-                        ) : (
-                          <span className="recent-activity-friend-name">{activity.friendName}</span>
-                        )}
-                        <span className="recent-activity-date">
-                          {activity.watchedAt
-                            ? new Date(activity.watchedAt).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              })
-                            : "unknown date"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="recent-activity-anime">
-                      {activity.animePicture && (
-                        <Link to={`/anime/${activity.animeId}`}>
-                          <img
-                            src={activity.animePicture}
-                            alt={activity.animeTitle}
-                            className="recent-activity-anime-thumb"
-                            loading="lazy"
-                          />
-                        </Link>
-                      )}
-                      <div className="recent-activity-anime-info">
-                        <Link to={`/anime/${activity.animeId}`} className="recent-activity-anime-title">
-                          {activity.animeTitle}
-                        </Link>
-                        <span className="recent-activity-anime-type">{activity.animeType}</span>
-                        {activity.watchedComment && (
-                          <p className="recent-activity-comment">"{activity.watchedComment}"</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              searchResults.map((user) => (
+                <FriendItem
+                  key={user.userId}
+                  user={user}
+                  isFriend={user.isFriend}
+                  requestStatus={user.requestStatus}
+                  onSendRequest={() => onSendRequest(user.userId)}
+                  onRemoveFriend={() => onRemoveFriend(user.userId)}
+                />
+              ))
             )}
           </div>
-        ) : activeTab === "friends" ? (
-          <>
-            <div className="friends-search">
-              <input
-                type="text"
-                placeholder="search users by name or username..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="friends-search-input"
-              />
-            </div>
+        </div>
+      )}
 
-            {searchQuery.trim() && searchResults !== undefined && (
-              <div className="friends-search-results">
-                <h3 className="friends-section-title">search results</h3>
-                {searchResults.length === 0 ? (
-                  <p className="friends-empty">no users found</p>
-                ) : (
-                  <div className="friends-list">
-                    {searchResults.map((user: SearchResult) => (
-                      <div key={user.userId} className="friend-item">
-                        <div className="friend-avatar">
-                          {user.profilePicture ? (
-                            <img
-                              src={user.profilePicture}
-                              alt={user.displayName}
-                              className="friend-avatar-img"
-                              loading="lazy"
-                            />
-                          ) : (
-                            <div className="friend-avatar-placeholder">
-                              {user.displayName.charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                        </div>
-                        <div className="friend-info">
-                          <UserProfileLink user={user} />
-                          {user.username && (
-                            <span className="friend-username">@{user.username}</span>
-                          )}
-                        </div>
-                        <div className="friend-actions">
-                          {user.isFriend ? (
-                            <span className="friend-status">friends</span>
-                          ) : user.requestStatus === "pending_sent" ? (
-                            <span className="friend-status pending">request sent</span>
-                          ) : user.requestStatus === "pending_received" ? (
-                            <span className="friend-status pending">request pending</span>
-                          ) : (
-                            <button
-                              className="friend-action-button"
-                              onClick={() => handleSendRequest(user.userId)}
-                            >
-                              add friend
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="friends-list-section">
-              <h3 className="friends-section-title">my friends</h3>
-              {friends === undefined ? (
-                <div className="loading">
-                  <p>loading...</p>
-                </div>
-              ) : friends.length === 0 ? (
-                <div className="friends-empty">
-                  <p>no friends yet</p>
-                  <p className="friends-hint">search for users above to add friends</p>
-                </div>
-              ) : (
-                <div className="friends-list">
-                  {friends.map((friend: UserProfile) => (
-                    <div key={friend.userId} className="friend-item">
-                      <div className="friend-avatar">
-                        {friend.profilePicture ? (
-                          <img
-                            src={friend.profilePicture}
-                            alt={friend.displayName}
-                            className="friend-avatar-img"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="friend-avatar-placeholder">
-                            {friend.displayName.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                       <div className="friend-info">
-                          <UserProfileLink user={friend} />
-                          {friend.username && (
-                            <span className="friend-username">@{friend.username}</span>
-                          )}
-                        </div>
-                      <div className="friend-actions">
-                        <button
-                          className="friend-action-button remove"
-                          onClick={() => handleRemoveFriend(friend.userId)}
-                        >
-                          remove
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </>
+      <div className="friends-section">
+        <div className="section-bar"><span className="section-bar-title">my friends</span></div>
+        {friends === undefined ? (
+          <div className="loading"><p>loading...</p></div>
+        ) : friends.length === 0 ? (
+          <div className="empty-state"><p>no friends yet. search above to add friends!</p></div>
         ) : (
-          <div className="friends-requests">
-            <div className="friends-requests-section">
-              <h3 className="friends-section-title">received requests</h3>
-              {requests === undefined ? (
-                <div className="loading">
-                  <p>loading...</p>
-                </div>
-              ) : requests.received.length === 0 ? (
-                <p className="friends-empty">no pending requests</p>
-              ) : (
-                <div className="friends-list">
-                  {requests.received.map((request: ReceivedFriendRequest) => (
-                    <div key={request._id} className="friend-item">
-                      <div className="friend-avatar">
-                        {request.senderProfilePicture ? (
-                          <img
-                            src={request.senderProfilePicture}
-                            alt={request.senderDisplayName}
-                            className="friend-avatar-img"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="friend-avatar-placeholder">
-                            {request.senderDisplayName.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                      <div className="friend-info">
-                        <span className="friend-name">{request.senderDisplayName}</span>
-                        <span className="friend-meta">
-                          sent {new Date(request.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <div className="friend-actions">
-                        <button
-                          className="friend-action-button accept"
-                          onClick={() => handleAcceptRequest(request._id)}
-                        >
-                          accept
-                        </button>
-                        <button
-                          className="friend-action-button decline"
-                          onClick={() => handleDeclineRequest(request._id)}
-                        >
-                          decline
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="friends-requests-section">
-              <h3 className="friends-section-title">sent requests</h3>
-              {requests === undefined ? (
-                <div className="loading">
-                  <p>loading...</p>
-                </div>
-              ) : requests.sent.length === 0 ? (
-                <p className="friends-empty">no sent requests</p>
-              ) : (
-                <div className="friends-list">
-                  {requests.sent.map((request: SentFriendRequest) => (
-                    <div key={request._id} className="friend-item">
-                      <div className="friend-avatar">
-                        {request.receiverProfilePicture ? (
-                          <img
-                            src={request.receiverProfilePicture}
-                            alt={request.receiverDisplayName}
-                            className="friend-avatar-img"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="friend-avatar-placeholder">
-                            {request.receiverDisplayName.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                      <div className="friend-info">
-                        <span className="friend-name">{request.receiverDisplayName}</span>
-                        <span className="friend-meta">
-                          sent {new Date(request.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <div className="friend-actions">
-                        <button
-                          className="friend-action-button remove"
-                          onClick={() => handleCancelRequest(request._id)}
-                        >
-                          cancel
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+          <div className="friends-list">
+            {friends.map((friend) => (
+              <FriendItem
+                key={friend.userId}
+                user={friend}
+                isFriend={true}
+                requestStatus="none"
+                onRemoveFriend={() => onRemoveFriend(friend.userId)}
+              />
+            ))}
           </div>
         )}
-      </main>
+      </div>
+    </>
+  );
+}
 
-      <footer className="page-footer">
-        <p>analog v1.0</p>
-      </footer>
+function RequestsTab({
+  requests,
+  onAccept,
+  onDecline,
+  onCancel,
+}: {
+  requests: { received: ReceivedFriendRequest[]; sent: SentFriendRequest[] } | undefined;
+  onAccept: (id: string) => void;
+  onDecline: (id: string) => void;
+  onCancel: (id: string) => void;
+}) {
+  if (requests === undefined) {
+    return <div className="loading"><p>loading...</p></div>;
+  }
+
+  return (
+    <>
+      <div className="friends-section">
+        <div className="section-bar"><span className="section-bar-title">received requests</span></div>
+        {requests.received.length === 0 ? (
+          <div className="empty-state"><p>no pending requests</p></div>
+        ) : (
+          <div className="friends-list">
+            {requests.received.map((req) => (
+              <div key={req._id} className="friend-item">
+                <div className="friend-avatar">
+                  {req.senderProfilePicture ? (
+                    <img src={req.senderProfilePicture} alt={req.senderDisplayName} />
+                  ) : (
+                    <span>{req.senderDisplayName[0]}</span>
+                  )}
+                </div>
+                <div className="friend-info">
+                  <span className="friend-name">{req.senderDisplayName}</span>
+                  <span className="friend-meta">sent {new Date(req.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="friend-actions">
+                  <button className="btn btn-small" onClick={() => onAccept(req._id)}>accept</button>
+                  <button className="btn btn-small" onClick={() => onDecline(req._id)}>decline</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="friends-section">
+        <div className="section-bar"><span className="section-bar-title">sent requests</span></div>
+        {requests.sent.length === 0 ? (
+          <div className="empty-state"><p>no sent requests</p></div>
+        ) : (
+          <div className="friends-list">
+            {requests.sent.map((req) => (
+              <div key={req._id} className="friend-item">
+                <div className="friend-avatar">
+                  {req.receiverProfilePicture ? (
+                    <img src={req.receiverProfilePicture} alt={req.receiverDisplayName} />
+                  ) : (
+                    <span>{req.receiverDisplayName[0]}</span>
+                  )}
+                </div>
+                <div className="friend-info">
+                  <span className="friend-name">{req.receiverDisplayName}</span>
+                  <span className="friend-meta">sent {new Date(req.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="friend-actions">
+                  <button className="btn btn-small" onClick={() => onCancel(req._id)}>cancel</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+function FriendItem({
+  user,
+  isFriend,
+  requestStatus,
+  onSendRequest,
+  onRemoveFriend,
+}: {
+  user: UserProfile;
+  isFriend: boolean;
+  requestStatus: "none" | "pending_sent" | "pending_received";
+  onSendRequest?: () => void;
+  onRemoveFriend?: () => void;
+}) {
+  return (
+    <div className="friend-item">
+      <div className="friend-avatar">
+        {user.profilePicture ? (
+          <img src={user.profilePicture} alt={user.displayName} />
+        ) : (
+          <span>{user.displayName[0]}</span>
+        )}
+      </div>
+      <div className="friend-info">
+        {user.username ? (
+          <Link to={`/profile/${user.username}`} className="friend-name">{user.displayName}</Link>
+        ) : (
+          <span className="friend-name">{user.displayName}</span>
+        )}
+        {user.username && <span className="friend-username">@{user.username}</span>}
+      </div>
+      <div className="friend-actions">
+        {isFriend ? (
+          <>
+            <span className="friend-status">friends</span>
+            {onRemoveFriend && (
+              <button className="btn btn-small" onClick={onRemoveFriend}>remove</button>
+            )}
+          </>
+        ) : requestStatus === "pending_sent" ? (
+          <span className="friend-status">request sent</span>
+        ) : requestStatus === "pending_received" ? (
+          <span className="friend-status">pending</span>
+        ) : (
+          onSendRequest && <button className="btn btn-small" onClick={onSendRequest}>add</button>
+        )}
+      </div>
     </div>
   );
 }

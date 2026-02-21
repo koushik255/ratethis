@@ -1,134 +1,85 @@
 /* ============================================
-   LISTS PAGE - Editorial Design
+   LISTS PAGE - Retro Style
    ============================================ */
 
-.lists-controls {
+.lists-view {
+  max-width: 900px;
+}
+
+.lists-view .content-header {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: 2px solid var(--color-border);
-}
-
-.create-list-button {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  padding: var(--space-3) var(--space-5);
-  border: none;
-  border-radius: var(--radius-md);
-  background-color: var(--color-fg);
-  color: var(--color-bg);
-  cursor: pointer;
-  transition: all var(--transition-base);
-}
-
-.create-list-button:hover {
-  background-color: var(--color-accent);
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
 }
 
 .lists-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: var(--space-4);
-}
-
-.list-card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
 }
 
 .list-card {
-  background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: var(--space-3);
   display: flex;
   flex-direction: column;
-  transition: all var(--transition-base);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--transition-fast);
 }
 
-.list-card-link:hover .list-card {
-  border-color: var(--color-border-dark);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.owned-card {
-  border-left: 4px solid var(--color-accent);
-}
-
-.view-card {
-  border-left: 4px solid var(--color-border);
+.list-card:hover {
+  border-color: var(--accent);
 }
 
 .list-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--space-3);
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
 }
 
 .list-card-title {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: normal;
   margin: 0;
-  color: var(--color-fg);
-  line-height: 1.3;
+  color: var(--link);
 }
 
-.owned-badge {
-  font-family: var(--font-body);
+.list-card:hover .list-card-title {
+  color: var(--link-hover);
+}
+
+.list-card-desc {
   font-size: var(--text-xs);
-  font-weight: 600;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  background-color: var(--color-accent);
-  color: var(--color-bg);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.list-card-description {
-  font-size: var(--text-sm);
-  color: var(--color-fg-muted);
-  margin: 0 0 var(--space-4);
-  line-height: 1.6;
+  color: var(--fg-muted);
+  margin: 0 0 var(--space-3);
+  line-height: 1.5;
   flex: 1;
 }
 
 .list-card-meta {
   display: flex;
   justify-content: space-between;
-  font-size: var(--text-sm);
-  color: var(--color-fg-light);
-}
-
-.list-card-author {
-  color: var(--color-fg-muted);
+  font-size: var(--text-xs);
+  color: var(--fg-light);
 }
 
 .list-card-action {
   font-size: var(--text-xs);
-  color: var(--color-fg-light);
-  text-transform: lowercase;
-  margin-top: var(--space-3);
-  text-align: right;
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
+  color: var(--fg-muted);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-light);
 }
 
-.loading-state,
-.empty-state {
-  padding: var(--space-16);
-  text-align: center;
-  color: var(--color-fg-muted);
-}
-
-.loading-state p,
-.empty-state p {
-  font-size: var(--text-lg);
+/* Responsive */
+@media (max-width: 640px) {
+  .lists-grid {
+    grid-template-columns: 1fr;
+  }
 }

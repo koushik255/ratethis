@@ -4,7 +4,6 @@ import { api } from "../../convex/_generated/api";
 import { Link } from "react-router-dom";
 import { SignIn, SignOut } from "./Auth";
 import { AnimeLogPanel } from "./AnimeLogPanel";
-import "../styles.css";
 import "./Profile.css";
 
 const USERNAME_REGEX = /^[a-zA-Z0-9_]+$/;
@@ -192,7 +191,7 @@ export function Profile() {
               value={profilePicture}
               onChange={(e) => setProfilePicture(e.target.value)}
               placeholder="https://..."
-              className="raw-input"
+              className="input"
             />
           </div>
 
@@ -203,7 +202,7 @@ export function Profile() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="your name"
-              className="raw-input"
+              className="input"
             />
           </div>
 
@@ -217,7 +216,7 @@ export function Profile() {
                 setUsernameError(null);
               }}
               placeholder="your_username"
-              className={`raw-input ${usernameError ? "error" : ""}`}
+              className={`input ${usernameError ? "error" : ""}`}
               disabled={showUsernameCooldown ? true : undefined}
             />
             {usernameError && <span className="field-error">{usernameError}</span>}
@@ -237,8 +236,9 @@ export function Profile() {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="something about you..."
-              className="raw-textarea"
+              className="input"
               rows={3}
+              style={{ resize: "vertical" }}
             />
           </div>
 
@@ -247,12 +247,12 @@ export function Profile() {
           <div className="form-actions">
             <button 
               onClick={handleSave} 
-              className="raw-button"
+              className="btn"
               disabled={!!usernameError}
             >
               save
             </button>
-            <button onClick={handleCancel} className="raw-button secondary">
+            <button onClick={handleCancel} className="btn">
               cancel
             </button>
           </div>
@@ -268,7 +268,7 @@ export function Profile() {
       {!hasUsername && (
         <div className="username-prompt">
           <p>add a username so people can see your profile</p>
-          <button onClick={() => setIsEditing(true)} className="raw-button small">
+          <button onClick={() => setIsEditing(true)} className="btn btn-small">
             add username
           </button>
         </div>
@@ -297,7 +297,7 @@ export function Profile() {
             )}
           </div>
           <div className="profile-header-actions">
-            <button onClick={() => setIsEditing(true)} className="raw-button small">
+            <button onClick={() => setIsEditing(true)} className="btn btn-small">
               edit
             </button>
             <SignOut />
@@ -349,12 +349,12 @@ export function Profile() {
             value={malUsername}
             onChange={(e) => setMalUsername(e.target.value)}
             placeholder="MAL username"
-            className="raw-input"
+            className="input"
             disabled={isImporting}
           />
           <button
             onClick={handleMalImport}
-            className="raw-button"
+            className="btn"
             disabled={isImporting || !malUsername.trim()}
           >
             {isImporting ? "importing..." : "import"}
