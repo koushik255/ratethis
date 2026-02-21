@@ -1,44 +1,24 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "convex/react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { api } from "../convex/_generated/api";
 import RetroLayout from "./components/RetroLayout";
 import "./IndexPage.css";
 
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-  return debouncedValue;
-}
-
 function App() {
-  const [inputValue, setInputValue] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [searchParams] = useSearchParams();
-
-  const debouncedInput = useDebounce(inputValue, 300);
+  const navigate = useNavigate();
+  
+  // Get search query directly from URL - single source of truth
+  const searchQuery = searchParams.get("q") || "";
 
   const animes = useQuery(
     api.anime.searchByTitle,
     searchQuery ? { query: searchQuery, limit: 50 } : "skip"
   );
 
-  useEffect(() => {
-    const queryFromUrl = searchParams.get("q");
-    if (queryFromUrl) {
-      setInputValue(queryFromUrl);
-      setSearchQuery(queryFromUrl);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (debouncedInput !== searchQuery) {
-      setSearchQuery(debouncedInput);
-    }
-  }, [debouncedInput, searchQuery]);
+  const handleClearSearch = () => {
+    navigate("/");
+  };
 
   return (
     <RetroLayout>
@@ -76,7 +56,7 @@ function App() {
             <option>not yet aired</option>
           </select>
           {searchQuery && (
-            <button className="btn btn-small" onClick={() => setSearchQuery("")}>
+            <button className="btn btn-small" onClick={handleClearSearch}>
               clear search
             </button>
           )}

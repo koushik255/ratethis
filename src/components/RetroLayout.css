@@ -241,6 +241,23 @@
   background: var(--btn-face-hover);
 }
 
+.search-clear-btn {
+  padding: var(--space-2) var(--space-2);
+  background: var(--btn-active);
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  font-family: var(--font-body);
+  line-height: 1;
+}
+
+.search-clear-btn:hover {
+  background: var(--error-bg);
+  color: var(--error);
+  border-color: var(--error);
+}
+
 .top-bar-right {
   display: flex;
   align-items: center;

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useConvexAuth, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -103,19 +103,46 @@ function RetroLayout({ children, hideSearch = false }: RetroLayoutProps) {
 function SearchBar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   
-  const currentQuery = searchParams.get("q") || "";
+  // Local state for input - controlled component
+  const [inputValue, setInputValue] = useState(searchParams.get("q") || "");
   
+  // Sync input with URL when it changes externally
+  useEffect(() => {
+    const urlQuery = searchParams.get("q") || "";
+    setInputValue(urlQuery);
+  }, [searchParams]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const query = formData.get("search") as string;
+    const trimmedValue = inputValue.trim();
     
-    if (query.trim()) {
-      setSearchParams({ q: query.trim() });
-      if (window.location.pathname !== "/") {
-        navigate(`/?q=${encodeURIComponent(query.trim())}`);
+    if (trimmedValue) {
+      // Update URL params
+      setSearchParams({ q: trimmedValue });
+      // If not on home page, navigate there with search
+      if (location.pathname !== "/") {
+        navigate(`/?q=${encodeURIComponent(trimmedValue)}`);
       }
+    } else {
+      // Clear search
+      setSearchParams({});
+      if (location.pathname !== "/") {
+        navigate("/");
+      }
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleClear = () => {
+    setInputValue("");
+    setSearchParams({});
+    if (location.pathname !== "/") {
+      navigate("/");
     }
   };
 
@@ -123,12 +150,17 @@ function SearchBar() {
     <form className="search-bar" onSubmit={handleSubmit}>
       <input
         type="text"
-        name="search"
         className="global-search"
         placeholder="search anime..."
-        defaultValue={currentQuery}
+        value={inputValue}
+        onChange={handleInputChange}
       />
       <button type="submit" className="search-btn">search</button>
+      {inputValue && (
+        <button type="button" className="search-clear-btn" onClick={handleClear}>
+          ×
+        </button>
+      )}
     </form>
   );
 }
