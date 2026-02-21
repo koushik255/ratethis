@@ -393,3 +393,22 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.search-all-btn {
+  font-family: var(--font);
+  font-size: 11px;
+  padding: 8px 12px;
+  margin: 8px 12px;
+  border: 1px solid var(--border);
+  background-color: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: all 0.2s ease;
+  width: calc(100% - 24px);
+}
+
+.search-all-btn:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}

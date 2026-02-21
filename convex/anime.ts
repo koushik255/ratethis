@@ -80,6 +80,39 @@ export const getById = query({
   },
 });
 
+// Get anime by MAL ID (for top anime cache lookups)
+export const getByMalId = query({
+  args: {
+    malId: v.string(),
+  },
+  handler: async (ctx, { malId }) => {
+    const anime = await ctx.db
+      .query("anime")
+      .withIndex("by_malId", (q) => q.eq("malId", malId))
+      .first();
+    return anime;
+  },
+});
+
+// Get multiple anime by MAL IDs (batch lookup)
+export const getByMalIds = query({
+  args: {
+    malIds: v.array(v.string()),
+  },
+  handler: async (ctx, { malIds }) => {
+    const results = await Promise.all(
+      malIds.map(async (malId) => {
+        const anime = await ctx.db
+          .query("anime")
+          .withIndex("by_malId", (q) => q.eq("malId", malId))
+          .first();
+        return anime;
+      })
+    );
+    return results.filter((anime) => anime !== null);
+  },
+});
+
 // Simple title lookup - returns just the top match for MAL matching
 export const getTopMatchByTitle = query({
   args: {

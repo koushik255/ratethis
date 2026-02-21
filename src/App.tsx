@@ -1,20 +1,58 @@
 import { useQuery } from "convex/react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { useMemo, useEffect } from "react";
 import { api } from "../convex/_generated/api";
 import RetroLayout from "./components/RetroLayout";
+import { useTopAnimeSearch } from "./hooks/useTopAnimeSearch";
 import "./IndexPage.css";
 
 function App() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   
-  // Get search query directly from URL - single source of truth
   const searchQuery = searchParams.get("q") || "";
 
-  const animes = useQuery(
+  const { isLoaded, isLoading: isCacheLoading, ensureLoaded, searchLocal } = useTopAnimeSearch();
+
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      ensureLoaded();
+    }
+  }, [searchQuery, ensureLoaded]);
+
+  const localResults = useMemo(() => {
+    if (!isLoaded || !searchQuery.trim()) return [];
+    return searchLocal(searchQuery, 50);
+  }, [isLoaded, searchQuery, searchLocal]);
+
+  const localMalIds = useMemo(() => 
+    localResults.map((anime) => anime.malId).filter((id) => id),
+    [localResults]
+  );
+
+  const localAnimeFromDb = useQuery(
+    api.anime.getByMalIds,
+    localMalIds.length > 0 ? { malIds: localMalIds } : "skip"
+  );
+
+  const convexResults = useQuery(
     api.anime.searchByTitle,
     searchQuery ? { query: searchQuery, limit: 50 } : "skip"
   );
+
+  const animes = useMemo(() => {
+    if (!searchQuery) return null;
+    
+    if (localAnimeFromDb && localAnimeFromDb.length > 0 && convexResults) {
+      const localIds = new Set(localAnimeFromDb.map((a) => a._id));
+      const uniqueConvex = convexResults.filter((a) => !localIds.has(a._id));
+      return [...localAnimeFromDb, ...uniqueConvex].slice(0, 50);
+    }
+    
+    return convexResults;
+  }, [searchQuery, localAnimeFromDb, convexResults]);
+
+  const isLoading = searchQuery && (!isLoaded && isCacheLoading || animes === undefined);
 
   const handleClearSearch = () => {
     navigate("/");
@@ -27,7 +65,7 @@ function App() {
           <h2 className="page-title">{searchQuery ? "search results" : "browse anime"}</h2>
           {searchQuery && (
             <span className="results-count">
-              {animes?.length ?? 0} result{(animes?.length ?? 0) !== 1 ? "s" : ""} for "{searchQuery}"
+              {isLoading ? "..." : (animes?.length ?? 0)} result{(animes?.length ?? 0) !== 1 ? "s" : ""} for "{searchQuery}"
             </span>
           )}
         </div>
@@ -62,7 +100,13 @@ function App() {
           )}
         </div>
 
-        {searchQuery && animes && animes.length > 0 && (
+        {isLoading && (
+          <div className="empty-state">
+            <p>searching...</p>
+          </div>
+        )}
+
+        {searchQuery && !isLoading && animes && animes.length > 0 && (
           <div className="anime-grid animate-slide-up">
             {animes.map((anime, index) => (
               <AnimeCard key={anime._id} anime={anime} index={index} />
@@ -70,7 +114,7 @@ function App() {
           </div>
         )}
 
-        {searchQuery && animes && animes.length === 0 && (
+        {searchQuery && !isLoading && animes && animes.length === 0 && (
           <div className="empty-state">
             <p>no anime found matching your search.</p>
           </div>
