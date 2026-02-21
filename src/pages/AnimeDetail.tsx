@@ -90,7 +90,7 @@ function AnimeDetail() {
             <div className="entry-header">
               <h1 className="entry-title">{anime.title}</h1>
               {anime.animeSeason?.year && (
-                <span className="entry-year">{anime.animeSeason.year}</span>
+                <div className="entry-year">{anime.animeSeason.year}</div>
               )}
             </div>
 

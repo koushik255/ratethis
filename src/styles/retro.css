@@ -65,8 +65,8 @@
   --selected-bg: #316ac5;
   --selected-fg: #ffffff;
   
-  --sidebar-width: 200px;
-  --topbar-height: 48px;
+  --sidebar-width: 250px;
+  --topbar-height: 60px;
   
   --transition-fast: 100ms ease;
   --transition-base: 150ms ease;
@@ -81,7 +81,7 @@
 }
 
 html {
-  font-size: 11px;
+  font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
